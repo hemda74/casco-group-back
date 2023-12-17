@@ -27,6 +27,7 @@ model Billboard {
   storeId    String
   store      Store      @relation("StoreToBillboard", fields: [storeId], references: [id])
   label      String
+  label_ar   String
   imageUrl   String
   categories Category[]
   createdAt  DateTime   @default(now())
@@ -42,6 +43,7 @@ model Category {
   billboardId String // Foreign Key to Billboard
   billboard   Billboard @relation(fields: [billboardId], references: [id])
   name        String
+  name_ar     String
   products    Product[] @relation("CategoryToProduct")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -57,6 +59,7 @@ model Product {
   categoryId String // Foreign Key to Category
   category   Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
   name       String
+  name_ar    String
   price      Decimal
   isFeatured Boolean     @default(false)
   isArchived Boolean     @default(false)
@@ -106,6 +109,7 @@ model Size {
   storeId   String // Foreign Key to Store
   store     Store     @relation("StoreToSize", fields: [storeId], references: [id])
   name      String
+  name_ar   String
   value     String
   products  Product[] // Relation to Product model
   createdAt DateTime  @default(now())
@@ -119,6 +123,7 @@ model Color {
   storeId   String // Foreign Key to Store
   store     Store     @relation("StoreToColor", fields: [storeId], references: [id])
   name      String
+  name_ar   String
   value     String
   products  Product[] // Relation to Product model
   createdAt DateTime  @default(now())
