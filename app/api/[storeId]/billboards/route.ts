@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
-
 import prismadb from '@/lib/prismadb';
- 
 export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
@@ -12,7 +10,7 @@ export async function POST(
 
     const body = await req.json();
 
-    const { label, imageUrl } = body;
+    const { label, label_ar, imageUrl } = body;
 
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 403 });
@@ -21,6 +19,10 @@ export async function POST(
     if (!label) {
       return new NextResponse("Label is required", { status: 400 });
     }
+    if (!label_ar) {
+      return new NextResponse("Label is required", { status: 400 });
+    }
+
 
     if (!imageUrl) {
       return new NextResponse("Image URL is required", { status: 400 });
@@ -44,6 +46,7 @@ export async function POST(
     const billboard = await prismadb.billboard.create({
       data: {
         label,
+        label_ar,
         imageUrl,
         storeId: params.storeId,
       }
