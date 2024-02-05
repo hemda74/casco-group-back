@@ -64,7 +64,7 @@ model Course {
   intro           String
   intro_ar        String
   duaration       String
-  duration_ar       String
+  duration_ar     String
   who_sh_att      String
   who_sh_att_ar       String
   c_obje          String
@@ -72,9 +72,13 @@ model Course {
   c_content       String
   c_content_ar       String
   wh_we_bnfi      String
+  wh_we_bnfi_ar      String
   c_in_house      String
+  c_in_house_ar      String
   delv_and_leaders      String
+  delv_and_leaders_ar      String
   date_and_rev DateTime
+  date_and_rev_ar DateTime
 
   // isFeatured Boolean     @default(false)
   // isArchived Boolean     @default(false)
