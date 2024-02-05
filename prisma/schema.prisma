@@ -9,13 +9,13 @@ datasource db {
 }
 
 model Store {
-  id         String      @id @default(uuid())
-  name       String
-  userId     String
+  id              String      @id @default(uuid())
+  name            String
+  userId          String
   billboards Billboard[] @relation("StoreToBillboard")
   categories Category[]  @relation("StoreToCategory")
-  products   Product[]   @relation("StoreToProduct")
-  sizes      Size[]      @relation("StoreToSize")
+  courses   Course[]   @relation("StoreTocourse")
+  // sizes      Size[]      @relation("StoreToSize")
   colors     Color[]     @relation("StoreToColor")
   orders     Order[]     @relation("StoreToOrder")
   createdAt  DateTime    @default(now())
@@ -23,11 +23,11 @@ model Store {
 }
 
 model Billboard {
-  id         String     @id @default(uuid())
-  storeId    String
+  id              String     @id @default(uuid())
+  storeId         String
   store      Store      @relation("StoreToBillboard", fields: [storeId], references: [id])
-  label      String
-  label_ar   String
+  label           String
+  label_ar        String
   categories Category[]
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
@@ -36,14 +36,14 @@ model Billboard {
 }
 
 model Category {
-  id          String    @id @default(uuid())
-  storeId     String // Foreign Key to Store
+  id                String    @id @default(uuid())
+  storeId           String // Foreign Key to Store
   store       Store     @relation("StoreToCategory", fields: [storeId], references: [id])
-  billboardId String // Foreign Key to Billboard
+  billboardId       String // Foreign Key to Billboard
   billboard   Billboard @relation(fields: [billboardId], references: [id])
-  name        String
-  name_ar     String
-  products    Product[] @relation("CategoryToProduct")
+  name              String
+  name_ar           String
+  courses     Course[] @relation("CategoryTocourse")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
@@ -51,40 +51,55 @@ model Category {
   @@index([billboardId])
 }
 
-model Product {
-  id         String      @id @default(uuid())
-  storeId    String // Foreign Key to Store
-  store      Store       @relation("StoreToProduct", fields: [storeId], references: [id])
-  categoryId String // Foreign Key to Category
-  category   Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
-  name       String
-  name_ar    String
+model Course {
+  id              String      @id @default(uuid())
+  storeId         String // Foreign Key to Store
+  store      Store       @relation("StoreTocourse", fields: [storeId], references: [id])
+  categoryId      String // Foreign Key to Category
+  category   Category    @relation("CategoryTocourse", fields: [categoryId], references: [id])
+  name            String
+  name_ar         String
   price      Decimal
-  isFeatured Boolean     @default(false)
-  isArchived Boolean     @default(false)
-  sizeId     String // Foreign Key to Size
-  size       Size        @relation(fields: [sizeId], references: [id])
-  colorId    String // Foreign Key to Color
-  color      Color       @relation(fields: [colorId], references: [id])
   images     Image[] // Relation to Image model
-  orderItems OrderItem[] // Relation to Order model
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  intro           String
+  intro_ar        String
+  duaration       String
+  duration_ar       String
+  who_sh_att      String
+  who_sh_att_ar       String
+  c_obje          String
+  c_obje_ar          String
+  c_content       String
+  c_content_ar       String
+  wh_we_bnfi      String
+  c_in_house      String
+  delv_and_leaders      String
+  date_and_rev DateTime
+
+  // isFeatured Boolean     @default(false)
+  // isArchived Boolean     @default(false)
+  // sizeId           String // Foreign Key to Size
+  // size       Size        @relation(fields: [sizeId], references: [id])
+  // colorId          String // Foreign Key to Color
+  // color      Color       @relation(fields: [colorId], references: [id])
+  // orderItems OrderItem[] // Relation to Order model
+  // createdAt  DateTime    @default(now())
+  // updatedAt  DateTime    @updatedAt
 
   @@index([storeId])
   @@index([categoryId])
-  @@index([sizeId])
-  @@index([colorId])
+  // @@index([sizeId])
+  // @@index([colorId])
 }
 
 model Order {
-  id         String      @id @default(uuid())
-  storeId    String // Foreign Key to Store
+  id              String      @id @default(uuid())
+  storeId         String // Foreign Key to Store
   store      Store       @relation("StoreToOrder", fields: [storeId], references: [id])
   orderItems OrderItem[] // Relation to OrderItem model
   isPaid     Boolean     @default(false)
-  phone      String      @default("")
-  address    String      @default("")
+  phone           String      @default("")
+  address         String      @default("")
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
 
@@ -93,38 +108,38 @@ model Order {
 
 // Intermediary for a many-to-many relationship
 model OrderItem {
-  id        String  @id @default(uuid())
-  orderId   String // Foreign Key to Order
+  id              String  @id @default(uuid())
+  orderId         String // Foreign Key to Order
   order     Order   @relation(fields: [orderId], references: [id])
-  productId String // Foreign Key to Product
-  product   Product @relation(fields: [productId], references: [id])
+  courseId      String // Foreign Key to course
+  // course   course @relation(fields: [courseId], references: [id])
 
   @@index([orderId])
-  @@index([productId])
+  @@index([courseId])
 }
 
-model Size {
-  id        String    @id @default(uuid())
-  storeId   String // Foreign Key to Store
-  store     Store     @relation("StoreToSize", fields: [storeId], references: [id])
-  name      String
-  name_ar   String
-  value     String
-  products  Product[] // Relation to Product model
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+// model Size {
+//   id             String    @id @default(uuid())
+//   storeId        String // Foreign Key to Store
+//   store     Store     @relation("StoreToSize", fields: [storeId], references: [id])
+//   name           String
+//   name_ar        String
+//   value          String
+//   courses  course[] // Relation to course model
+//   createdAt DateTime  @default(now())
+//   updatedAt DateTime  @updatedAt
 
-  @@index([storeId])
-}
+//   @@index([storeId])
+// }
 
 model Color {
-  id        String    @id @default(uuid())
-  storeId   String // Foreign Key to Store
+  id              String    @id @default(uuid())
+  storeId         String // Foreign Key to Store
   store     Store     @relation("StoreToColor", fields: [storeId], references: [id])
-  name      String
-  name_ar   String
-  value     String
-  products  Product[] // Relation to Product model
+  name            String
+  name_ar         String
+  value           String
+  // courses  course[] // Relation to course model
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
@@ -132,12 +147,12 @@ model Color {
 }
 
 model Image {
-  id        String   @id @default(uuid())
-  productId String // Foreign Key to Product
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  url       String // URL of the image
+  id              String   @id @default(uuid())
+  courseId      String // Foreign Key to course
+  course   Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  url             String // URL of the image
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([productId])
+  @@index([courseId])
 }
