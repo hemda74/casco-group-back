@@ -276,7 +276,7 @@ export async function GET(
 			});
 		}
 
-		const products = await prismadb.course.findMany({
+		const courses = await prismadb.course.findMany({
 			where: {
 				storeId: params.storeId,
 				categoryId,
@@ -286,13 +286,13 @@ export async function GET(
 				category: true,
 			},
 			orderBy: {
-				date_and_rev: 'desc',
+				name: 'desc',
 			},
 		});
 
-		return NextResponse.json(products);
+		return NextResponse.json(courses);
 	} catch (error) {
-		console.log('[PRODUCTS_GET]', error);
+		console.log('[COURSES_GET]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }

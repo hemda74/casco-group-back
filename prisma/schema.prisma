@@ -77,8 +77,8 @@ model Course {
   c_in_house_ar      String
   delv_and_leaders      String
   delv_and_leaders_ar      String
-  date_and_rev DateTime
-  date_and_rev_ar DateTime
+  date_and_rev String
+  date_and_rev_ar String
 
   // isFeatured Boolean     @default(false)
   // isArchived Boolean     @default(false)

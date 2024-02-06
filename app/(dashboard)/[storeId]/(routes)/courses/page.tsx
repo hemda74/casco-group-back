@@ -41,8 +41,8 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
 		delv_and_leaders_ar: item.delv_and_leaders_ar,
 		price: formatter.format(item.price.toNumber()),
 		category: item.category.name,
-		date_and_rev: format(item.date_and_rev, 'MMMM do, yyyy'),
-		date_and_rev_ar: format(item.date_and_rev_ar, 'MMMM do, yyyy'),
+		date_and_rev: item.date_and_rev,
+		date_and_rev_ar: item.date_and_rev_ar,
 	}));
 
 	return (
