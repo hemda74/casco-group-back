@@ -45,12 +45,12 @@ export const ProductsClient: React.FC<ProductsClientProps> = ({ data }) => {
 			/>
 			<Heading
 				title="API"
-				description="API Calls for Courses"
+				description="API Calls for Products"
 			/>
 			<Separator />
 			<ApiList
-				entityName="courses"
-				entityIdName="courseId"
+				entityName="products"
+				entityIdName="productId"
 			/>
 		</>
 	);
