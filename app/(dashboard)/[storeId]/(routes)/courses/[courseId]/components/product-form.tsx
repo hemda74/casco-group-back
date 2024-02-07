@@ -277,6 +277,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 								</FormItem>
 							)}
 						/>
+
 						<FormField
 							control={form.control}
 							name="name_ar"
@@ -291,29 +292,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 											disabled={
 												loading
 											}
-											placeholder="Product name in Arabic"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="name_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Arabic
-										Name
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Course name in Arabic"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -334,7 +313,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 											disabled={
 												loading
 											}
-											placeholder="Introduction"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -357,7 +336,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 											disabled={
 												loading
 											}
-											placeholder="Introduction in Arabic"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -378,7 +357,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 											disabled={
 												loading
 											}
-											placeholder="Duration"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -401,7 +380,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 											disabled={
 												loading
 											}
-											placeholder="Duration in Arabic"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -426,7 +405,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 											disabled={
 												loading
 											}
-											placeholder="How Should Attend this Course"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -453,11 +432,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 											disabled={
 												loading
 											}
-											placeholder="How
-										Should
-										Attend
-										this
-										Course in Arabic"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -479,7 +454,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 											disabled={
 												loading
 											}
-											placeholder="Course Objective"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -503,8 +478,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 											disabled={
 												loading
 											}
-											placeholder="Course
-										Objective in Arabic"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -526,8 +500,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 											disabled={
 												loading
 											}
-											placeholder="Course
-										Content"
+											placeholder=" Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -551,8 +524,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 											disabled={
 												loading
 											}
-											placeholder="Course
-										Content in Arabic"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -575,7 +547,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 											disabled={
 												loading
 											}
-											placeholder="what we benfite"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -600,7 +572,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 											disabled={
 												loading
 											}
-											placeholder="what we benfite in arabic"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -623,7 +595,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 											disabled={
 												loading
 											}
-											placeholder="course in house"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -648,7 +620,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 											disabled={
 												loading
 											}
-											placeholder="course in house in arabic"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -672,7 +644,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 											disabled={
 												loading
 											}
-											placeholder="enter vaule"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -698,7 +670,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 											disabled={
 												loading
 											}
-											placeholder="enter value"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -722,7 +694,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 											disabled={
 												loading
 											}
-											placeholder="enter value"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -736,10 +708,9 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Course
-										Date
+										CourseDate
 										&
-										Revuene
+										Revuen
 										in
 										arabic
 									</FormLabel>
@@ -748,7 +719,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 											disabled={
 												loading
 											}
-											placeholder="enter value"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -756,7 +727,6 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 								</FormItem>
 							)}
 						/>
-						/////////////////////////////////////////////////////////////////////////////////////////
 						<FormField
 							control={form.control}
 							name="price"

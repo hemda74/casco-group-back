@@ -1,83 +1,83 @@
-import { NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs';
+// import { NextResponse } from 'next/server';
+// import { auth } from '@clerk/nextjs';
 
-import prismadb from '@/lib/prismadb';
- 
-export async function POST(
-  req: Request,
-  { params }: { params: { storeId: string } }
-) {
-  try {
-    const { userId } = auth();
+// import prismadb from '@/lib/prismadb';
 
-    const body = await req.json();
+// export async function POST(
+//   req: Request,
+//   { params }: { params: { storeId: string } }
+// ) {
+//   try {
+//     const { userId } = auth();
 
-    const { name,name_ar, value } = body;
+//     const body = await req.json();
 
-    if (!userId) {
-      return new NextResponse("Unauthenticated", { status: 403 });
-    }
+//     const { name,name_ar, value } = body;
 
-    if (!name) {
-      return new NextResponse("Name is required", { status: 400 });
-    }
-    if (!name_ar) {
-      return new NextResponse("Name is required", { status: 400 });
-    }
+//     if (!userId) {
+//       return new NextResponse("Unauthenticated", { status: 403 });
+//     }
 
-    if (!value) {
-      return new NextResponse("Value is required", { status: 400 });
-    }
+//     if (!name) {
+//       return new NextResponse("Name is required", { status: 400 });
+//     }
+//     if (!name_ar) {
+//       return new NextResponse("Name is required", { status: 400 });
+//     }
 
-    if (!params.storeId) {
-      return new NextResponse("Store id is required", { status: 400 });
-    }
+//     if (!value) {
+//       return new NextResponse("Value is required", { status: 400 });
+//     }
 
-    const storeByUserId = await prismadb.store.findFirst({
-      where: {
-        id: params.storeId,
-        userId
-      }
-    });
+//     if (!params.storeId) {
+//       return new NextResponse("Store id is required", { status: 400 });
+//     }
 
-    if (!storeByUserId) {
-      return new NextResponse("Unauthorized", { status: 405 });
-    }
+//     const storeByUserId = await prismadb.store.findFirst({
+//       where: {
+//         id: params.storeId,
+//         userId
+//       }
+//     });
 
-    const size = await prismadb.size.create({
-      data: {
-        name,
-        name_ar,
-        value,
-        storeId: params.storeId
-      }
-    });
-  
-    return NextResponse.json(size);
-  } catch (error) {
-    console.log('[SIZES_POST]', error);
-    return new NextResponse("Internal error", { status: 500 });
-  }
-};
+//     if (!storeByUserId) {
+//       return new NextResponse("Unauthorized", { status: 405 });
+//     }
 
-export async function GET(
-  req: Request,
-  { params }: { params: { storeId: string } }
-) {
-  try {
-    if (!params.storeId) {
-      return new NextResponse("Store id is required", { status: 400 });
-    }
+//     // const size = await prismadb.size.create({
+//     //   data: {
+//     //     name,
+//     //     name_ar,
+//     //     value,
+//     //     storeId: params.storeId
+//     //   }
+//     // });
 
-    const sizes = await prismadb.size.findMany({
-      where: {
-        storeId: params.storeId
-      }
-    });
-  
-    return NextResponse.json(sizes);
-  } catch (error) {
-    console.log('[SIZES_GET]', error);
-    return new NextResponse("Internal error", { status: 500 });
-  }
-};
+//     return NextResponse.json(size);
+//   } catch (error) {
+//     console.log('[SIZES_POST]', error);
+//     return new NextResponse("Internal error", { status: 500 });
+//   }
+// };
+
+// export async function GET(
+//   req: Request,
+//   { params }: { params: { storeId: string } }
+// ) {
+//   try {
+//     if (!params.storeId) {
+//       return new NextResponse("Store id is required", { status: 400 });
+//     }
+
+//     const sizes = await prismadb.size.findMany({
+//       where: {
+//         storeId: params.storeId
+//       }
+//     });
+
+//     return NextResponse.json(sizes);
+//   } catch (error) {
+//     console.log('[SIZES_GET]', error);
+//     return new NextResponse("Internal error", { status: 500 });
+//   }
+// };
