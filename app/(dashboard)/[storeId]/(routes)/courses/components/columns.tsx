@@ -32,92 +32,92 @@ export type ProductColumn = {
 export const columns: ColumnDef<ProductColumn>[] = [
 	{
 		accessorKey: 'name',
-		header: 'Name',
+		header: 'Course_Name',
 	},
 	{
 		accessorKey: 'name_ar',
-		header: 'Arabic Name',
+		header: 'Course_Arabic_Name',
 	},
 	{
 		accessorKey: 'intro',
-		header: 'Introduction',
+		header: 'Course_Introduction',
 	},
 	{
 		accessorKey: 'intro_ar',
-		header: 'Introduction in Arabic',
+		header: 'Introduction_in_Arabic',
 	},
 	{
 		accessorKey: 'duaration',
-		header: 'Course duration in Arabic',
+		header: 'Course_duration',
 	},
 	{
-		accessorKey: 'duaration_ar',
-		header: 'Course duration in Arabic',
+		accessorKey: 'duration_ar',
+		header: 'Course_duration_in_Arabic',
 	},
 	{
 		accessorKey: 'who_sh_att',
-		header: 'who_should_attend this course',
+		header: 'who_should_attend_this_course',
 	},
 	{
 		accessorKey: 'who_sh_att_ar',
-		header: 'who_should_attend this course in Arabic',
+		header: 'who_should_attend_this_course_in_Arabic',
 	},
 	{
 		accessorKey: 'c_obje',
-		header: 'course objective',
+		header: 'course_objective',
 	},
 	{
 		accessorKey: 'c_obje_ar',
-		header: 'course objective in Arabic',
+		header: 'course_objective_in_Arabic',
 	},
 	{
 		accessorKey: 'c_content',
-		header: 'course Content',
+		header: 'course_Content',
 	},
 	{
 		accessorKey: 'c_content_ar',
-		header: 'course Content in Arabic',
+		header: 'course_Content_in_Arabic',
 	},
 	{
 		accessorKey: 'wh_we_bnfi',
-		header: 'what we benefit',
+		header: 'what_we_benefit',
 	},
 	{
 		accessorKey: 'wh_we_bnfi_ar',
-		header: 'what we benefit in Arabic',
+		header: 'what_we_benefit_in_Arabic',
 	},
 	{
 		accessorKey: 'c_in_house',
-		header: 'Course in house',
+		header: 'Course_in_house',
 	},
 	{
 		accessorKey: 'c_in_house_ar',
-		header: 'Course in house in Arabic',
+		header: 'Course_in_house_in_Arabic',
 	},
 	{
 		accessorKey: 'delv_and_leaders',
-		header: 'Style of Delivery and Course Leaders',
+		header: 'Style_of_Delivery_and_Course_Leaders',
 	},
 	{
 		accessorKey: 'delv_and_leaders_ar',
-		header: 'Style of Delivery and Course Leaders in Arabic',
+		header: 'Style_of_Delivery_and_Course_Leaders_in_Arabic',
 	},
 	{
 		accessorKey: 'price',
-		header: 'Price',
+		header: 'Course_Price',
 	},
 	{
 		accessorKey: 'category',
-		header: 'Category',
+		header: 'Course_Category',
 	},
 
 	{
 		accessorKey: 'date_and_rev',
-		header: 'Date',
+		header: 'Course_Date_1',
 	},
 	{
 		accessorKey: 'date_and_rev_ar',
-		header: 'Date',
+		header: 'Course_Date_2',
 	},
 	{
 		id: 'actions',

@@ -61,12 +61,12 @@ model Course {
   name_ar         String
   price      Decimal
   images     Image[] // Relation to Image model
-  intro           String
-  intro_ar        String
-  duaration       String
-  duration_ar     String
-  who_sh_att      String
-  who_sh_att_ar       String
+  intro           String @db.LongText
+  intro_ar        String @db.LongText
+  duaration       String @db.LongText
+  duration_ar     String @db.LongText
+  who_sh_att      String @db.LongText
+  who_sh_att_ar       String @db.LongText
   c_obje          String
   c_obje_ar          String
   c_content       String
