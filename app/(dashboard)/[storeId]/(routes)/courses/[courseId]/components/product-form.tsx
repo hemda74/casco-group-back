@@ -277,7 +277,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 											disabled={
 												loading
 											}
-											placeholder="Course name"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -695,7 +695,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 										Course
 										Date
 										&
-										Revuene
+										Revuene_1
 									</FormLabel>
 									<FormControl>
 										<Input
@@ -719,7 +719,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 										Course
 										Date
 										&
-										Revuene
+										Revuene_2
 									</FormLabel>
 									<FormControl>
 										<Input
@@ -743,7 +743,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 										Course
 										Date
 										&
-										Revuene
+										Revuene_3
 									</FormLabel>
 									<FormControl>
 										<Input
@@ -767,7 +767,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 										Course
 										Date
 										&
-										Revuene
+										Revuene_4
 									</FormLabel>
 									<FormControl>
 										<Input
@@ -791,7 +791,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 										Course
 										Date
 										&
-										Revuene
+										Revuene_5
 									</FormLabel>
 									<FormControl>
 										<Input
@@ -815,7 +815,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 										Course
 										Date
 										&
-										Revuene
+										Revuene_6
 									</FormLabel>
 									<FormControl>
 										<Input
