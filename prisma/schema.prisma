@@ -14,7 +14,8 @@ model Store {
   userId          String
   billboards Billboard[] @relation("StoreToBillboard")
   categories Category[]  @relation("StoreToCategory")
-  courses   Course[]   @relation("StoreTocourse")
+  courses   Course[]   @relation("StoreToCourse")
+  Services   Service[]   @relation("StoreToService")
   // sizes      Size[]      @relation("StoreToSize")
   colors     Color[]     @relation("StoreToColor")
   orders     Order[]     @relation("StoreToOrder")
@@ -43,7 +44,8 @@ model Category {
   billboard   Billboard @relation(fields: [billboardId], references: [id])
   name              String
   name_ar           String
-  courses     Course[] @relation("CategoryTocourse")
+  courses     Course[] @relation("CategoryToCourse")
+  services     Service[] @relation("CategoryToService")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
@@ -54,9 +56,9 @@ model Category {
 model Course {
   id                       String       @id @default(uuid())
   storeId                  String // Foreign Key to Store
-  store                    Store       @relation("StoreTocourse", fields: [storeId], references: [id])
+  store                    Store       @relation("StoreToCourse", fields: [storeId], references: [id])
   categoryId               String // Foreign Key to Category
-  category                 Category    @relation("CategoryTocourse", fields: [categoryId], references: [id])
+  category                 Category    @relation("CategoryToCourse", fields: [categoryId], references: [id])
   name                     String @db.LongText
   name_ar                  String @db.LongText
   price                    Decimal
@@ -65,7 +67,7 @@ model Course {
   intro_ar                 String @db.LongText
   duaration                String @db.LongText
   duration_ar              String @db.LongText
-  who_sh_att            String @db.LongText
+  who_sh_att               String @db.LongText
   who_sh_att_ar            String @db.LongText
   c_obje                   String @db.LongText
   c_obje_ar                String @db.LongText
@@ -99,7 +101,40 @@ model Course {
   // @@index([sizeId])
   // @@index([colorId])
 }
+model Service {
+  id                       String       @id @default(uuid())
+  storeId                  String // Foreign Key to Store
+  store                    Store       @relation("StoreToService", fields: [storeId], references: [id])
+  categoryId               String // Foreign Key to Category
+  category                 Category    @relation("CategoryToService", fields: [categoryId], references: [id])
+  name                     String @db.LongText
+  name_ar                  String @db.LongText
+  price                    Decimal
+  images                   Image[] // Relation to Image model
+  title_1                  String @db.LongText
+  explanation_1            String @db.LongText
+  title_2                  String @db.LongText
+  explanation_2            String @db.LongText
+  title_3                  String @db.LongText
+  explanation_3            String @db.LongText
+  title_4                  String @db.LongText
+  explanation_4            String @db.LongText
 
+  // isFeatured Boolean     @default(false)
+  // isArchived Boolean     @default(false)
+  // sizeId           String // Foreign Key to Size
+  // size       Size        @relation(fields: [sizeId], references: [id])
+  // colorId          String // Foreign Key to Color
+  // color      Color       @relation(fields: [colorId], references: [id])
+  // orderItems OrderItem[] // Relation to Order model
+  // createdAt  DateTime    @default(now())
+  // updatedAt  DateTime    @updatedAt
+
+  @@index([storeId])
+  @@index([categoryId])
+  // @@index([sizeId])
+  // @@index([colorId])
+}
 model Order {
   id              String      @id @default(uuid())
   storeId         String // Foreign Key to Store
@@ -156,11 +191,15 @@ model Color {
 
 model Image {
   id              String   @id @default(uuid())
-  courseId        String // Foreign Key to course
+  courseId        String
+  serviceId       String // Foreign Key to service
   course          Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  service         Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
   url             String // URL of the image
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
   @@index([courseId])
+  @@index([serviceId])
+
 }
