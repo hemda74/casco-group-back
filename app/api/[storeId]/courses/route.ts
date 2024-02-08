@@ -34,8 +34,12 @@ export async function POST(
 			c_in_house_ar,
 			delv_and_leaders,
 			delv_and_leaders_ar,
-			date_and_rev,
-			date_and_rev_ar,
+			date_and_rev_1,
+			date_and_rev_2,
+			date_and_rev_3,
+			date_and_rev_4,
+			date_and_rev_5,
+			date_and_rev_6,
 		} = body;
 
 		if (!userId) {
@@ -166,12 +170,7 @@ export async function POST(
 				status: 400,
 			});
 		}
-		if (!date_and_rev) {
-			return new NextResponse('date and revnue is required', {
-				status: 400,
-			});
-		}
-		if (!date_and_rev_ar) {
+		if (!date_and_rev_1) {
 			return new NextResponse('date and revnue is required', {
 				status: 400,
 			});
@@ -234,8 +233,12 @@ export async function POST(
 				c_in_house_ar,
 				delv_and_leaders,
 				delv_and_leaders_ar,
-				date_and_rev,
-				date_and_rev_ar,
+				date_and_rev_1,
+				date_and_rev_2,
+				date_and_rev_3,
+				date_and_rev_4,
+				date_and_rev_5,
+				date_and_rev_6,
 
 				storeId: params.storeId,
 				images: {

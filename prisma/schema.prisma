@@ -52,33 +52,37 @@ model Category {
 }
 
 model Course {
-  id              String      @id @default(uuid())
-  storeId         String // Foreign Key to Store
-  store      Store       @relation("StoreTocourse", fields: [storeId], references: [id])
-  categoryId      String // Foreign Key to Category
-  category   Category    @relation("CategoryTocourse", fields: [categoryId], references: [id])
-  name            String
-  name_ar         String
-  price      Decimal
-  images     Image[] // Relation to Image model
-  intro           String @db.LongText
-  intro_ar        String @db.LongText
-  duaration       String @db.LongText
-  duration_ar     String @db.LongText
-  who_sh_att      String @db.LongText
-  who_sh_att_ar       String @db.LongText
-  c_obje          String
-  c_obje_ar          String
-  c_content       String
-  c_content_ar       String
-  wh_we_bnfi      String
-  wh_we_bnfi_ar      String
-  c_in_house      String
-  c_in_house_ar      String
-  delv_and_leaders      String
-  delv_and_leaders_ar      String
-  date_and_rev String
-  date_and_rev_ar String
+  id                       String       @id @default(uuid())
+  storeId                  String // Foreign Key to Store
+  store                    Store       @relation("StoreTocourse", fields: [storeId], references: [id])
+  categoryId               String // Foreign Key to Category
+  category                 Category    @relation("CategoryTocourse", fields: [categoryId], references: [id])
+  name                     String @db.LongText
+  name_ar                  String @db.LongText
+  price                    Decimal
+  images                   Image[] // Relation to Image model
+  intro                    String @db.LongText
+  intro_ar                 String @db.LongText
+  duaration                String @db.LongText
+  duration_ar              String @db.LongText
+  who_sh_att            String @db.LongText
+  who_sh_att_ar            String @db.LongText
+  c_obje                   String @db.LongText
+  c_obje_ar                String @db.LongText
+  c_content                String @db.LongText
+  c_content_ar             String @db.LongText
+  wh_we_bnfi               String @db.LongText
+  wh_we_bnfi_ar            String @db.LongText
+  c_in_house               String @db.LongText
+  c_in_house_ar            String @db.LongText
+  delv_and_leaders         String @db.LongText
+  delv_and_leaders_ar      String @db.LongText
+  date_and_rev_1           String @db.LongText
+  date_and_rev_2           String @db.LongText
+  date_and_rev_3           String @db.LongText
+  date_and_rev_4           String @db.LongText
+  date_and_rev_5           String @db.LongText
+  date_and_rev_6           String @db.LongText
 
   // isFeatured Boolean     @default(false)
   // isArchived Boolean     @default(false)
@@ -99,14 +103,14 @@ model Course {
 model Order {
   id              String      @id @default(uuid())
   storeId         String // Foreign Key to Store
-  store      Store       @relation("StoreToOrder", fields: [storeId], references: [id])
-  orderItems OrderItem[] // Relation to OrderItem model
-  isPaid     Boolean     @default(false)
+  store           Store       @relation("StoreToOrder", fields: [storeId], references: [id])
+  orderItems      OrderItem[] // Relation to OrderItem model
+  isPaid          Boolean     @default(false)
   phone           String      @default("")
   address         String      @default("")
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  
   @@index([storeId])
 }
 
@@ -139,7 +143,7 @@ model OrderItem {
 model Color {
   id              String    @id @default(uuid())
   storeId         String // Foreign Key to Store
-  store     Store     @relation("StoreToColor", fields: [storeId], references: [id])
+  store           Store     @relation("StoreToColor", fields: [storeId], references: [id])
   name            String
   name_ar         String
   value           String
@@ -152,11 +156,11 @@ model Color {
 
 model Image {
   id              String   @id @default(uuid())
-  courseId      String // Foreign Key to course
-  course   Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId        String // Foreign Key to course
+  course          Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
   url             String // URL of the image
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   @@index([courseId])
 }

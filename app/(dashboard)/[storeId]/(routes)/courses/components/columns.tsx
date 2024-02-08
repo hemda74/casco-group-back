@@ -25,8 +25,12 @@ export type ProductColumn = {
 	c_in_house_ar: string;
 	delv_and_leaders: string;
 	delv_and_leaders_ar: string;
-	date_and_rev: string;
-	date_and_rev_ar: string;
+	date_and_rev_1: string;
+	date_and_rev_2: string;
+	date_and_rev_3: string;
+	date_and_rev_4: string;
+	date_and_rev_5: string;
+	date_and_rev_6: string;
 };
 
 export const columns: ColumnDef<ProductColumn>[] = [
@@ -56,11 +60,11 @@ export const columns: ColumnDef<ProductColumn>[] = [
 	},
 	{
 		accessorKey: 'who_sh_att',
-		header: 'who_should_attend_this_course',
+		header: '								who_should_attend_this_course',
 	},
 	{
 		accessorKey: 'who_sh_att_ar',
-		header: 'who_should_attend_this_course_in_Arabic',
+		header: '								who_should_attend_this_course_in_Arabic',
 	},
 	{
 		accessorKey: 'c_obje',
@@ -68,15 +72,15 @@ export const columns: ColumnDef<ProductColumn>[] = [
 	},
 	{
 		accessorKey: 'c_obje_ar',
-		header: 'course_objective_in_Arabic',
+		header: '								course_objective_in_Arabic',
 	},
 	{
 		accessorKey: 'c_content',
-		header: 'course_Content',
+		header: '								course_Content',
 	},
 	{
 		accessorKey: 'c_content_ar',
-		header: 'course_Content_in_Arabic',
+		header: '								course_Content_in_Arabic',
 	},
 	{
 		accessorKey: 'wh_we_bnfi',
@@ -84,7 +88,7 @@ export const columns: ColumnDef<ProductColumn>[] = [
 	},
 	{
 		accessorKey: 'wh_we_bnfi_ar',
-		header: 'what_we_benefit_in_Arabic',
+		header: '								what_we_benefit_in_Arabic',
 	},
 	{
 		accessorKey: 'c_in_house',
@@ -92,15 +96,15 @@ export const columns: ColumnDef<ProductColumn>[] = [
 	},
 	{
 		accessorKey: 'c_in_house_ar',
-		header: 'Course_in_house_in_Arabic',
+		header: '								 Course_in_house_in_Arabic',
 	},
 	{
 		accessorKey: 'delv_and_leaders',
-		header: 'Style_of_Delivery_and_Course_Leaders',
+		header: '                                Style_of_Delivery_and_Course_Leaders',
 	},
 	{
 		accessorKey: 'delv_and_leaders_ar',
-		header: 'Style_of_Delivery_and_Course_Leaders_in_Arabic',
+		header: '                                 Style_of_Delivery_and_Course_Leaders_in_Arabic',
 	},
 	{
 		accessorKey: 'price',
@@ -112,13 +116,30 @@ export const columns: ColumnDef<ProductColumn>[] = [
 	},
 
 	{
-		accessorKey: 'date_and_rev',
+		accessorKey: 'date_and_rev_1',
 		header: 'Course_Date_1',
 	},
 	{
-		accessorKey: 'date_and_rev_ar',
+		accessorKey: 'date_and_rev_2',
 		header: 'Course_Date_2',
 	},
+	{
+		accessorKey: 'date_and_rev_3',
+		header: 'Course_Date_3',
+	},
+	{
+		accessorKey: 'date_and_rev_4',
+		header: 'Course_Date_4',
+	},
+	{
+		accessorKey: 'date_and_rev_5',
+		header: 'Course_Date_5',
+	},
+	{
+		accessorKey: 'date_and_rev_6',
+		header: 'Course_Date_6',
+	},
+
 	{
 		id: 'actions',
 		cell: ({ row }) => <CellAction data={row.original} />,

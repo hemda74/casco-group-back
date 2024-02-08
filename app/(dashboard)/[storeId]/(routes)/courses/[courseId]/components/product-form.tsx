@@ -56,8 +56,12 @@ const formSchema = z.object({
 	c_in_house_ar: z.string().min(1),
 	delv_and_leaders: z.string().min(1),
 	delv_and_leaders_ar: z.string().min(1),
-	date_and_rev: z.string().min(1),
-	date_and_rev_ar: z.string().min(1),
+	date_and_rev_1: z.string().min(1),
+	date_and_rev_2: z.string().min(1),
+	date_and_rev_3: z.string().min(1),
+	date_and_rev_4: z.string().min(1),
+	date_and_rev_5: z.string().min(1),
+	date_and_rev_6: z.string().min(1),
 
 	// colorId: z.string().min(1),
 	// sizeId: z.string().min(1),
@@ -122,8 +126,12 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 				c_in_house_ar: '',
 				delv_and_leaders: '',
 				delv_and_leaders_ar: '',
-				date_and_rev: '',
-				date_and_rev_ar: '',
+				date_and_rev_1: '',
+				date_and_rev_2: '',
+				date_and_rev_3: '',
+				date_and_rev_4: '',
+				date_and_rev_5: '',
+				date_and_rev_6: '',
 		  };
 
 	const form = useForm<CourseFormValues>({
@@ -680,7 +688,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="date_and_rev"
+							name="date_and_rev_1"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
@@ -704,15 +712,14 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="date_and_rev_ar"
+							name="date_and_rev_2"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										CourseDate
+										Course
+										Date
 										&
-										Revuen
-										in
-										arabic
+										Revuene
 									</FormLabel>
 									<FormControl>
 										<Input
@@ -727,6 +734,103 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 								</FormItem>
 							)}
 						/>
+						<FormField
+							control={form.control}
+							name="date_and_rev_3"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Course
+										Date
+										&
+										Revuene
+									</FormLabel>
+									<FormControl>
+										<Input
+											disabled={
+												loading
+											}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="date_and_rev_4"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Course
+										Date
+										&
+										Revuene
+									</FormLabel>
+									<FormControl>
+										<Input
+											disabled={
+												loading
+											}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="date_and_rev_5"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Course
+										Date
+										&
+										Revuene
+									</FormLabel>
+									<FormControl>
+										<Input
+											disabled={
+												loading
+											}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="date_and_rev_6"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Course
+										Date
+										&
+										Revuene
+									</FormLabel>
+									<FormControl>
+										<Input
+											disabled={
+												loading
+											}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
 						<FormField
 							control={form.control}
 							name="price"

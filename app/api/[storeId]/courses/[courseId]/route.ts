@@ -109,8 +109,12 @@ export async function PATCH(
 			c_in_house_ar,
 			delv_and_leaders,
 			delv_and_leaders_ar,
-			date_and_rev,
-			date_and_rev_ar,
+			date_and_rev_1,
+			date_and_rev_2,
+			date_and_rev_3,
+			date_and_rev_4,
+			date_and_rev_5,
+			date_and_rev_6,
 		} = body;
 
 		if (!userId) {
@@ -246,16 +250,15 @@ export async function PATCH(
 				status: 400,
 			});
 		}
-		if (!date_and_rev) {
-			return new NextResponse('date and revnue is required', {
-				status: 400,
-			});
+		if (!date_and_rev_1) {
+			return new NextResponse(
+				'At Least date and revnue is required',
+				{
+					status: 400,
+				}
+			);
 		}
-		if (!date_and_rev_ar) {
-			return new NextResponse('date and revnue is required', {
-				status: 400,
-			});
-		}
+
 		if (!delv_and_leaders) {
 			return new NextResponse(
 				'delviary and course leaders is required',
@@ -310,8 +313,12 @@ export async function PATCH(
 				c_in_house_ar,
 				delv_and_leaders,
 				delv_and_leaders_ar,
-				date_and_rev,
-				date_and_rev_ar,
+				date_and_rev_1,
+				date_and_rev_2,
+				date_and_rev_3,
+				date_and_rev_4,
+				date_and_rev_5,
+				date_and_rev_6,
 
 				images: {
 					deleteMany: {},
