@@ -85,7 +85,7 @@ model Course {
   date_and_rev_4           String @db.LongText
   date_and_rev_5           String @db.LongText
   date_and_rev_6           String @db.LongText
-  certification
+  certification            String @db.LongText
   // isFeatured Boolean     @default(false)
   // isArchived Boolean     @default(false)
   // sizeId           String // Foreign Key to Size
