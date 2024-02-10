@@ -15,7 +15,7 @@ model Store {
   billboards Billboard[] @relation("StoreToBillboard")
   categories Category[]  @relation("StoreToCategory")
   courses   Course[]   @relation("StoreToCourse")
-  // Services   Service[]   @relation("StoreToService")
+  Services   Service[]   @relation("StoreToService")
   // sizes      Size[]      @relation("StoreToSize")
   colors     Color[]     @relation("StoreToColor")
   orders     Order[]     @relation("StoreToOrder")
@@ -45,7 +45,7 @@ model Category {
   name              String
   name_ar           String
   courses     Course[] @relation("CategoryToCourse")
-  // services     Service[] @relation("CategoryToService")
+  services     Service[] @relation("CategoryToService")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
@@ -101,24 +101,24 @@ model Course {
   // @@index([sizeId])
   // @@index([colorId])
 }
-// model Service {
-//   id                       String       @id @default(uuid())
-//   storeId                  String // Foreign Key to Store
-//   store                    Store       @relation("StoreToService", fields: [storeId], references: [id])
-//   categoryId               String // Foreign Key to Category
-//   category                 Category    @relation("CategoryToService", fields: [categoryId], references: [id])
-//   name                     String @db.LongText
-//   name_ar                  String @db.LongText
-//   price                    Decimal
-//   images                   Image[] // Relation to Image model
-//   title_1                  String @db.LongText
-//   explanation_1            String @db.LongText
-//   title_2                  String @db.LongText
-//   explanation_2            String @db.LongText
-//   title_3                  String @db.LongText
-//   explanation_3            String @db.LongText
-//   title_4                  String @db.LongText
-//   explanation_4            String @db.LongText
+
+ model Service {
+   id                       String       @id @default(uuid())
+   storeId                  String   //Foreign Key to Store
+   store                    Store       @relation("StoreToService", fields: [storeId], references: [id])
+   categoryId               String  // Foreign Key to Category
+   category                 Category    @relation("CategoryToService", fields: [categoryId], references: [id])
+   name                     String @db.LongText
+   name_ar                  String @db.LongText
+   price                    Decimal
+   title_1                  String @db.LongText
+   explanation_1            String @db.LongText
+   title_2                  String @db.LongText
+   explanation_2            String @db.LongText
+   title_3                  String @db.LongText
+   explanation_3            String @db.LongText
+   title_4                  String @db.LongText
+   explanation_4            String @db.LongText
 
 //   // isFeatured Boolean     @default(false)
 //   // isArchived Boolean     @default(false)
@@ -130,11 +130,11 @@ model Course {
 //   // createdAt  DateTime    @default(now())
 //   // updatedAt  DateTime    @updatedAt
 
-//   @@index([storeId])
-//   @@index([categoryId])
+   @@index([storeId])
+  @@index([categoryId])
 //   // @@index([sizeId])
 //   // @@index([colorId])
-// }
+}
 model Order {
   id              String      @id @default(uuid())
   storeId         String // Foreign Key to Store
