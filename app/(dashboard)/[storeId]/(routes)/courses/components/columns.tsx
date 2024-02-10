@@ -31,6 +31,7 @@ export type ProductColumn = {
 	date_and_rev_4: string;
 	date_and_rev_5: string;
 	date_and_rev_6: string;
+	certification: string;
 };
 
 export const columns: ColumnDef<ProductColumn>[] = [
@@ -105,6 +106,10 @@ export const columns: ColumnDef<ProductColumn>[] = [
 	{
 		accessorKey: 'delv_and_leaders_ar',
 		header: 'Style_of_Delivery_and_Course_Leaders_in_Arabic___________________________________',
+	},
+	{
+		accessorKey: 'certification',
+		header: 'Course_Certification___________________________________',
 	},
 	{
 		accessorKey: 'price',

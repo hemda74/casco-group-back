@@ -20,6 +20,7 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
+	Textarea,
 } from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
 import { Heading } from '@/components/ui/heading';
@@ -62,6 +63,7 @@ const formSchema = z.object({
 	date_and_rev_4: z.string().min(1),
 	date_and_rev_5: z.string().min(1),
 	date_and_rev_6: z.string().min(1),
+	certification: z.string().min(1),
 
 	// colorId: z.string().min(1),
 	// sizeId: z.string().min(1),
@@ -132,6 +134,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 				date_and_rev_4: '',
 				date_and_rev_5: '',
 				date_and_rev_6: '',
+				certification: '',
 		  };
 
 	const form = useForm<CourseFormValues>({
@@ -317,7 +320,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 										Introduction
 									</FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={
 												loading
 											}
@@ -672,6 +675,28 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 										leaders
 										in
 										arabic
+									</FormLabel>
+									<FormControl>
+										<Input
+											disabled={
+												loading
+											}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="certification"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Course
+										Certification
 									</FormLabel>
 									<FormControl>
 										<Input

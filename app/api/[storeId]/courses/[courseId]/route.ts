@@ -115,6 +115,7 @@ export async function PATCH(
 			date_and_rev_4,
 			date_and_rev_5,
 			date_and_rev_6,
+			certification,
 		} = body;
 
 		if (!userId) {
@@ -258,6 +259,14 @@ export async function PATCH(
 				}
 			);
 		}
+		if (!certification) {
+			return new NextResponse(
+				'Course Certification is required',
+				{
+					status: 400,
+				}
+			);
+		}
 
 		if (!delv_and_leaders) {
 			return new NextResponse(
@@ -319,6 +328,7 @@ export async function PATCH(
 				date_and_rev_4,
 				date_and_rev_5,
 				date_and_rev_6,
+				certification,
 
 				images: {
 					deleteMany: {},

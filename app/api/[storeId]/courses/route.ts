@@ -40,6 +40,7 @@ export async function POST(
 			date_and_rev_4,
 			date_and_rev_5,
 			date_and_rev_6,
+			certification,
 		} = body;
 
 		if (!userId) {
@@ -191,6 +192,14 @@ export async function POST(
 				}
 			);
 		}
+		if (!certification) {
+			return new NextResponse(
+				'delviary and course leaders in arabic is required',
+				{
+					status: 400,
+				}
+			);
+		}
 
 		if (!params.storeId) {
 			return new NextResponse('Store id is required', {
@@ -239,6 +248,7 @@ export async function POST(
 				date_and_rev_4,
 				date_and_rev_5,
 				date_and_rev_6,
+				certification,
 
 				storeId: params.storeId,
 				images: {
