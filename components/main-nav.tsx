@@ -33,15 +33,20 @@ export function MainNav({
 			label: 'Sizes',
 			active: pathname === `/${params.storeId}/sizes`,
 		},
-		{
-			href: `/${params.storeId}/colors`,
-			label: 'Colors',
-			active: pathname === `/${params.storeId}/colors`,
-		},
+		// {
+		// 	href: `/${params.storeId}/colors`,
+		// 	label: 'Colors',
+		// 	active: pathname === `/${params.storeId}/colors`,
+		// },
 		{
 			href: `/${params.storeId}/courses`,
 			label: 'Courses',
 			active: pathname === `/${params.storeId}/courses`,
+		},
+		{
+			href: `/${params.storeId}/services`,
+			label: 'Services',
+			active: pathname === `/${params.storeId}/services`,
 		},
 		{
 			href: `/${params.storeId}/orders`,

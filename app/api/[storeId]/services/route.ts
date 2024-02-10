@@ -12,35 +12,7 @@ export async function POST(
 
 		const body = await req.json();
 
-		const {
-			name,
-			name_ar,
-			price,
-			categoryId,
-			images,
-			intro,
-			intro_ar,
-			duaration,
-			duration_ar,
-			who_sh_att,
-			who_sh_att_ar,
-			c_obje,
-			c_obje_ar,
-			c_content,
-			c_content_ar,
-			wh_we_bnfi,
-			wh_we_bnfi_ar,
-			c_in_house,
-			c_in_house_ar,
-			delv_and_leaders,
-			delv_and_leaders_ar,
-			date_and_rev_1,
-			date_and_rev_2,
-			date_and_rev_3,
-			date_and_rev_4,
-			date_and_rev_5,
-			date_and_rev_6,
-		} = body;
+		const {} = body;
 
 		if (!userId) {
 			return new NextResponse('Unauthenticated', {
@@ -213,33 +185,6 @@ export async function POST(
 
 		const product = await prismadb.course.create({
 			data: {
-				name,
-				price,
-				categoryId,
-				name_ar,
-				intro,
-				intro_ar,
-				duaration,
-				duration_ar,
-				who_sh_att,
-				who_sh_att_ar,
-				c_obje,
-				c_obje_ar,
-				c_content,
-				c_content_ar,
-				wh_we_bnfi,
-				wh_we_bnfi_ar,
-				c_in_house,
-				c_in_house_ar,
-				delv_and_leaders,
-				delv_and_leaders_ar,
-				date_and_rev_1,
-				date_and_rev_2,
-				date_and_rev_3,
-				date_and_rev_4,
-				date_and_rev_5,
-				date_and_rev_6,
-
 				storeId: params.storeId,
 				images: {
 					createMany: {

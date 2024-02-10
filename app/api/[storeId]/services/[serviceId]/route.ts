@@ -5,10 +5,10 @@ import prismadb from '@/lib/prismadb';
 
 export async function GET(
 	req: Request,
-	{ params }: { params: { courseId: string } }
+	{ params }: { params: { serviceId: string } }
 ) {
 	try {
-		if (!params.courseId) {
+		if (!params.serviceId) {
 			return new NextResponse('course id is required', {
 				status: 400,
 			});
@@ -16,7 +16,7 @@ export async function GET(
 
 		const course = await prismadb.course.findUnique({
 			where: {
-				id: params.courseId,
+				id: params.serviceId,
 			},
 			include: {
 				images: true,
@@ -28,14 +28,14 @@ export async function GET(
 
 		return NextResponse.json(course);
 	} catch (error) {
-		console.log('[course_GET]', error);
+		console.log('[service_GET]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { courseId: string; storeId: string } }
+	{ params }: { params: { serviceId: string; storeId: string } }
 ) {
 	try {
 		const { userId } = auth();
@@ -46,7 +46,7 @@ export async function DELETE(
 			});
 		}
 
-		if (!params.courseId) {
+		if (!params.serviceId) {
 			return new NextResponse('course id is required', {
 				status: 400,
 			});
@@ -67,7 +67,7 @@ export async function DELETE(
 
 		const course = await prismadb.course.delete({
 			where: {
-				id: params.courseId,
+				id: params.serviceId,
 			},
 		});
 
@@ -80,7 +80,7 @@ export async function DELETE(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { courseId: string; storeId: string } }
+	{ params }: { params: { serviceId: string; storeId: string } }
 ) {
 	try {
 		const { userId } = auth();
@@ -123,7 +123,7 @@ export async function PATCH(
 			});
 		}
 
-		if (!params.courseId) {
+		if (!params.serviceId) {
 			return new NextResponse('Course Id is required', {
 				status: 400,
 			});
@@ -290,7 +290,7 @@ export async function PATCH(
 
 		await prismadb.course.update({
 			where: {
-				id: params.courseId,
+				id: params.serviceId,
 			},
 			data: {
 				name,
@@ -328,7 +328,7 @@ export async function PATCH(
 
 		const course = await prismadb.course.update({
 			where: {
-				id: params.courseId,
+				id: params.serviceId,
 			},
 			data: {
 				images: {
