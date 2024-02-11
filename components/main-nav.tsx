@@ -24,10 +24,20 @@ export function MainNav({
 			active: pathname === `/${params.storeId}/billboards`,
 		},
 		{
-			href: `/${params.storeId}/categories`,
-			label: 'Categories',
-			active: pathname === `/${params.storeId}/categories`,
+			href: `/${params.storeId}/courses-categories`,
+			label: 'Courses Categories',
+			active:
+				pathname ===
+				`/${params.storeId}/courses-categories`,
 		},
+		{
+			href: `/${params.storeId}/services-categories`,
+			label: 'Services Categories',
+			active:
+				pathname ===
+				`/${params.storeId}/services-categories`,
+		},
+
 		{
 			href: `/${params.storeId}/sizes`,
 			label: 'Sizes',

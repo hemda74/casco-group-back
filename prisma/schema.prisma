@@ -13,7 +13,8 @@ model Store {
   name            String
   userId          String
   billboards Billboard[] @relation("StoreToBillboard")
-  categories Category[]  @relation("StoreToCategory")
+  coursescategories CoursesCategory[]  @relation("StoreToCategory")
+  servicescategories ServicesCategory[] @relation("StoreToCategory")
   courses   Course[]   @relation("StoreToCourse")
   Services   Service[]   @relation("StoreToService")
   // sizes      Size[]      @relation("StoreToSize")
@@ -29,25 +30,40 @@ model Billboard {
   store      Store      @relation("StoreToBillboard", fields: [storeId], references: [id])
   label           String
   label_ar        String
-  categories Category[]
+  coursescategories CoursesCategory[]
+  servicescategories ServicesCategory[]
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 
   @@index([storeId])
 }
 
-model Category {
+model CoursesCategory {
   id                String    @id @default(uuid())
   storeId           String // Foreign Key to Store
-  store       Store     @relation("StoreToCategory", fields: [storeId], references: [id])
+  store             Store     @relation("StoreToCategory", fields: [storeId], references: [id])
   billboardId       String // Foreign Key to Billboard
-  billboard   Billboard @relation(fields: [billboardId], references: [id])
+  billboard         Billboard @relation(fields: [billboardId], references: [id])
   name              String
   name_ar           String
-  courses     Course[] @relation("CategoryToCourse")
-  services     Service[] @relation("CategoryToService")
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  courses           Course[] @relation("CategoryToCourse")
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([storeId])
+  @@index([billboardId])
+}
+model ServicesCategory {
+  id                String    @id @default(uuid())
+  storeId           String // Foreign Key to Store
+  store             Store     @relation("StoreToCategory", fields: [storeId], references: [id])
+  billboardId       String // Foreign Key to Billboard
+  billboard         Billboard @relation(fields: [billboardId], references: [id])
+  name              String
+  name_ar           String
+  service           Service[] @relation("CategoryToService")
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
   @@index([storeId])
   @@index([billboardId])
@@ -58,7 +74,7 @@ model Course {
   storeId                  String // Foreign Key to Store
   store                    Store       @relation("StoreToCourse", fields: [storeId], references: [id])
   categoryId               String // Foreign Key to Category
-  category                 Category    @relation("CategoryToCourse", fields: [categoryId], references: [id])
+  category                 CoursesCategory    @relation("CategoryToCourse", fields: [categoryId], references: [id])
   name                     String @db.LongText
   name_ar                  String @db.LongText
   price                    Decimal
@@ -107,7 +123,7 @@ model Course {
    storeId                  String   //Foreign Key to Store
    store                    Store       @relation("StoreToService", fields: [storeId], references: [id])
    categoryId               String  // Foreign Key to Category
-   category                 Category    @relation("CategoryToService", fields: [categoryId], references: [id])
+   category                 ServicesCategory    @relation("CategoryToService", fields: [categoryId], references: [id])
    name                     String @db.LongText
    name_ar                  String @db.LongText
    title_1                  String @db.LongText
@@ -148,7 +164,46 @@ model OrderItem {
   @@index([orderId])
   @@index([courseId])
 }
+model Color {
+  id              String    @id @default(uuid())
+  storeId         String // Foreign Key to Store
+  store           Store     @relation("StoreToColor", fields: [storeId], references: [id])
+  name            String
+  name_ar         String
+  value           String
+  // courses  course[] // Relation to course model
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
+  @@index([storeId])
+}
+model Image {
+  id              String   @id @default(uuid())
+  courseId        String
+  course          Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  // service         Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  url             String // URL of the image
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  @@index([courseId])
+}
+ model Persontoservice{
+  id              String   @id @default(uuid())
+  name            String
+  bio             String @db.LongText
+  mail            String
+  images          Image2[]
+ }
+model Image2 {
+  id                    String   @id @default(uuid())
+  persontoserviceId     String
+  persontoservice       Persontoservice  @relation(fields: [persontoserviceId], references: [id], onDelete: Cascade)
+  url                   String // URL of the image
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([persontoserviceId])
+}
 // model Size {
 //   id             String    @id @default(uuid())
 //   storeId        String // Foreign Key to Store
@@ -162,30 +217,3 @@ model OrderItem {
 
 //   @@index([storeId])
 // }
-
-model Color {
-  id              String    @id @default(uuid())
-  storeId         String // Foreign Key to Store
-  store           Store     @relation("StoreToColor", fields: [storeId], references: [id])
-  name            String
-  name_ar         String
-  value           String
-  // courses  course[] // Relation to course model
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  @@index([storeId])
-}
-
-model Image {
-  id              String   @id @default(uuid())
-  courseId        String
-  course          Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  // service         Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
-  url             String // URL of the image
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  @@index([courseId])
-}
-
