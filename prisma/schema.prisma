@@ -149,7 +149,6 @@ model Order {
   address         String      @default("")
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
-  
   @@index([storeId])
 }
 
@@ -160,7 +159,6 @@ model OrderItem {
   order           Order   @relation(fields: [orderId], references: [id])
   courseId        String // Foreign Key to course
   // course   course @relation(fields: [courseId], references: [id])
-
   @@index([orderId])
   @@index([courseId])
 }
