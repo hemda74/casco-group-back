@@ -20,6 +20,7 @@ model Store {
   Services                Service[]                       @relation("StoreToService")
   Industries              Industry[]                      @relation("StoreToIndustry")
   colors                  Color[]                         @relation("StoreToColor")
+  currences               Currency[]                      @relation("StoreToCurrency")
   orders                  Order[]                         @relation("StoreToOrder")
   casestudies             CaseStudy[]                     @relation("StoreToCaseStudy")
   createdAt               DateTime                        @default(now())
@@ -174,6 +175,19 @@ model Course {
   @@index([categoryId])
 //   // @@index([sizeId])
 //   // @@index([colorId])
+}
+model Currency {
+  id              String    @id @default(uuid())
+  storeId         String // Foreign Key to Store
+  store           Store     @relation("StoreToCurrency", fields: [storeId], references: [id])
+  name            String
+  name_ar         String
+  value           String
+  // courses  course[] // Relation to course model
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([storeId])
 }
 model CaseStudy {
   id             String    @id @default(uuid())
