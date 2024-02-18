@@ -9,35 +9,37 @@ datasource db {
 }
 
 model Store {
-  id              String      @id @default(uuid())
-  name            String
-  userId          String
-  billboards Billboard[] @relation("StoreToBillboard")
-  coursescategories CoursesCategory[]  @relation("StoreToCategory")
-  servicescategories ServicesCategory[] @relation("StoreToCategory")
-  courses   Course[]   @relation("StoreToCourse")
-  Services   Service[]   @relation("StoreToService")
-  // sizes      Size[]      @relation("StoreToSize")
-  colors     Color[]     @relation("StoreToColor")
-  orders     Order[]     @relation("StoreToOrder")
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  id                      String                          @id @default(uuid())
+  name                    String
+  userId                  String
+  billboards              Billboard[]                     @relation("StoreToBillboard")
+  coursescategories       CoursesCategory[]               @relation("StoreToCategory")
+  servicescategories      ServicesCategory[]              @relation("StoreToCategory")
+  industriescategories    IndustryCategory[]              @relation("StoreToCategory")
+  courses                 Course[]                        @relation("StoreToCourse")
+  Services                Service[]                       @relation("StoreToService")
+  Industries              Industry[]                      @relation("StoreToIndustry")
+  colors                  Color[]                         @relation("StoreToColor")
+  orders                  Order[]                         @relation("StoreToOrder")
+  casestudies             CaseStudy[]                     @relation("StoreToCaseStudy")
+  createdAt               DateTime                        @default(now())
+  updatedAt               DateTime                        @updatedAt
+ //sizes                  Size[]                          @relation("StoreToSize")
 }
-
 model Billboard {
-  id              String     @id @default(uuid())
-  storeId         String
-  store      Store      @relation("StoreToBillboard", fields: [storeId], references: [id])
-  label           String
-  label_ar        String
-  coursescategories CoursesCategory[]
-  servicescategories ServicesCategory[]
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  id                        String                @id @default(uuid())
+  storeId                   String
+  store                     Store                 @relation("StoreToBillboard", fields: [storeId], references: [id])
+  label                     String
+  label_ar                  String
+  coursescategories         CoursesCategory[]
+  servicescategories        ServicesCategory[]
+  industriescategories      IndustryCategory[]
+  createdAt                 DateTime               @default(now())
+  updatedAt                 DateTime               @updatedAt
 
   @@index([storeId])
 }
-
 model CoursesCategory {
   id                String    @id @default(uuid())
   storeId           String // Foreign Key to Store
@@ -47,6 +49,21 @@ model CoursesCategory {
   name              String
   name_ar           String
   courses           Course[] @relation("CategoryToCourse")
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([storeId])
+  @@index([billboardId])
+}
+model IndustryCategory {
+  id                String    @id @default(uuid())
+  storeId           String // Foreign Key to Store
+  store             Store     @relation("StoreToCategory", fields: [storeId], references: [id])
+  billboardId       String // Foreign Key to Billboard
+  billboard         Billboard @relation(fields: [billboardId], references: [id])
+  name              String
+  name_ar           String
+  industries        Industry[] @relation("CategoryToIndustry")
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
 
@@ -68,7 +85,6 @@ model ServicesCategory {
   @@index([storeId])
   @@index([billboardId])
 }
-
 model Course {
   id                       String       @id @default(uuid())
   storeId                  String // Foreign Key to Store
@@ -139,6 +155,42 @@ model Course {
 //   // @@index([sizeId])
 //   // @@index([colorId])
 }
+ model Industry {
+   id                       String              @id @default(uuid())
+   storeId                  String   //Foreign Key to Store
+   store                    Store               @relation("StoreToIndustry", fields: [storeId], references: [id])
+   categoryId               String  // Foreign Key to Category
+   category                 IndustryCategory    @relation("CategoryToIndustry", fields: [categoryId], references: [id])
+   casestudy                CaseStudy[]         @relation("IndustryToCaseStudy")
+   name                     String              @db.LongText
+   name_ar                  String              @db.LongText
+   title_1                  String              @db.LongText
+   explanation_1            String              @db.LongText
+   title_2                  String              @db.LongText
+   explanation_2            String              @db.LongText
+   title_3                  String              @db.LongText
+   explanation_3            String              @db.LongText
+   @@index([storeId])
+  @@index([categoryId])
+//   // @@index([sizeId])
+//   // @@index([colorId])
+}
+model CaseStudy {
+  id             String    @id @default(uuid())
+  storeId         String // Foreign Key to Store
+  store           Store     @relation("StoreToCaseStudy", fields: [storeId], references: [id])
+  name            String
+  name_ar         String
+  value           String
+  industryId      String // Foreign Key to Industry
+  industry        Industry  @relation("IndustryToCaseStudy",fields: [industryId],references: [id])
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  @@index([storeId])
+  @@index([industryId])
+}
+
+
 model Order {
   id              String      @id @default(uuid())
   storeId         String // Foreign Key to Store
@@ -186,9 +238,9 @@ model Image {
   @@index([courseId])
 }
  model Persontoservice{
-  id              String   @id @default(uuid())
+  id              String    @id @default(uuid())
   name            String
-  bio             String @db.LongText
+  bio             String    @db.LongText
   mail            String
   images          Image2[]
  }
