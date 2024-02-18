@@ -104,7 +104,7 @@ export async function PATCH(
 			});
 		}
 		if (!name_ar) {
-			return new NextResponse('Name is required', {
+			return new NextResponse('Arabic Name is required', {
 				status: 400,
 			});
 		}
