@@ -62,7 +62,7 @@ export async function DELETE(
 			});
 		}
 
-		const category = await prismadb.category.delete({
+		const category = await prismadb.coursesCategory.delete({
 			where: {
 				id: params.categoryId,
 			},
@@ -84,7 +84,7 @@ export async function PATCH(
 
 		const body = await req.json();
 
-		const { name, billboardId } = body;
+		const { name, name_ar, billboardId } = body;
 
 		if (!userId) {
 			return new NextResponse('Unauthenticated', {
@@ -99,6 +99,11 @@ export async function PATCH(
 		}
 
 		if (!name) {
+			return new NextResponse('Name is required', {
+				status: 400,
+			});
+		}
+		if (!name_ar) {
 			return new NextResponse('Name is required', {
 				status: 400,
 			});
@@ -123,7 +128,7 @@ export async function PATCH(
 			});
 		}
 
-		const category = await prismadb.category.update({
+		const category = await prismadb.coursesCategory.update({
 			where: {
 				id: params.categoryId,
 			},
