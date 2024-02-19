@@ -48,7 +48,10 @@ export const BillboardClient: React.FC<BillboardClientProps> = ({ data }) => {
 				description="API Calls for Billboards"
 			/>
 			<Separator />
-			{/* <ApiList entityName="billboards" entityIdName="billboardId" /> */}
+			<ApiList
+				entityName="billboards"
+				entityIdName="billboardId"
+			/>
 		</>
 	);
 };
