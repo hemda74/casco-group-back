@@ -23,7 +23,7 @@ export const BillboardClient: React.FC<BillboardClientProps> = ({ data }) => {
 		<>
 			<div className="flex items-center justify-between">
 				<Heading
-					title={`Categorious(${data.length})`}
+					title={`Main Categorious(${data.length})`}
 					description="Manage Gategories for your App"
 				/>
 				<Button
