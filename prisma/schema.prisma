@@ -23,6 +23,7 @@ model Store {
   currences               Currency[]                      @relation("StoreToCurrency")
   orders                  Order[]                         @relation("StoreToOrder")
   casestudies             CaseStudy[]                     @relation("StoreToCaseStudy")
+  expert                  Expert[]                        @relation("StoreToExpert")
   createdAt               DateTime                        @default(now())
   updatedAt               DateTime                        @updatedAt
  //sizes                  Size[]                          @relation("StoreToSize")
@@ -162,12 +163,12 @@ model Course {
     explanation_2_1_ar           String @db.LongText
    explanation_2_2_ar           String @db.LongText
    title_3_ar                  String @db.LongText
-     explanation_3_1_ar           String @db.LongText
+  explanation_3_1_ar           String @db.LongText
    explanation_3_2_ar           String @db.LongText
    title_4_ar                  String @db.LongText
    explanation_4_1_ar           String @db.LongText
    explanation_4_2_ar           String @db.LongText
-  expert            Expert[] @relation("ExpertToService")
+  expert                          Expert[] @relation("ExpertToService")
    @@index([storeId])
   @@index([categoryId])
 //   // @@index([sizeId])
@@ -180,6 +181,7 @@ model Course {
    categoryId               String  // Foreign Key to Category
    category                 IndustryCategory    @relation("CategoryToIndustry", fields: [categoryId], references: [id])
    casestudy                CaseStudy[]         @relation("IndustryToCaseStudy")
+   expert                   Expert[]            @relation("ExpertToIndustry")
    name                     String              @db.LongText
    name_ar                  String              @db.LongText
    title_1                  String              @db.LongText
@@ -189,7 +191,7 @@ model Course {
    title_3                  String              @db.LongText
    explanation_3            String              @db.LongText
    @@index([storeId])
-  @@index([categoryId])
+   @@index([categoryId])
 //   // @@index([sizeId])
 //   // @@index([colorId])
 }
@@ -203,20 +205,37 @@ model Currency {
   // courses  course[] // Relation to course model
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
-
   @@index([storeId])
 }
 model CaseStudy {
-  id             String    @id @default(uuid())
+  id              String    @id @default(uuid())
   storeId         String // Foreign Key to Store
   store           Store     @relation("StoreToCaseStudy", fields: [storeId], references: [id])
   name            String
   name_ar         String
-  value           String
   industryId      String // Foreign Key to Industry
   industry        Industry  @relation("IndustryToCaseStudy",fields: [industryId],references: [id])
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  sub_title       String
+  sub_title_ar       String
+  onerole_1          String
+  onerole_2          String
+  onerole_3          String
+  onerole_1_ar          String
+  onerole_2_ar          String
+  onerole_3_ar          String
+  result_1             String
+ result_2 String
+ result_3 String 
+ result_4 String
+  result_1_ar             String
+ result_2_ar String
+ result_3_ar String 
+ result_4_ar String
+ brief_1  String
+ brief_2 String
+ brief_1_ar  String
+ brief_2_ar String
+
   @@index([storeId])
   @@index([industryId])
 }
@@ -269,15 +288,20 @@ model Image {
 }
  model Expert{
   id              String    @id @default(uuid())
-  serviceId       String //
-     service                 Service    @relation("ExpertToService", fields: [serviceId], references: [id])
-
+  storeId         String // Foreign Key to Store
+  store           Store     @relation("StoreToExpert", fields: [storeId], references: [id])
+  serviceId       String // Foreign Key to Service 
+  industryId       String // Foreign Key to Industry 
+  service                 Service    @relation("ExpertToService", fields: [serviceId], references: [id])
+  idustry                 Industry    @relation("ExpertToIndustry", fields: [industryId], references: [id])
   name            String
   bio             String    @db.LongText
   mail            String
   phone           String
   images          Image2[]
+  @@index([storeId])
   @@index([serviceId])
+  @@index([industryId])
  }
 model Image2 {
   id                    String   @id @default(uuid())
