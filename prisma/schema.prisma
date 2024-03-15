@@ -217,25 +217,25 @@ model CaseStudy {
   industry        Industry  @relation("IndustryToCaseStudy",fields: [industryId],references: [id])
   sub_title       String
   sub_title_ar       String
-  onerole_1          String
-  onerole_2          String
-  onerole_3          String
-  onerole_1_ar          String
-  onerole_2_ar          String
-  onerole_3_ar          String
-  result_1             String
- result_2 String
- result_3 String 
- result_4 String
-  result_1_ar             String
- result_2_ar String
- result_3_ar String 
- result_4_ar String
- brief_1  String
- brief_2 String
- brief_1_ar  String
- brief_2_ar String
-
+  onerole_1          String  @db.LongText 
+  onerole_2          String  @db.LongText
+  onerole_3          String  @db.LongText
+  onerole_1_ar          String  @db.LongText
+  onerole_2_ar          String  @db.LongText
+  onerole_3_ar          String  @db.LongText
+  result_1             String  @db.LongText
+ result_2 String  @db.LongText
+ result_3 String  @db.LongText 
+ result_4 String  @db.LongText
+  result_1_ar             String  @db.LongText
+ result_2_ar String  @db.LongText
+ result_3_ar String  @db.LongText 
+ result_4_ar String  @db.LongText
+ brief_1  String  @db.LongText
+ brief_2 String  @db.LongText
+ brief_1_ar  String  @db.LongText
+ brief_2_ar String  @db.LongText
+ image    Image3[]
   @@index([storeId])
   @@index([industryId])
 }
@@ -292,10 +292,12 @@ model Image {
   store           Store     @relation("StoreToExpert", fields: [storeId], references: [id])
   serviceId       String // Foreign Key to Service 
   industryId       String // Foreign Key to Industry 
-  service                 Service    @relation("ExpertToService", fields: [serviceId], references: [id])
-  idustry                 Industry    @relation("ExpertToIndustry", fields: [industryId], references: [id])
+service           Service    @relation("ExpertToService", fields: [serviceId], references: [id])
+idustry           Industry    @relation("ExpertToIndustry", fields: [industryId], references: [id])
   name            String
+  name_ar         String
   bio             String    @db.LongText
+  bio_ar          String 
   mail            String
   phone           String
   images          Image2[]
@@ -311,6 +313,15 @@ model Image2 {
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
   @@index([expertId])
+}
+model Image3 {
+  id                    String   @id @default(uuid())
+  casestudyId     String
+  casestudy      CaseStudy  @relation(fields: [casestudyId], references: [id], onDelete: Cascade)
+  url                   String // URL of the image
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  @@index([casestudyId])
 }
 // model Size {
 //   id             String    @id @default(uuid())
