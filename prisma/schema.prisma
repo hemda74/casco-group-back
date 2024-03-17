@@ -24,6 +24,7 @@ model Store {
   orders                  Order[]                         @relation("StoreToOrder")
   casestudies             CaseStudy[]                     @relation("StoreToCaseStudy")
   expert                  Expert[]                        @relation("StoreToExpert")
+  team                    Team[]                          @relation("StoreToTeam")
   createdAt               DateTime                        @default(now())
   updatedAt               DateTime                        @updatedAt
  //sizes                  Size[]                          @relation("StoreToSize")
@@ -37,6 +38,7 @@ model Billboard {
   coursescategories         CoursesCategory[]
   servicescategories        ServicesCategory[]
   industriescategories      IndustryCategory[]
+  teams                      Team[]
   createdAt                 DateTime               @default(now())
   updatedAt                 DateTime               @updatedAt
 
@@ -56,6 +58,18 @@ model CoursesCategory {
 
   @@index([storeId])
   @@index([billboardId])
+}
+model Team {
+ id               String @id @default(uuid())
+ storeId          String 
+ store            Store   @relation("StoreToTeam",fields: [storeId],references: [id])
+ billboardId      String
+ name             String
+ name_ar          String
+ image            Image4[]
+ billboard         Billboard @relation(fields: [billboardId],references: [id])
+ @@index([storeId])
+ @@index([billboardId])
 }
 model IndustryCategory {
   id                String    @id @default(uuid())
@@ -224,9 +238,9 @@ model CaseStudy {
   onerole_2_ar          String  @db.LongText
   onerole_3_ar          String  @db.LongText
   result_1             String  @db.LongText
- result_2 String  @db.LongText
- result_3 String  @db.LongText 
- result_4 String  @db.LongText
+  result_2 String  @db.LongText
+  result_3 String  @db.LongText 
+  result_4 String  @db.LongText
   result_1_ar             String  @db.LongText
  result_2_ar String  @db.LongText
  result_3_ar String  @db.LongText 
@@ -292,12 +306,12 @@ model Image {
   store           Store     @relation("StoreToExpert", fields: [storeId], references: [id])
   serviceId       String // Foreign Key to Service 
   industryId       String // Foreign Key to Industry 
-service           Service    @relation("ExpertToService", fields: [serviceId], references: [id])
-idustry           Industry    @relation("ExpertToIndustry", fields: [industryId], references: [id])
+  service           Service    @relation("ExpertToService", fields: [serviceId], references: [id])
+  idustry           Industry    @relation("ExpertToIndustry", fields: [industryId], references: [id])
   name            String
   name_ar         String
   bio             String    @db.LongText
-  bio_ar          String 
+  bio_ar          String    @db.LongText
   mail            String
   phone           String
   images          Image2[]
@@ -322,6 +336,16 @@ model Image3 {
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
   @@index([casestudyId])
+}
+
+model Image4 {
+  id                    String   @id @default(uuid())
+  teamId     String
+  team      Team  @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  url                   String // URL of the image
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  @@index([teamId])
 }
 // model Size {
 //   id             String    @id @default(uuid())
