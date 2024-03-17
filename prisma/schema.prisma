@@ -20,14 +20,13 @@ model Store {
   Services                Service[]                       @relation("StoreToService")
   Industries              Industry[]                      @relation("StoreToIndustry")
   colors                  Color[]                         @relation("StoreToColor")
-  currences               Currency[]                      @relation("StoreToCurrency")
   orders                  Order[]                         @relation("StoreToOrder")
   casestudies             CaseStudy[]                     @relation("StoreToCaseStudy")
   expert                  Expert[]                        @relation("StoreToExpert")
   team                    Team[]                          @relation("StoreToTeam")
+  teammember              TeamMember[]                    @relation("StoreToTeamMember")
   createdAt               DateTime                        @default(now())
   updatedAt               DateTime                        @updatedAt
- //sizes                  Size[]                          @relation("StoreToSize")
 }
 model Billboard {
   id                        String                @id @default(uuid())
@@ -55,7 +54,6 @@ model CoursesCategory {
   courses           Course[] @relation("CategoryToCourse")
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
-
   @@index([storeId])
   @@index([billboardId])
 }
@@ -68,6 +66,7 @@ model Team {
  name_ar          String
  image            Image4[]
  billboard         Billboard @relation(fields: [billboardId],references: [id])
+ teammember       TeamMember[]  @relation("TeamToTeamMember")
  @@index([storeId])
  @@index([billboardId])
 }
@@ -101,53 +100,54 @@ model ServicesCategory {
   @@index([storeId])
   @@index([billboardId])
 }
+model TeamMember{
+    id     String @id @default(uuid())
+    storeId                  String // Foreign Key to Store
+    teamId   String
+    team     Team @relation("TeamToTeamMember",fields: [teamId],references: [id])
+      store                    Store       @relation("StoreToTeamMember", fields: [storeId], references: [id])
+    name   String
+    name_ar String
+    brief_1 String @db.LongText
+    brief_2 String @db.LongText
+    brief_3 String @db.LongText
+    brief_1_ar String @db.LongText
+    brief_2_ar String @db.LongText
+    brief_3_ar String @db.LongText
+    @@index([storeId])
+    @@index([teamId])
+}
 model Course {
-  id                       String       @id @default(uuid())
-  storeId                  String // Foreign Key to Store
-  store                    Store       @relation("StoreToCourse", fields: [storeId], references: [id])
-  categoryId               String // Foreign Key to Category
-  category                 CoursesCategory    @relation("CategoryToCourse", fields: [categoryId], references: [id])
-  name                     String @db.LongText
-  name_ar                  String @db.LongText
-  price                    Decimal
-  images                   Image[] // Relation to Image model
-  intro                    String @db.LongText
-  intro_ar                 String @db.LongText
-  duaration                String @db.LongText
-  duration_ar              String @db.LongText
-  who_sh_att               String @db.LongText
-  who_sh_att_ar            String @db.LongText
-  c_obje                   String @db.LongText
-  c_obje_ar                String @db.LongText
-  c_content                String @db.LongText
-  c_content_ar             String @db.LongText
-  wh_we_bnfi               String @db.LongText
-  wh_we_bnfi_ar            String @db.LongText
-  c_in_house               String @db.LongText
-  c_in_house_ar            String @db.LongText
-  delv_and_leaders         String @db.LongText
-  delv_and_leaders_ar      String @db.LongText
-  date_and_rev_1           String @db.LongText
-  date_and_rev_2           String @db.LongText
-  date_and_rev_3           String @db.LongText
-  date_and_rev_4           String @db.LongText
-  date_and_rev_5           String @db.LongText
-  date_and_rev_6           String @db.LongText
-  certification            String @db.LongText
-  // isFeatured Boolean     @default(false)
-  // isArchived Boolean     @default(false)
-  // sizeId           String // Foreign Key to Size
-  // size       Size        @relation(fields: [sizeId], references: [id])
-  // colorId          String // Foreign Key to Color
-  // color      Color       @relation(fields: [colorId], references: [id])
-  // orderItems OrderItem[] // Relation to Order model
-  // createdAt  DateTime    @default(now())
-  // updatedAt  DateTime    @updatedAt
-
-  @@index([storeId])
-  @@index([categoryId])
-  // @@index([sizeId])
-  // @@index([colorId])
+    id                       String       @id @default(uuid())
+    storeId                  String // Foreign Key to Store
+    store                    Store       @relation("StoreToCourse", fields: [storeId], references: [id])
+    categoryId               String // Foreign Key to Courses Category
+    category                 CoursesCategory    @relation("CategoryToCourse", fields: [categoryId], references: [id])
+    name                     String @db.LongText
+    name_ar                  String @db.LongText
+    price                    Decimal
+    images                   Image[] // Relation to Image model
+    intro                    String @db.LongText
+    intro_ar                 String @db.LongText
+    duaration                String @db.LongText
+    duration_ar              String @db.LongText
+    who_sh_att               String @db.LongText
+    who_sh_att_ar            String @db.LongText
+    c_obje                   String @db.LongText
+    c_obje_ar                String @db.LongText
+    c_content                String @db.LongText
+    c_content_ar             String @db.LongText
+    wh_we_bnfi               String @db.LongText
+    wh_we_bnfi_ar            String @db.LongText
+    c_in_house               String @db.LongText
+    c_in_house_ar            String @db.LongText
+    delv_and_leaders         String @db.LongText
+    delv_and_leaders_ar      String @db.LongText
+    date_and_rev             String @db.LongText
+    certification            String @db.LongText
+    currancy                 String
+    @@index([storeId])
+    @@index([categoryId])
 }
 
  model Service {
@@ -162,27 +162,27 @@ model Course {
    explanation_1_1           String @db.LongText
    explanation_1_2           String @db.LongText
    title_2                  String @db.LongText
-    explanation_2_1           String @db.LongText
+   explanation_2_1           String @db.LongText
    explanation_2_2           String @db.LongText
    title_3                  String @db.LongText
-     explanation_3_1           String @db.LongText
+   explanation_3_1           String @db.LongText
    explanation_3_2           String @db.LongText
    title_4                  String @db.LongText
    explanation_4_1           String @db.LongText
    explanation_4_2           String @db.LongText
-    title_1_ar                  String @db.LongText
+   title_1_ar                  String @db.LongText
    explanation_1_1_ar           String @db.LongText
    explanation_1_2_ar           String @db.LongText
    title_2_ar                  String @db.LongText
-    explanation_2_1_ar           String @db.LongText
+   explanation_2_1_ar           String @db.LongText
    explanation_2_2_ar           String @db.LongText
    title_3_ar                  String @db.LongText
-  explanation_3_1_ar           String @db.LongText
+   explanation_3_1_ar           String @db.LongText
    explanation_3_2_ar           String @db.LongText
    title_4_ar                  String @db.LongText
    explanation_4_1_ar           String @db.LongText
    explanation_4_2_ar           String @db.LongText
-  expert                          Expert[] @relation("ExpertToService")
+   expert                          Expert[] @relation("ExpertToService")
    @@index([storeId])
   @@index([categoryId])
 //   // @@index([sizeId])
@@ -209,47 +209,35 @@ model Course {
 //   // @@index([sizeId])
 //   // @@index([colorId])
 }
-model Currency {
-  id              String    @id @default(uuid())
-  storeId         String // Foreign Key to Store
-  store           Store     @relation("StoreToCurrency", fields: [storeId], references: [id])
-  name            String
-  name_ar         String
-  value           String
-  // courses  course[] // Relation to course model
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  @@index([storeId])
-}
 model CaseStudy {
   id              String    @id @default(uuid())
   storeId         String // Foreign Key to Store
   store           Store     @relation("StoreToCaseStudy", fields: [storeId], references: [id])
   name            String
   name_ar         String
-  industryId      String // Foreign Key to Industry
-  industry        Industry  @relation("IndustryToCaseStudy",fields: [industryId],references: [id])
-  sub_title       String
-  sub_title_ar       String
-  onerole_1          String  @db.LongText 
-  onerole_2          String  @db.LongText
-  onerole_3          String  @db.LongText
-  onerole_1_ar          String  @db.LongText
-  onerole_2_ar          String  @db.LongText
-  onerole_3_ar          String  @db.LongText
-  result_1             String  @db.LongText
-  result_2 String  @db.LongText
-  result_3 String  @db.LongText 
-  result_4 String  @db.LongText
-  result_1_ar             String  @db.LongText
- result_2_ar String  @db.LongText
- result_3_ar String  @db.LongText 
- result_4_ar String  @db.LongText
- brief_1  String  @db.LongText
- brief_2 String  @db.LongText
- brief_1_ar  String  @db.LongText
- brief_2_ar String  @db.LongText
- image    Image3[]
+  industryId                   String // Foreign Key to Industry
+  industry                     Industry  @relation("IndustryToCaseStudy",fields: [industryId],references: [id])
+  sub_title                    String
+  sub_title_ar                 String
+  onerole_1                    String  @db.LongText 
+  onerole_2                    String  @db.LongText
+  onerole_3                    String  @db.LongText
+  onerole_1_ar                 String  @db.LongText
+  onerole_2_ar                 String  @db.LongText
+  onerole_3_ar                 String  @db.LongText
+  result_1                     String  @db.LongText
+  result_2                     String  @db.LongText
+  result_3                     String  @db.LongText 
+  result_4                     String  @db.LongText
+  result_1_ar                  String  @db.LongText
+  result_2_ar                  String  @db.LongText
+  result_3_ar                  String  @db.LongText 
+  result_4_ar                  String  @db.LongText
+  brief_1                      String  @db.LongText
+  brief_2                      String  @db.LongText
+  brief_1_ar                   String  @db.LongText
+  brief_2_ar                   String  @db.LongText
+  image    Image3[]
   @@index([storeId])
   @@index([industryId])
 }
