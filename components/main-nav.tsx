@@ -2,9 +2,7 @@
 
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
-
 import { cn } from '@/lib/utils';
-
 export function MainNav({
 	className,
 	...props
@@ -13,11 +11,11 @@ export function MainNav({
 	const params = useParams();
 
 	const routes = [
-		{
-			href: `/${params.storeId}`,
-			label: 'Overview',
-			active: pathname === `/${params.storeId}`,
-		},
+		// {
+		// 	href: `/${params.storeId}`,
+		// 	label: 'Overview',
+		// 	active: pathname === `/${params.storeId}`,
+		// },
 		{
 			href: `/${params.storeId}/billboards`,
 			label: 'Main Categories',
@@ -38,11 +36,11 @@ export function MainNav({
 				`/${params.storeId}/services-categories`,
 		},
 
-		{
-			href: `/${params.storeId}/sizes`,
-			label: 'Sizes',
-			active: pathname === `/${params.storeId}/sizes`,
-		},
+		// {
+		// 	href: `/${params.storeId}/sizes`,
+		// 	label: 'Sizes',
+		// 	active: pathname === `/${params.storeId}/sizes`,
+		// },
 		// {
 		// 	href: `/${params.storeId}/colors`,
 		// 	label: 'Colors',
@@ -58,11 +56,11 @@ export function MainNav({
 			label: 'Services',
 			active: pathname === `/${params.storeId}/services`,
 		},
-		{
-			href: `/${params.storeId}/orders`,
-			label: 'Orders',
-			active: pathname === `/${params.storeId}/orders`,
-		},
+		// {
+		// 	href: `/${params.storeId}/orders`,
+		// 	label: 'Orders',
+		// 	active: pathname === `/${params.storeId}/orders`,
+		// },
 		{
 			href: `/${params.storeId}/settings`,
 			label: 'Settings',
@@ -71,9 +69,9 @@ export function MainNav({
 	];
 
 	return (
-		<nav
+		<div
 			className={cn(
-				'flex items-center space-x-4 lg:space-x-6',
+				'flex mt-5 items-center flex-col space-y-4 lg:space-y-6',
 				className
 			)}
 			{...props}
@@ -92,6 +90,6 @@ export function MainNav({
 					{route.label}
 				</Link>
 			))}
-		</nav>
+		</div>
 	);
 }

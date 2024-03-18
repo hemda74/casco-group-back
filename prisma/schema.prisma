@@ -165,7 +165,7 @@ model Course {
    explanation_2_ar           String @db.LongText
    expert                          Expert[] @relation("ExpertToService")
    @@index([storeId])
-  @@index([categoryId])
+   @@index([categoryId])
 //   // @@index([sizeId])
 //   // @@index([colorId])
 }
