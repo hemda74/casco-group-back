@@ -71,7 +71,7 @@ export function MainNav({
 	return (
 		<div
 			className={cn(
-				'flex mt-5 items-center flex-col space-y-4 lg:space-y-6',
+				'flex mt-5 items-start flex-col space-y-4 lg:space-y-6',
 				className
 			)}
 			{...props}

@@ -31,7 +31,7 @@ export default async function DashboardLayout({
 	return (
 		<>
 			<div className="grid grid-cols-10 gap-4  ">
-				<div className="col-start-1 col-end-3">
+				<div className="col-start-1 col-end-3 border-r">
 					<Navbar />
 				</div>
 				<div className="col-start-3 col-end-10">
