@@ -36,7 +36,7 @@ model Billboard {
   coursescategories         CoursesCategory[]
   servicescategories        ServicesCategory[]
   industriescategories      IndustryCategory[]
-  teams                      Team[]
+  teams                     Team[]
   createdAt                 DateTime               @default(now())
   updatedAt                 DateTime               @updatedAt
 
@@ -158,12 +158,12 @@ model Course {
    name                     String @db.LongText
    name_ar                  String @db.LongText
    title_1                  String @db.LongText
-   explanation           String @db.LongText
-   explanation_2           String @db.LongText
-   title_ar                  String @db.LongText
+   explanation              String @db.LongText
+   explanation_2            String @db.LongText
+   title_ar                 String @db.LongText
    explanation_ar           String @db.LongText
-   explanation_2_ar           String @db.LongText
-   expert                          Expert[] @relation("ExpertToService")
+   explanation_2_ar         String @db.LongText
+   expert                   Expert[] @relation("ExpertToService")
    @@index([storeId])
    @@index([categoryId])
 //   // @@index([sizeId])
@@ -177,7 +177,7 @@ model Course {
    category                 IndustryCategory    @relation("CategoryToIndustry", fields: [categoryId], references: [id])
    casestudy                CaseStudy[]         @relation("IndustryToCaseStudy")
    expert                   Expert[]            @relation("ExpertToIndustry")
-   idustrydetailes         IndustryDetailes[]     @relation("IndustryToIndustryDetailes")
+   idustrydetailes          IndustryDetailes[]     @relation("IndustryToIndustryDetailes")
    name                     String              @db.LongText
    name_ar                  String              @db.LongText
    title_1                  String              @db.LongText
