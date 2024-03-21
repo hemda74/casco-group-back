@@ -157,7 +157,7 @@ model Course {
    category                 ServicesCategory    @relation("CategoryToService", fields: [categoryId], references: [id])
    name                     String @db.LongText
    name_ar                  String @db.LongText
-   title_1                  String @db.LongText
+   title                  String @db.LongText
    explanation              String @db.LongText
    explanation_2            String @db.LongText
    title_ar                 String @db.LongText

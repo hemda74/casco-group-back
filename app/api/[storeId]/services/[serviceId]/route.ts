@@ -9,24 +9,24 @@ export async function GET(
 ) {
 	try {
 		if (!params.serviceId) {
-			return new NextResponse('course id is required', {
+			return new NextResponse('Service id is required', {
 				status: 400,
 			});
 		}
 
-		const course = await prismadb.course.findUnique({
+		const service = await prismadb.service.findUnique({
 			where: {
 				id: params.serviceId,
 			},
 			include: {
-				images: true,
+				expert: true,
 				category: true,
 				// size: true,
 				// color: true,
 			},
 		});
 
-		return NextResponse.json(course);
+		return NextResponse.json(service);
 	} catch (error) {
 		console.log('[service_GET]', error);
 		return new NextResponse('Internal error', { status: 500 });
@@ -47,7 +47,7 @@ export async function DELETE(
 		}
 
 		if (!params.serviceId) {
-			return new NextResponse('course id is required', {
+			return new NextResponse('service id is required', {
 				status: 400,
 			});
 		}
@@ -65,15 +65,15 @@ export async function DELETE(
 			});
 		}
 
-		const course = await prismadb.course.delete({
+		const service = await prismadb.service.delete({
 			where: {
 				id: params.serviceId,
 			},
 		});
 
-		return NextResponse.json(course);
+		return NextResponse.json(service);
 	} catch (error) {
-		console.log('[course_DELETE]', error);
+		console.log('[service_DELETE]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
@@ -88,33 +88,16 @@ export async function PATCH(
 		const body = await req.json();
 
 		const {
+			categoryId,
 			name,
 			name_ar,
-			price,
-			categoryId,
-			images,
-			intro,
-			intro_ar,
-			duaration,
-			duration_ar,
-			who_sh_att,
-			who_sh_att_ar,
-			c_obje,
-			c_obje_ar,
-			c_content,
-			c_content_ar,
-			wh_we_bnfi,
-			wh_we_bnfi_ar,
-			c_in_house,
-			c_in_house_ar,
-			delv_and_leaders,
-			delv_and_leaders_ar,
-			date_and_rev_1,
-			date_and_rev_2,
-			date_and_rev_3,
-			date_and_rev_4,
-			date_and_rev_5,
-			date_and_rev_6,
+			title,
+			title_ar,
+			explanation,
+			explanation_2,
+			explanation_ar,
+			explanation_2_ar,
+			expert,
 		} = body;
 
 		if (!userId) {
@@ -124,7 +107,7 @@ export async function PATCH(
 		}
 
 		if (!params.serviceId) {
-			return new NextResponse('Course Id is required', {
+			return new NextResponse('service Id is required', {
 				status: 400,
 			});
 		}
@@ -139,14 +122,17 @@ export async function PATCH(
 				status: 400,
 			});
 		}
-		if (!images || !images.length) {
-			return new NextResponse('Images are required', {
-				status: 400,
-			});
+		if (!expert || !expert.length) {
+			return new NextResponse(
+				'one Expert at least required',
+				{
+					status: 400,
+				}
+			);
 		}
 
-		if (!price) {
-			return new NextResponse('Price is required', {
+		if (!title) {
+			return new NextResponse('title is required', {
 				status: 400,
 			});
 		}
@@ -156,125 +142,38 @@ export async function PATCH(
 				status: 400,
 			});
 		}
-		if (!intro) {
-			return new NextResponse('intro is required', {
+		if (!title_ar) {
+			return new NextResponse('Arabic Tilte is required', {
 				status: 400,
 			});
 		}
-		if (!intro_ar) {
-			return new NextResponse(
-				'introduction in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!duaration) {
-			return new NextResponse('duaration is required', {
+		if (!explanation) {
+			return new NextResponse('explanation 1 is required', {
 				status: 400,
 			});
 		}
-		if (!duration_ar) {
-			return new NextResponse(
-				'duaration in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!who_sh_att) {
-			return new NextResponse(
-				'who should attend is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!who_sh_att_ar) {
-			return new NextResponse(
-				'who should attend in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!c_obje) {
-			return new NextResponse(
-				'course objective is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!c_obje_ar) {
-			return new NextResponse(
-				'course objective in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!c_content) {
-			return new NextResponse('course conetent is required', {
+		if (!explanation_2) {
+			return new NextResponse('explanation 2 is required', {
 				status: 400,
 			});
 		}
-		if (!c_content_ar) {
+		if (!explanation_ar) {
 			return new NextResponse(
-				'course conetent in arabic is required',
+				'explanation 1 in arabic is required',
 				{
 					status: 400,
 				}
 			);
 		}
-		if (!wh_we_bnfi) {
-			return new NextResponse('what we benefit is required', {
-				status: 400,
-			});
-		}
-		if (!wh_we_bnfi_ar) {
+		if (!explanation_2_ar) {
 			return new NextResponse(
-				'what we benefit in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!c_in_house) {
-			return new NextResponse('course in house is required', {
-				status: 400,
-			});
-		}
-		if (!c_in_house_ar) {
-			return new NextResponse('course in house is required', {
-				status: 400,
-			});
-		}
-		if (!date_and_rev_1) {
-			return new NextResponse(
-				'At Least date and revnue is required',
+				'explanation 2  in arabic is required',
 				{
 					status: 400,
 				}
 			);
 		}
 
-		if (!delv_and_leaders) {
-			return new NextResponse(
-				'delviary and course leaders is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!delv_and_leaders_ar) {
-			return new NextResponse(
-				'delviary and course leaders in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
 		const storeByUserId = await prismadb.store.findFirst({
 			where: {
 				id: params.storeId,
@@ -288,56 +187,38 @@ export async function PATCH(
 			});
 		}
 
-		await prismadb.course.update({
+		await prismadb.service.update({
 			where: {
 				id: params.serviceId,
 			},
 			data: {
-				name,
-				price,
 				categoryId,
+				name,
 				name_ar,
-				intro,
-				intro_ar,
-				duaration,
-				duration_ar,
-				who_sh_att,
-				who_sh_att_ar,
-				c_obje,
-				c_obje_ar,
-				c_content,
-				c_content_ar,
-				wh_we_bnfi,
-				wh_we_bnfi_ar,
-				c_in_house,
-				c_in_house_ar,
-				delv_and_leaders,
-				delv_and_leaders_ar,
-				date_and_rev_1,
-				date_and_rev_2,
-				date_and_rev_3,
-				date_and_rev_4,
-				date_and_rev_5,
-				date_and_rev_6,
-
-				images: {
+				title,
+				title_ar,
+				explanation,
+				explanation_2,
+				explanation_ar,
+				explanation_2_ar,
+				expert: {
 					deleteMany: {},
 				},
 			},
 		});
 
-		const course = await prismadb.course.update({
+		const service = await prismadb.service.update({
 			where: {
 				id: params.serviceId,
 			},
 			data: {
-				images: {
+				expert: {
 					createMany: {
 						data: [
-							...images.map(
-								(image: {
+							...expert.map(
+								(expert: {
 									url: string;
-								}) => image
+								}) => expert
 							),
 						],
 					},
@@ -345,9 +226,9 @@ export async function PATCH(
 			},
 		});
 
-		return NextResponse.json(course);
+		return NextResponse.json(service);
 	} catch (error) {
-		console.log('[course_PATCH]', error);
+		console.log('[service_PATCH]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
