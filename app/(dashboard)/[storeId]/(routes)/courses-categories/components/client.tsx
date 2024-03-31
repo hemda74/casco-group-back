@@ -30,7 +30,7 @@ export const CategoriesClient: React.FC<CategoriesClientProps> = ({ data }) => {
 				<Button
 					onClick={() =>
 						router.push(
-							`/${params.storeId}/categories/new`
+							`/${params.storeId}/courses-categories/new`
 						)
 					}
 				>
