@@ -24,8 +24,8 @@ export const CategoriesClient: React.FC<CategoriesClientProps> = ({ data }) => {
 		<>
 			<div className="flex items-center justify-between">
 				<Heading
-					title={`Categories (${data.length})`}
-					description="Manage categories for your store"
+					title={`Courses-Categories (${data.length})`}
+					description="Manage categories for your courses"
 				/>
 				<Button
 					onClick={() =>
@@ -48,8 +48,11 @@ export const CategoriesClient: React.FC<CategoriesClientProps> = ({ data }) => {
 				title="API"
 				description="API Calls for Categories"
 			/>
-			{/* <Separator /> */}
-			{/* <ApiList entityName="categories" entityIdName="categoryId" /> */}
+			<Separator />
+			<ApiList
+				entityName="categories"
+				entityIdName="categoryId"
+			/>
 		</>
 	);
 };
