@@ -33,7 +33,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 		try {
 			setLoading(true);
 			await axios.delete(
-				`/api/${params.storeId}/categories/${data.id}`
+				`/api/${params.storeId}/services-categories/${data.id}`
 			);
 			toast.success('Category deleted.');
 			router.refresh();
@@ -85,7 +85,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 					<DropdownMenuItem
 						onClick={() =>
 							router.push(
-								`/${params.storeId}/categories/${data.id}`
+								`/${params.storeId}/services-categories/${data.id}`
 							)
 						}
 					>
