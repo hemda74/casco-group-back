@@ -24,13 +24,13 @@ export const CategoriesClient: React.FC<CategoriesClientProps> = ({ data }) => {
 		<>
 			<div className="flex items-center justify-between">
 				<Heading
-					title={`Services-Categories (${data.length})`}
-					description="Manage categories for your Services"
+					title={`Industries-Categories (${data.length})`}
+					description="Manage categories for your Industries"
 				/>
 				<Button
 					onClick={() =>
 						router.push(
-							`/${params.storeId}/services-categories/new`
+							`/${params.storeId}/industries-categories/new`
 						)
 					}
 				>
@@ -50,7 +50,7 @@ export const CategoriesClient: React.FC<CategoriesClientProps> = ({ data }) => {
 			/>
 			<Separator />
 			<ApiList
-				entityName="services-categories"
+				entityName="industries-categories"
 				entityIdName="categoryId"
 			/>
 		</>

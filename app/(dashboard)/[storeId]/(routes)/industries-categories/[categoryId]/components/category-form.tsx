@@ -77,17 +77,17 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 			setLoading(true);
 			if (initialData) {
 				await axios.patch(
-					`/api/${params.storeId}/services-categories/${params.categoryId}`,
+					`/api/${params.storeId}/industries-categories/${params.categoryId}`,
 					data
 				);
 			} else {
 				await axios.post(
-					`/api/${params.storeId}/services-categories`,
+					`/api/${params.storeId}/industries-categories`,
 					data
 				);
 			}
 			router.refresh();
-			router.push(`/${params.storeId}/services-categories`);
+			router.push(`/${params.storeId}/industries-categories`);
 			toast.success(toastMessage);
 		} catch (error: any) {
 			toast.error('Something went wrong.');
@@ -100,10 +100,10 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 		try {
 			setLoading(true);
 			await axios.delete(
-				`/api/${params.storeId}/services-categories/${params.categoryId}`
+				`/api/${params.storeId}/industries-categories/${params.categoryId}`
 			);
 			router.refresh();
-			router.push(`/${params.storeId}/services-categories`);
+			router.push(`/${params.storeId}/industries-categories`);
 			toast.success('Category deleted.');
 		} catch (error: any) {
 			toast.error(
