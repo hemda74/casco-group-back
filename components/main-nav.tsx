@@ -35,7 +35,13 @@ export function MainNav({
 				pathname ===
 				`/${params.storeId}/services-categories`,
 		},
-
+		{
+			href: `/${params.storeId}/industries-categories`,
+			label: 'Industries Categories',
+			active:
+				pathname ===
+				`/${params.storeId}/industries-categories`,
+		},
 		// {
 		// 	href: `/${params.storeId}/sizes`,
 		// 	label: 'Sizes',
