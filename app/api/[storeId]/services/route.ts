@@ -12,7 +12,9 @@ export async function POST(
 
 		const body = await req.json();
 
-		const {} = body;
+		const {
+			name
+		} = body;
 
 		if (!userId) {
 			return new NextResponse('Unauthenticated', {
@@ -30,13 +32,6 @@ export async function POST(
 				status: 400,
 			});
 		}
-
-		if (!images || !images.length) {
-			return new NextResponse('Images are required', {
-				status: 400,
-			});
-		}
-
 		if (!price) {
 			return new NextResponse('Price is required', {
 				status: 400,
@@ -92,7 +87,7 @@ export async function POST(
 		}
 		if (!c_obje) {
 			return new NextResponse(
-				'course objective is required',
+				'service objective is required',
 				{
 					status: 400,
 				}
@@ -100,75 +95,26 @@ export async function POST(
 		}
 		if (!c_obje_ar) {
 			return new NextResponse(
-				'course objective in arabic is required',
+				'service objective in arabic is required',
 				{
 					status: 400,
 				}
 			);
 		}
 		if (!c_content) {
-			return new NextResponse('course conetent is required', {
+			return new NextResponse('service conetent is required', {
 				status: 400,
 			});
 		}
 		if (!c_content_ar) {
 			return new NextResponse(
-				'course conetent in arabic is required',
+				'service conetent in arabic is required',
 				{
 					status: 400,
 				}
 			);
 		}
-		if (!wh_we_bnfi) {
-			return new NextResponse('what we benefit is required', {
-				status: 400,
-			});
-		}
-		if (!wh_we_bnfi_ar) {
-			return new NextResponse(
-				'what we benefit in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!c_in_house) {
-			return new NextResponse('course in house is required', {
-				status: 400,
-			});
-		}
-		if (!c_in_house_ar) {
-			return new NextResponse('course in house is required', {
-				status: 400,
-			});
-		}
-		if (!date_and_rev_1) {
-			return new NextResponse('date and revnue is required', {
-				status: 400,
-			});
-		}
-		if (!delv_and_leaders) {
-			return new NextResponse(
-				'delviary and course leaders is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!delv_and_leaders_ar) {
-			return new NextResponse(
-				'delviary and course leaders in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-
-		if (!params.storeId) {
-			return new NextResponse('Store id is required', {
-				status: 400,
-			});
-		}
+	
 
 		const storeByUserId = await prismadb.store.findFirst({
 			where: {
@@ -183,18 +129,12 @@ export async function POST(
 			});
 		}
 
-		const product = await prismadb.course.create({
+		const product = await prismadb.service.create({
 			data: {
 				storeId: params.storeId,
 				images: {
 					createMany: {
-						data: [
-							...images.map(
-								(image: {
-									url: string;
-								}) => image
-							),
-						],
+						
 					},
 				},
 			},
@@ -224,13 +164,12 @@ export async function GET(
 			});
 		}
 
-		const courses = await prismadb.course.findMany({
+		const services = await prismadb.service.findMany({
 			where: {
 				storeId: params.storeId,
 				categoryId,
 			},
 			include: {
-				images: true,
 				category: true,
 			},
 			orderBy: {
@@ -238,9 +177,9 @@ export async function GET(
 			},
 		});
 
-		return NextResponse.json(courses);
+		return NextResponse.json(services);
 	} catch (error) {
-		console.log('[COURSES_GET]', error);
+		console.log('[serviceS_GET]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }

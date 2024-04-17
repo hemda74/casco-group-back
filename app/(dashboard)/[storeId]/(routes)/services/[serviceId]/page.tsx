@@ -1,22 +1,22 @@
 import prismadb from '@/lib/prismadb';
 
-import { CourseForm } from './components/product-form';
+import { ServiceForm } from './components/service-form';
 
 const ProductPage = async ({
 	params,
 }: {
-	params: { courseId: string; storeId: string };
+	params: { ServiceId: string; storeId: string };
 }) => {
-	const Course = await prismadb.course.findUnique({
+	const Service = await prismadb.service.findUnique({
 		where: {
-			id: params.courseId,
+			id: params.ServiceId,
 		},
 		include: {
-			images: true,
+			expert: true,
 		},
 	});
 
-	const categories = await prismadb.category.findMany({
+	const categories = await prismadb.servicesCategory.findMany({
 		where: {
 			storeId: params.storeId,
 		},
@@ -37,9 +37,9 @@ const ProductPage = async ({
 	return (
 		<div className="flex-row">
 			<div className="flex-1 space-x-4 p-8 pt-6">
-				<CourseForm
+				<ServiceForm
 					categories={categories}
-					initialData={Course}
+					initialData={Service}
 				/>
 			</div>
 		</div>

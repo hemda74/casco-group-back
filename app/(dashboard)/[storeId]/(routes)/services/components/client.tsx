@@ -23,13 +23,13 @@ export const ProductsClient: React.FC<ProductsClientProps> = ({ data }) => {
 		<>
 			<div className="flex items-center justify-between">
 				<Heading
-					title={`Products (${data.length})`}
-					description="Manage products for your store"
+					title={`Services (${data.length})`}
+					description="Manage Services "
 				/>
 				<Button
 					onClick={() =>
 						router.push(
-							`/${params.storeId}/courses/new`
+							`/${params.storeId}/services/new`
 						)
 					}
 				>
@@ -45,12 +45,12 @@ export const ProductsClient: React.FC<ProductsClientProps> = ({ data }) => {
 			/>
 			<Heading
 				title="API"
-				description="API Calls for Products"
+				description="API Calls for Services"
 			/>
 			<Separator />
 			<ApiList
-				entityName="products"
-				entityIdName="productId"
+				entityName="service"
+				entityIdName="serviceId"
 			/>
 		</>
 	);

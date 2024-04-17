@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
-import { Category, Color, Image, Course } from '@prisma/client';
+import { Service, Image, ServicesCategory } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 
 import { Input } from '@/components/ui/input';
@@ -37,52 +37,33 @@ import { Checkbox } from '@/components/ui/checkbox';
 const formSchema = z.object({
 	name: z.string().min(1),
 	name_ar: z.string().min(1),
-	images: z.object({ url: z.string() }).array(),
-	price: z.coerce.number().min(1),
+	title: z.string().min(1),
+	title_ar: z.string().min(1),
+	explanation: z.string().min(1),
+	explanation_2: z.string().min(1),
+	explanation_ar: z.string().min(1),
+	explanation_2_ar: z.string().min(1),
 	categoryId: z.string().min(1),
-	intro: z.string().min(1),
-	intro_ar: z.string().min(1),
-	duaration: z.string().min(1),
-	duration_ar: z.string().min(1),
-	who_sh_att: z.string().min(1),
-	who_sh_att_ar: z.string().min(1),
-	c_obje: z.string().min(1),
-	c_obje_ar: z.string().min(1),
-	c_content: z.string().min(1),
-	c_content_ar: z.string().min(1),
-	wh_we_bnfi: z.string().min(1),
-	wh_we_bnfi_ar: z.string().min(1),
-	c_in_house: z.string().min(1),
-	c_in_house_ar: z.string().min(1),
-	delv_and_leaders: z.string().min(1),
-	delv_and_leaders_ar: z.string().min(1),
-	date_and_rev_1: z.string().min(1),
-	date_and_rev_2: z.string().min(1),
-	date_and_rev_3: z.string().min(1),
-	date_and_rev_4: z.string().min(1),
-	date_and_rev_5: z.string().min(1),
-	date_and_rev_6: z.string().min(1),
-
 	// colorId: z.string().min(1),
 	// sizeId: z.string().min(1),
 	// isFeatured: z.boolean().default(false).optional(),
 	// isArchived: z.boolean().default(false).optional(),
 });
 
-type CourseFormValues = z.infer<typeof formSchema>;
+type ServiceFormValues = z.infer<typeof formSchema>;
 
-interface CourseFormProps {
+interface ServiceFormProps {
 	initialData:
-		| (Course & {
+		| (Service & {
 				images: Image[];
 		  })
 		| null;
-	categories: Category[];
+	categories: ServicesCategory[];
 	// colors: Color[];
 	// sizes: Size[];
 }
 
-export const CourseForm: React.FC<CourseFormProps> = ({
+export const ServiceForm: React.FC<ServiceFormProps> = ({
 	initialData,
 	categories,
 }) => {
@@ -92,69 +73,53 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 
-	const title = initialData ? 'Edit course' : 'Create course';
-	const description = initialData ? 'Edit a course.' : 'Add a new Course';
+	const title = initialData ? 'Edit Service' : 'Create Service';
+	const description = initialData
+		? 'Edit a Service.'
+		: 'Add a new Service';
 	const toastMessage = initialData
-		? 'Course updated.'
-		: 'Course created.';
+		? 'Service updated.'
+		: 'Service created.';
 	const action = initialData ? 'Save changes' : 'Create';
 
 	const defaultValues = initialData
 		? {
 				...initialData,
-				price: parseFloat(String(initialData?.price)),
 		  }
 		: {
+				id: '',
+				categoryId: '',
 				name: '',
 				name_ar: '',
-				images: [],
-				price: 0,
-				categoryId: '',
-				intro: '',
-				intro_ar: '',
-				duaration: '',
-				duration_ar: '',
-				who_sh_att: '',
-				who_sh_att_ar: '',
-				c_obje: '',
-				c_obje_ar: '',
-				c_content: '',
-				c_content_ar: '',
-				wh_we_bnfi: '',
-				wh_we_bnfi_ar: '',
-				c_in_house: '',
-				c_in_house_ar: '',
-				delv_and_leaders: '',
-				delv_and_leaders_ar: '',
-				date_and_rev_1: '',
-				date_and_rev_2: '',
-				date_and_rev_3: '',
-				date_and_rev_4: '',
-				date_and_rev_5: '',
-				date_and_rev_6: '',
+				title: '',
+				title_ar: '',
+				explanation: '',
+				explanation_2: '',
+				explanation_2_ar: '',
+				explanation_ar: '',
 		  };
 
-	const form = useForm<CourseFormValues>({
+	const form = useForm<ServiceFormValues>({
 		resolver: zodResolver(formSchema),
 		defaultValues,
 	});
 
-	const onSubmit = async (data: CourseFormValues) => {
+	const onSubmit = async (data: ServiceFormValues) => {
 		try {
 			setLoading(true);
 			if (initialData) {
 				await axios.patch(
-					`/api/${params.storeId}/courses/${params.courseId}`,
+					`/api/${params.storeId}/Services/${params.ServiceId}`,
 					data
 				);
 			} else {
 				await axios.post(
-					`/api/${params.storeId}/courses`,
+					`/api/${params.storeId}/Services`,
 					data
 				);
 			}
 			router.refresh();
-			router.push(`/${params.storeId}/courses`);
+			router.push(`/${params.storeId}/Services`);
 			toast.success(toastMessage);
 		} catch (error: any) {
 			toast.error('Something went wrong.');
@@ -168,11 +133,11 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 		try {
 			setLoading(true);
 			await axios.delete(
-				`/api/${params.storeId}/courses/${params.courseId}`
+				`/api/${params.storeId}/services/${params.serviceId}`
 			);
 			router.refresh();
-			router.push(`/${params.storeId}/courses`);
-			toast.success('Course deleted.');
+			router.push(`/${params.storeId}/services`);
+			toast.success('Service deleted.');
 		} catch (error: any) {
 			toast.error('Something went wrong.');
 		} finally {
@@ -211,58 +176,6 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 					onSubmit={form.handleSubmit(onSubmit)}
 					className="space-y-8 w-full"
 				>
-					<FormField
-						control={form.control}
-						name="images"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>
-									Images
-								</FormLabel>
-								<FormControl>
-									<ImageUpload
-										value={field.value.map(
-											(
-												image
-											) =>
-												image.url
-										)}
-										disabled={
-											loading
-										}
-										onChange={(
-											url
-										) =>
-											field.onChange(
-												[
-													...field.value,
-													{
-														url,
-													},
-												]
-											)
-										}
-										onRemove={(
-											url
-										) =>
-											field.onChange(
-												[
-													...field.value.filter(
-														(
-															current
-														) =>
-															current.url !==
-															url
-													),
-												]
-											)
-										}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
 					<div className="md:grid md:grid-cols-3 gap-8">
 						<FormField
 							control={form.control}
@@ -310,11 +223,12 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="intro"
+							name="title"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Introduction
+										Service
+										Title
 									</FormLabel>
 									<FormControl>
 										<Input
@@ -331,11 +245,11 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="intro_ar"
+							name="title_ar"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Introduction
+										Service
 										in
 										Arabic
 									</FormLabel>
@@ -354,11 +268,13 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="duaration"
+							name="explanation"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Duration
+										Service
+										Explanation
+										1
 									</FormLabel>
 									<FormControl>
 										<Input
@@ -375,11 +291,13 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="duration_ar"
+							name="explanation_ar"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Duration
+										Service
+										Explanation
+										1
 										in
 										Arabic
 									</FormLabel>
@@ -398,15 +316,13 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="who_sh_att"
+							name="explanation_2"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										How
-										Should
-										Attend
-										this
-										Course
+										Service
+										Explanation
+										2
 									</FormLabel>
 									<FormControl>
 										<Input
@@ -423,399 +339,15 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="who_sh_att_ar"
+							name="explanation_2_ar"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										How
-										Should
-										Attend
-										this
-										Course
+										Service
+										Explanation
+										2
 										in
 										Arabic
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_obje"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Objective
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_obje_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Objective
-										in
-										Arabic
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_content"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Content
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder=" Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_content_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Content
-										in
-										Arabic
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="wh_we_bnfi"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										What
-										we
-										benfite
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="wh_we_bnfi_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										what
-										we
-										benfite
-										in
-										arabic
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_in_house"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										in
-										house
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_in_house_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										in
-										house
-										in
-										arabic
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="delv_and_leaders"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										delvairy
-										and
-										leaders
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="delv_and_leaders_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										delvairy
-										and
-										leaders
-										in
-										arabic
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="date_and_rev_1"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Date
-										&
-										Revuene_1
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="date_and_rev_2"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Date
-										&
-										Revuene_2
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="date_and_rev_3"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Date
-										&
-										Revuene_3
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="date_and_rev_4"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Date
-										&
-										Revuene_4
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="date_and_rev_5"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Date
-										&
-										Revuene_5
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="date_and_rev_6"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Date
-										&
-										Revuene_6
 									</FormLabel>
 									<FormControl>
 										<Input
@@ -831,28 +363,6 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 							)}
 						/>
 
-						<FormField
-							control={form.control}
-							name="price"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Price
-									</FormLabel>
-									<FormControl>
-										<Input
-											type="number"
-											disabled={
-												loading
-											}
-											placeholder="9.99"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
 						<FormField
 							control={form.control}
 							name="categoryId"

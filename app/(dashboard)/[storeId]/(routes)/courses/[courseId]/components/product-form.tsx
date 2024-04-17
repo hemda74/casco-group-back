@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
-import { Category, Color, Image, Course } from '@prisma/client';
+import { CoursesCategory, Image, Course } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 
 import { Input } from '@/components/ui/input';
@@ -79,7 +79,7 @@ interface CourseFormProps {
 				images: Image[];
 		  })
 		| null;
-	categories: Category[];
+	categories: CoursesCategory[];
 	// colors: Color[];
 	// sizes: Size[];
 }

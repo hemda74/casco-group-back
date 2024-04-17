@@ -97,7 +97,6 @@ export async function PATCH(
 			explanation_2,
 			explanation_ar,
 			explanation_2_ar,
-			expert,
 		} = body;
 
 		if (!userId) {
@@ -121,14 +120,6 @@ export async function PATCH(
 			return new NextResponse('Name is required', {
 				status: 400,
 			});
-		}
-		if (!expert || !expert.length) {
-			return new NextResponse(
-				'one Expert at least required',
-				{
-					status: 400,
-				}
-			);
 		}
 
 		if (!title) {
@@ -211,19 +202,7 @@ export async function PATCH(
 			where: {
 				id: params.serviceId,
 			},
-			data: {
-				expert: {
-					createMany: {
-						data: [
-							...expert.map(
-								(expert: {
-									url: string;
-								}) => expert
-							),
-						],
-					},
-				},
-			},
+			data: {},
 		});
 
 		return NextResponse.json(service);
