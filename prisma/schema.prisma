@@ -1,9 +1,352 @@
+// generator client {
+//   provider = "prisma-client-js"
+// }
+
+// datasource db {
+//   provider     = "mysql"
+//   url          = env("DATABASE_URL")
+//   relationMode = "prisma"
+// }
+
+// model Store {
+//   id                      String                          @id @default(uuid())
+//   name                    String
+//   userId                  String
+//   billboards              Billboard[]                     @relation("StoreToBillboard")
+//   coursescategories       CoursesCategory[]               @relation("StoreToCategory")
+//   servicescategories      ServicesCategory[]              @relation("StoreToCategory")
+//   industriescategories    IndustryCategory[]              @relation("StoreToCategory")
+//   courses                 Course[]                        @relation("StoreToCourse")
+//   Services                Service[]                       @relation("StoreToService")
+//   Industries              Industry[]                      @relation("StoreToIndustry")
+//   casestudies             CaseStudy[]                     @relation("StoreToCaseStudy")
+//   expert                  Expert[]                        @relation("StoreToExpert")
+//   team                    Team[]                          @relation("StoreToTeam")
+//   teammember              TeamMember[]                    @relation("StoreToTeamMember")
+//   industrydetailes         IndustryDetailes[]             @relation("StoreToIndustryDetailes")
+//   createdAt               DateTime                        @default(now())
+//   updatedAt               DateTime                        @updatedAt
+// }
+// model Billboard {
+//   id                        String                @id @default(uuid())
+//   storeId                   String
+//   store                     Store                 @relation("StoreToBillboard", fields: [storeId], references: [id])
+//   label                     String
+//   label_ar                  String
+//   coursescategories         CoursesCategory[]
+//   servicescategories        ServicesCategory[]
+//   industriescategories      IndustryCategory[]
+//   teams                     Team[]
+//   createdAt                 DateTime               @default(now())
+//   updatedAt                 DateTime               @updatedAt
+
+//   @@index([storeId])
+// }
+// model CoursesCategory {
+//   id                String    @id @default(uuid())
+//   storeId           String // Foreign Key to Store
+//   store             Store     @relation("StoreToCategory", fields: [storeId], references: [id])
+//   billboardId       String // Foreign Key to Billboard
+//   billboard         Billboard @relation(fields: [billboardId], references: [id])
+//   name              String
+//   name_ar           String
+//   courses           Course[] @relation("CategoryToCourse")
+//   createdAt         DateTime  @default(now())
+//   updatedAt         DateTime  @updatedAt
+//   @@index([storeId])
+//   @@index([billboardId])
+// }
+// model Team {
+//  id               String @id @default(uuid())
+//  storeId          String 
+//  store            Store   @relation("StoreToTeam",fields: [storeId],references: [id])
+//  billboardId      String
+//  name             String
+//  name_ar          String
+//  image            Image4[]
+//  billboard         Billboard @relation(fields: [billboardId],references: [id])
+//  teammember       TeamMember[]  @relation("TeamToTeamMember")
+//  @@index([storeId])
+//  @@index([billboardId])
+// }
+// model IndustryCategory {
+//   id                String    @id @default(uuid())
+//   storeId           String // Foreign Key to Store
+//   store             Store     @relation("StoreToCategory", fields: [storeId], references: [id])
+//   billboardId       String // Foreign Key to Billboard
+//   billboard         Billboard @relation(fields: [billboardId], references: [id])
+//   name              String
+//   name_ar           String
+//   industries        Industry[] @relation("CategoryToIndustry")
+//   createdAt         DateTime  @default(now())
+//   updatedAt         DateTime  @updatedAt
+
+//   @@index([storeId])
+//   @@index([billboardId])
+// }
+// model ServicesCategory {
+//   id                String    @id @default(uuid())
+//   storeId           String // Foreign Key to Store
+//   store             Store     @relation("StoreToCategory", fields: [storeId], references: [id])
+//   billboardId       String // Foreign Key to Billboard
+//   billboard         Billboard @relation(fields: [billboardId], references: [id])
+//   name              String
+//   name_ar           String
+//   service           Service[] @relation("CategoryToService")
+//   createdAt         DateTime  @default(now())
+//   updatedAt         DateTime  @updatedAt
+
+//   @@index([storeId])
+//   @@index([billboardId])
+// }
+// model TeamMember{
+//     id                      String @id @default(uuid())
+//     storeId                 String // Foreign Key to Store
+//     teamId                  String
+//     team                    Team @relation("TeamToTeamMember",fields: [teamId],references: [id])
+//     store                   Store       @relation("StoreToTeamMember", fields: [storeId], references: [id])
+//     name                    String
+//     name_ar                 String
+//     brief_1                 String 
+//     brief_2                 String 
+//     brief_3                 String 
+//     brief_1_ar              String 
+//     brief_2_ar              String 
+//     brief_3_ar              String 
+//     @@index([storeId])
+//     @@index([teamId])
+// }
+// model Course {
+//     id                       String       @id @default(uuid())
+//     storeId                  String // Foreign Key to Store
+//     store                    Store       @relation("StoreToCourse", fields: [storeId], references: [id])
+//     categoryId               String // Foreign Key to Courses Category
+//     category                 CoursesCategory    @relation("CategoryToCourse", fields: [categoryId], references: [id])
+//     name                     String 
+//     name_ar                  String 
+//     price                    Decimal
+//     images                   Image[] // Relation to Image model
+//     intro                    String 
+//     intro_ar                 String 
+//     duaration                String 
+//     duration_ar              String 
+//     who_sh_att               String 
+//     who_sh_att_ar            String 
+//     c_obje                   String 
+//     c_obje_ar                String 
+//     c_content                String 
+//     c_content_ar             String 
+//     wh_we_bnfi               String 
+//     wh_we_bnfi_ar            String 
+//     c_in_house               String 
+//     c_in_house_ar            String 
+//     delv_and_leaders         String 
+//     delv_and_leaders_ar      String 
+//     date_and_rev             String 
+//     certification            String 
+//     currancy                 String
+//     @@index([storeId])
+//     @@index([categoryId])
+// }
+
+//  model Service {
+//    id                       String       @id @default(uuid())
+//    storeId                  String   //Foreign Key to Store
+//    store                    Store       @relation("StoreToService", fields: [storeId], references: [id])
+//    categoryId               String  // Foreign Key to Category
+//    category                 ServicesCategory    @relation("CategoryToService", fields: [categoryId], references: [id])
+//    name                     String 
+//    name_ar                  String 
+//    title                    String 
+//    explanation              String 
+//    explanation_2            String 
+//    title_ar                 String 
+//    explanation_ar           String 
+//    explanation_2_ar         String 
+//    expert                   Expert[] @relation("ExpertToService")
+//    @@index([storeId])
+//    @@index([categoryId])
+// //   // @@index([sizeId])
+// //   // @@index([colorId])
+// }
+//  model Industry {
+//    id                       String              @id @default(uuid())
+//    storeId                  String   //Foreign Key to Store
+//    store                    Store               @relation("StoreToIndustry", fields: [storeId], references: [id])
+//    categoryId               String  // Foreign Key to Category
+//    category                 IndustryCategory    @relation("CategoryToIndustry", fields: [categoryId], references: [id])
+//    casestudy                CaseStudy[]         @relation("IndustryToCaseStudy")
+//    expert                   Expert[]            @relation("ExpertToIndustry")
+//    idustrydetailes          IndustryDetailes[]     @relation("IndustryToIndustryDetailes")
+//    name                     String              
+//    name_ar                  String              
+//    title_1                  String              
+//    explanation_1            String              
+//    title_2                  String              
+//    explanation_2            String              
+//    title_3                  String              
+//    explanation_3            String              
+//    @@index([storeId])
+//    @@index([categoryId])
+// //   // @@index([sizeId])
+// //   // @@index([colorId])
+// }
+// model IndustryDetailes{
+// id                         String @id @default(uuid())
+// storeId                    String // Foreign Key to Store
+// store                      Store     @relation("StoreToIndustryDetailes", fields: [storeId], references: [id])
+// industryId                  String// Foreign Key To Industry
+// idustry                    Industry @relation("IndustryToIndustryDetailes",fields: [industryId],references: [id])
+// title                      String 
+// title_ar                   String 
+// point                      String 
+// point_ar                   String 
+// @@index([storeId])
+// @@index([industryId])
+// }
+// model CaseStudy {
+//   id                           String    @id @default(uuid())
+//   storeId                      String // Foreign Key to Store
+//   store                        Store     @relation("StoreToCaseStudy", fields: [storeId], references: [id])
+//   name                         String
+//   name_ar                      String
+//   industryId                   String // Foreign Key to Industry
+//   industry                     Industry  @relation("IndustryToCaseStudy",fields: [industryId],references: [id])
+//   sub_title                    String
+//   sub_title_ar                 String
+//   onerole_1                    String   
+//   onerole_2                    String  
+//   onerole_3                    String  
+//   onerole_1_ar                 String  
+//   onerole_2_ar                 String  
+//   onerole_3_ar                 String  
+//   result_1                     String  
+//   result_2                     String  
+//   result_3                     String   
+//   result_4                     String  
+//   result_1_ar                  String  
+//   result_2_ar                  String  
+//   result_3_ar                  String   
+//   result_4_ar                  String  
+//   brief_1                      String  
+//   brief_2                      String  
+//   brief_1_ar                   String  
+//   brief_2_ar                   String  
+//   image    Image3[]
+//   @@index([storeId])
+//   @@index([industryId])
+// }
+// model Image {
+//   id              String   @id @default(uuid())
+//   courseId        String
+//   course          Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+//   url             String // URL of the image
+//   createdAt       DateTime @default(now())
+//   updatedAt       DateTime @updatedAt
+//   @@index([courseId])
+// }
+//  model Expert{
+//   id                     String    @id @default(uuid())
+//   storeId                String // Foreign Key to Store
+//   store                  Store     @relation("StoreToExpert", fields: [storeId], references: [id])
+//   serviceId              String // Foreign Key to Service 
+//   industryId             String // Foreign Key to Industry 
+//   service                Service    @relation("ExpertToService", fields: [serviceId], references: [id])
+//   idustry                Industry    @relation("ExpertToIndustry", fields: [industryId], references: [id])
+//   name                   String
+//   name_ar                String
+//   bio                    String    
+//   bio_ar                 String    
+//   mail                   String
+//   phone                  String
+//   images                 Image2[]
+//   @@index([storeId])
+//   @@index([serviceId])
+//   @@index([industryId])
+//  }
+// model Image2 {
+//   id                    String   @id @default(uuid())
+//   expertId              String
+//   expert                Expert  @relation(fields: [expertId], references: [id], onDelete: Cascade)
+//   url                   String // URL of the image
+//   createdAt             DateTime @default(now())
+//   updatedAt             DateTime @updatedAt
+//   @@index([expertId])
+// }
+// model Image3 {
+//   id                    String   @id @default(uuid())
+//   casestudyId           String
+//   casestudy             CaseStudy  @relation(fields: [casestudyId], references: [id], onDelete: Cascade)
+//   url                   String // URL of the image
+//   createdAt             DateTime @default(now())
+//   updatedAt             DateTime @updatedAt
+//   @@index([casestudyId])
+// }
+
+// model Image4 {
+//   id                    String   @id @default(uuid())
+//   teamId                String
+//   team                  Team  @relation(fields: [teamId], references: [id], onDelete: Cascade)
+//   url                   String // URL of the image
+//   createdAt             DateTime @default(now())
+//   updatedAt             DateTime @updatedAt
+//   @@index([teamId])
+// }
+// // model Size {
+// //   id             String    @id @default(uuid())
+// //   storeId        String // Foreign Key to Store
+// //   store     Store     @relation("StoreToSize", fields: [storeId], references: [id])
+// //   name           String
+// //   name_ar        String
+// //   value          String
+// //   courses  course[] // Relation to course model
+// //   createdAt DateTime  @default(now())
+// //   updatedAt DateTime  @updatedAt
+
+// //   @@index([storeId])
+// // }
+// //model Color {
+// //   id              String    @id @default(uuid())
+// //   storeId         String // Foreign Key to Store
+// //   store           Store     @relation("StoreToColor", fields: [storeId], references: [id])
+// //   name            String
+// //   name_ar         String
+// //   value           String
+// //   // courses  course[] // Relation to course model
+// //   createdAt       DateTime  @default(now())
+// //   updatedAt       DateTime  @updatedAt
+
+// //   @@index([storeId])
+// // }
+// // model Order {
+// //   id              String      @id @default(uuid())
+// //   storeId         String // Foreign Key to Store
+// //   store           Store       @relation("StoreToOrder", fields: [storeId], references: [id])
+// //   orderItems      OrderItem[] // Relation to OrderItem model
+// //   isPaid          Boolean     @default(false)
+// //   phone           String      @default("")
+// //   address         String      @default("")
+// //   createdAt       DateTime    @default(now())
+// //   updatedAt       DateTime    @updatedAt
+// //   @@index([storeId])
+// // }
+
+// // // Intermediary for a many-to-many relationship
+// // model OrderItem {
+// //   id              String  @id @default(uuid())
+// //   orderId         String // Foreign Key to Order
+// //   order           Order   @relation(fields: [orderId], references: [id])
+// //   courseId        String // Foreign Key to course
+// //   // course   course @relation(fields: [courseId], references: [id])
+// //   @@index([orderId])
+// //   @@index([courseId])
+// // }
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider     = "mysql"
+  provider     = "postgresql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
@@ -27,6 +370,7 @@ model Store {
   createdAt               DateTime                        @default(now())
   updatedAt               DateTime                        @updatedAt
 }
+
 model Billboard {
   id                        String                @id @default(uuid())
   storeId                   String
@@ -42,6 +386,7 @@ model Billboard {
 
   @@index([storeId])
 }
+
 model CoursesCategory {
   id                String    @id @default(uuid())
   storeId           String // Foreign Key to Store
@@ -56,6 +401,7 @@ model CoursesCategory {
   @@index([storeId])
   @@index([billboardId])
 }
+
 model Team {
  id               String @id @default(uuid())
  storeId          String 
@@ -69,6 +415,7 @@ model Team {
  @@index([storeId])
  @@index([billboardId])
 }
+
 model IndustryCategory {
   id                String    @id @default(uuid())
   storeId           String // Foreign Key to Store
@@ -84,6 +431,7 @@ model IndustryCategory {
   @@index([storeId])
   @@index([billboardId])
 }
+
 model ServicesCategory {
   id                String    @id @default(uuid())
   storeId           String // Foreign Key to Store
@@ -99,6 +447,7 @@ model ServicesCategory {
   @@index([storeId])
   @@index([billboardId])
 }
+
 model TeamMember{
     id                      String @id @default(uuid())
     storeId                 String // Foreign Key to Store
@@ -107,69 +456,69 @@ model TeamMember{
     store                   Store       @relation("StoreToTeamMember", fields: [storeId], references: [id])
     name                    String
     name_ar                 String
-    brief_1                 String @db.LongText
-    brief_2                 String @db.LongText
-    brief_3                 String @db.LongText
-    brief_1_ar              String @db.LongText
-    brief_2_ar              String @db.LongText
-    brief_3_ar              String @db.LongText
+    brief_1                 String 
+    brief_2                 String 
+    brief_3                 String 
+    brief_1_ar              String 
+    brief_2_ar              String 
+    brief_3_ar              String 
     @@index([storeId])
     @@index([teamId])
 }
+
 model Course {
     id                       String       @id @default(uuid())
     storeId                  String // Foreign Key to Store
     store                    Store       @relation("StoreToCourse", fields: [storeId], references: [id])
     categoryId               String // Foreign Key to Courses Category
     category                 CoursesCategory    @relation("CategoryToCourse", fields: [categoryId], references: [id])
-    name                     String @db.LongText
-    name_ar                  String @db.LongText
+    name                     String 
+    name_ar                  String 
     price                    Decimal
     images                   Image[] // Relation to Image model
-    intro                    String @db.LongText
-    intro_ar                 String @db.LongText
-    duaration                String @db.LongText
-    duration_ar              String @db.LongText
-    who_sh_att               String @db.LongText
-    who_sh_att_ar            String @db.LongText
-    c_obje                   String @db.LongText
-    c_obje_ar                String @db.LongText
-    c_content                String @db.LongText
-    c_content_ar             String @db.LongText
-    wh_we_bnfi               String @db.LongText
-    wh_we_bnfi_ar            String @db.LongText
-    c_in_house               String @db.LongText
-    c_in_house_ar            String @db.LongText
-    delv_and_leaders         String @db.LongText
-    delv_and_leaders_ar      String @db.LongText
-    date_and_rev             String @db.LongText
-    certification            String @db.LongText
+    intro                    String 
+    intro_ar                 String 
+    duaration                String 
+    duration_ar              String 
+    who_sh_att               String 
+    who_sh_att_ar            String 
+    c_obje                   String 
+    c_obje_ar                String 
+    c_content                String 
+    c_content_ar             String 
+    wh_we_bnfi               String 
+    wh_we_bnfi_ar            String 
+    c_in_house               String 
+    c_in_house_ar            String 
+    delv_and_leaders         String 
+    delv_and_leaders_ar      String 
+    date_and_rev             String 
+    certification            String 
     currancy                 String
     @@index([storeId])
     @@index([categoryId])
 }
 
- model Service {
+model Service {
    id                       String       @id @default(uuid())
    storeId                  String   //Foreign Key to Store
    store                    Store       @relation("StoreToService", fields: [storeId], references: [id])
    categoryId               String  // Foreign Key to Category
    category                 ServicesCategory    @relation("CategoryToService", fields: [categoryId], references: [id])
-   name                     String @db.LongText
-   name_ar                  String @db.LongText
-   title                    String @db.LongText
-   explanation              String @db.LongText
-   explanation_2            String @db.LongText
-   title_ar                 String @db.LongText
-   explanation_ar           String @db.LongText
-   explanation_2_ar         String @db.LongText
+   name                     String 
+   name_ar                  String 
+   title                    String 
+   explanation              String 
+   explanation_2            String 
+   title_ar                 String 
+   explanation_ar           String 
+   explanation_2_ar         String 
    expert                   Expert[] @relation("ExpertToService")
    @@index([storeId])
    @@index([categoryId])
-//   // @@index([sizeId])
-//   // @@index([colorId])
 }
- model Industry {
+
+model Industry {
    id                       String              @id @default(uuid())
    storeId                  String   //Foreign Key to Store
    store                    Store               @relation("StoreToIndustry", fields: [storeId], references: [id])
@@ -178,32 +527,32 @@ model Course {
    casestudy                CaseStudy[]         @relation("IndustryToCaseStudy")
    expert                   Expert[]            @relation("ExpertToIndustry")
    idustrydetailes          IndustryDetailes[]     @relation("IndustryToIndustryDetailes")
-   name                     String              @db.LongText
-   name_ar                  String              @db.LongText
-   title_1                  String              @db.LongText
-   explanation_1            String              @db.LongText
-   title_2                  String              @db.LongText
-   explanation_2            String              @db.LongText
-   title_3                  String              @db.LongText
-   explanation_3            String              @db.LongText
+   name                     String              
+   name_ar                  String              
+   title_1                  String              
+   explanation_1            String              
+   title_2                  String              
+   explanation_2            String              
+   title_3                  String              
+   explanation_3            String              
    @@index([storeId])
    @@index([categoryId])
-//   // @@index([sizeId])
-//   // @@index([colorId])
 }
+
 model IndustryDetailes{
 id                         String @id @default(uuid())
 storeId                    String // Foreign Key to Store
 store                      Store     @relation("StoreToIndustryDetailes", fields: [storeId], references: [id])
 industryId                  String// Foreign Key To Industry
 idustry                    Industry @relation("IndustryToIndustryDetailes",fields: [industryId],references: [id])
-title                      String @db.LongText
-title_ar                   String @db.LongText
-point                      String @db.LongText
-point_ar                   String @db.LongText
+title                      String 
+title_ar                   String 
+point                      String 
+point_ar                   String 
 @@index([storeId])
 @@index([industryId])
 }
+
 model CaseStudy {
   id                           String    @id @default(uuid())
   storeId                      String // Foreign Key to Store
@@ -214,28 +563,29 @@ model CaseStudy {
   industry                     Industry  @relation("IndustryToCaseStudy",fields: [industryId],references: [id])
   sub_title                    String
   sub_title_ar                 String
-  onerole_1                    String  @db.LongText 
-  onerole_2                    String  @db.LongText
-  onerole_3                    String  @db.LongText
-  onerole_1_ar                 String  @db.LongText
-  onerole_2_ar                 String  @db.LongText
-  onerole_3_ar                 String  @db.LongText
-  result_1                     String  @db.LongText
-  result_2                     String  @db.LongText
-  result_3                     String  @db.LongText 
-  result_4                     String  @db.LongText
-  result_1_ar                  String  @db.LongText
-  result_2_ar                  String  @db.LongText
-  result_3_ar                  String  @db.LongText 
-  result_4_ar                  String  @db.LongText
-  brief_1                      String  @db.LongText
-  brief_2                      String  @db.LongText
-  brief_1_ar                   String  @db.LongText
-  brief_2_ar                   String  @db.LongText
-  image    Image3[]
+  onerole_1                    String   
+  onerole_2                    String  
+  onerole_3                    String  
+  onerole_1_ar                 String  
+  onerole_2_ar                 String  
+  onerole_3_ar                 String  
+  result_1                     String  
+  result_2                     String  
+  result_3                     String   
+  result_4                     String  
+  result_1_ar                  String  
+  result_2_ar                  String  
+  result_3_ar                  String   
+  result_4_ar                  String  
+  brief_1                      String  
+  brief_2                      String  
+  brief_1_ar                   String  
+  brief_2_ar                   String  
+  image                        Image3[]
   @@index([storeId])
   @@index([industryId])
 }
+
 model Image {
   id              String   @id @default(uuid())
   courseId        String
@@ -245,7 +595,8 @@ model Image {
   updatedAt       DateTime @updatedAt
   @@index([courseId])
 }
- model Expert{
+
+model Expert{
   id                     String    @id @default(uuid())
   storeId                String // Foreign Key to Store
   store                  Store     @relation("StoreToExpert", fields: [storeId], references: [id])
@@ -255,8 +606,8 @@ model Image {
   idustry                Industry    @relation("ExpertToIndustry", fields: [industryId], references: [id])
   name                   String
   name_ar                String
-  bio                    String    @db.LongText
-  bio_ar                 String    @db.LongText
+  bio                    String    
+  bio_ar                 String    
   mail                   String
   phone                  String
   images                 Image2[]
@@ -264,6 +615,7 @@ model Image {
   @@index([serviceId])
   @@index([industryId])
  }
+
 model Image2 {
   id                    String   @id @default(uuid())
   expertId              String
@@ -273,6 +625,7 @@ model Image2 {
   updatedAt             DateTime @updatedAt
   @@index([expertId])
 }
+
 model Image3 {
   id                    String   @id @default(uuid())
   casestudyId           String
@@ -292,52 +645,3 @@ model Image4 {
   updatedAt             DateTime @updatedAt
   @@index([teamId])
 }
-// model Size {
-//   id             String    @id @default(uuid())
-//   storeId        String // Foreign Key to Store
-//   store     Store     @relation("StoreToSize", fields: [storeId], references: [id])
-//   name           String
-//   name_ar        String
-//   value          String
-//   courses  course[] // Relation to course model
-//   createdAt DateTime  @default(now())
-//   updatedAt DateTime  @updatedAt
-
-//   @@index([storeId])
-// }
-//model Color {
-//   id              String    @id @default(uuid())
-//   storeId         String // Foreign Key to Store
-//   store           Store     @relation("StoreToColor", fields: [storeId], references: [id])
-//   name            String
-//   name_ar         String
-//   value           String
-//   // courses  course[] // Relation to course model
-//   createdAt       DateTime  @default(now())
-//   updatedAt       DateTime  @updatedAt
-
-//   @@index([storeId])
-// }
-// model Order {
-//   id              String      @id @default(uuid())
-//   storeId         String // Foreign Key to Store
-//   store           Store       @relation("StoreToOrder", fields: [storeId], references: [id])
-//   orderItems      OrderItem[] // Relation to OrderItem model
-//   isPaid          Boolean     @default(false)
-//   phone           String      @default("")
-//   address         String      @default("")
-//   createdAt       DateTime    @default(now())
-//   updatedAt       DateTime    @updatedAt
-//   @@index([storeId])
-// }
-
-// // Intermediary for a many-to-many relationship
-// model OrderItem {
-//   id              String  @id @default(uuid())
-//   orderId         String // Foreign Key to Order
-//   order           Order   @relation(fields: [orderId], references: [id])
-//   courseId        String // Foreign Key to course
-//   // course   course @relation(fields: [courseId], references: [id])
-//   @@index([orderId])
-//   @@index([courseId])
-// }
