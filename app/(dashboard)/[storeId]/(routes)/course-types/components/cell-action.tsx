@@ -32,13 +32,13 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 		try {
 			setLoading(true);
 			await axios.delete(
-				`/api/${params.storeId}/coursetypes/${data.id}`
+				`/api/${params.storeId}/course-types/${data.id}`
 			);
 			toast.success('Size deleted.');
 			router.refresh();
 		} catch (error) {
 			toast.error(
-				'Make sure you removed all products using this size first.'
+				'Make sure you removed all Courses using this type first.'
 			);
 		} finally {
 			setOpen(false);
@@ -48,7 +48,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
 	const onCopy = (id: string) => {
 		navigator.clipboard.writeText(id);
-		toast.success('Size ID copied to clipboard.');
+		toast.success('Type ID copied to clipboard.');
 	};
 
 	return (
@@ -84,7 +84,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 					<DropdownMenuItem
 						onClick={() =>
 							router.push(
-								`/${params.storeId}/coursetypes/${data.id}`
+								`/${params.storeId}/course-types/${data.id}`
 							)
 						}
 					>

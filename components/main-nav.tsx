@@ -72,6 +72,11 @@ export function MainNav({
 			label: 'Settings',
 			active: pathname === `/${params.storeId}/settings`,
 		},
+		{
+			href: `/${params.storeId}/course-types`,
+			label: 'Course Location',
+			active: pathname === `/${params.storeId}/course-types`,
+		},
 	];
 
 	return (
