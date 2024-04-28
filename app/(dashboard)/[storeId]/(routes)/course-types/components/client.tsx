@@ -24,7 +24,7 @@ export const SizesClient: React.FC<SizesClientProps> = ({ data }) => {
 			<div className="flex items-center justify-between">
 				<Heading
 					title={`Course Types (${data.length})`}
-					description="Manage sizes for your products"
+					description="Manage Types for your Courses"
 				/>
 				<Button
 					onClick={() =>
@@ -45,12 +45,12 @@ export const SizesClient: React.FC<SizesClientProps> = ({ data }) => {
 			/>
 			<Heading
 				title="API"
-				description="API Calls for Sizes"
+				description="API Calls for Types"
 			/>
 			<Separator />
 			<ApiList
-				entityName="sizes"
-				entityIdName="sizeId"
+				entityName="types"
+				entityIdName="typeId"
 			/>
 		</>
 	);

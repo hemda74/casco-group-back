@@ -81,7 +81,7 @@ export async function PATCH(
 
 		const body = await req.json();
 
-		const { name, value } = body;
+		const { name, name_ar } = body;
 
 		if (!userId) {
 			return new NextResponse('Unauthenticated', {
@@ -95,8 +95,8 @@ export async function PATCH(
 			});
 		}
 
-		if (!value) {
-			return new NextResponse('Value is required', {
+		if (!name_ar) {
+			return new NextResponse('Arabic Name is required', {
 				status: 400,
 			});
 		}
@@ -126,7 +126,7 @@ export async function PATCH(
 			},
 			data: {
 				name,
-				value,
+				name_ar,
 			},
 		});
 

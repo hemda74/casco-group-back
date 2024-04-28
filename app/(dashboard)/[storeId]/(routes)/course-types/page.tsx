@@ -19,7 +19,7 @@ const SizesPage = async ({ params }: { params: { storeId: string } }) => {
 		id: item.id,
 		name: item.name,
 		name_ar: item.name_ar,
-		value: item.value,
+
 		createdAt: format(item.createdAt, 'MMMM do, yyyy'),
 	}));
 

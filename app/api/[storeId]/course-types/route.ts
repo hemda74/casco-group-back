@@ -12,7 +12,7 @@ export async function POST(
 
 		const body = await req.json();
 
-		const { name, name_ar, value } = body;
+		const { name, name_ar } = body;
 
 		if (!userId) {
 			return new NextResponse('Unauthenticated', {
@@ -27,12 +27,6 @@ export async function POST(
 		}
 		if (!name_ar) {
 			return new NextResponse('Name is required', {
-				status: 400,
-			});
-		}
-
-		if (!value) {
-			return new NextResponse('Value is required', {
 				status: 400,
 			});
 		}
@@ -60,7 +54,7 @@ export async function POST(
 			data: {
 				name,
 				name_ar,
-				value,
+
 				storeId: params.storeId,
 			},
 		});

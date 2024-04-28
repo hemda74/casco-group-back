@@ -26,7 +26,6 @@ import { AlertModal } from '@/components/modals/alert-modal';
 const formSchema = z.object({
 	name: z.string().min(1),
 	name_ar: z.string().min(1),
-	value: z.string().min(1),
 });
 
 type SizeFormValues = z.infer<typeof formSchema>;
@@ -164,27 +163,6 @@ export const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
 												loading
 											}
 											placeholder="Type name in Arabic"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="value"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Value
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Type value"
 											{...field}
 										/>
 									</FormControl>
