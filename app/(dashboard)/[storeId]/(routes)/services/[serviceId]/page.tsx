@@ -11,9 +11,6 @@ const ProductPage = async ({
 		where: {
 			id: params.ServiceId,
 		},
-		include: {
-			expert: true,
-		},
 	});
 
 	const categories = await prismadb.servicesCategory.findMany({

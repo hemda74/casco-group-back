@@ -6,13 +6,12 @@ import { CellAction } from './cell-action';
 export type ProductColumn = {
 	id: string;
 	name: string;
-	price: string;
-	category: string;
 	name_ar: string;
 	intro: string;
 	intro_ar: string;
 	duaration: string;
 	duration_ar: string;
+
 	who_sh_att: string;
 	who_sh_att_ar: string;
 	c_obje: string;
@@ -25,13 +24,8 @@ export type ProductColumn = {
 	c_in_house_ar: string;
 	delv_and_leaders: string;
 	delv_and_leaders_ar: string;
-	date_and_rev_1: string;
-	date_and_rev_2: string;
-	date_and_rev_3: string;
-	date_and_rev_4: string;
-	date_and_rev_5: string;
-	date_and_rev_6: string;
-	certification: string;
+	price: string;
+	category: string;
 };
 
 export const columns: ColumnDef<ProductColumn>[] = [

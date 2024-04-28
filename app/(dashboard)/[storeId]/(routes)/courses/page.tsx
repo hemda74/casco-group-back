@@ -15,7 +15,7 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
 			category: true,
 		},
 		orderBy: {
-			date_and_rev_1: 'desc',
+			name: 'desc',
 		},
 	});
 
@@ -41,12 +41,6 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
 		delv_and_leaders_ar: item.delv_and_leaders_ar,
 		price: formatter.format(item.price.toNumber()),
 		category: item.category.name,
-		date_and_rev_1: item.date_and_rev_1,
-		date_and_rev_2: item.date_and_rev_2,
-		date_and_rev_3: item.date_and_rev_3,
-		date_and_rev_4: item.date_and_rev_4,
-		date_and_rev_5: item.date_and_rev_5,
-		date_and_rev_6: item.date_and_rev_6,
 	}));
 
 	return (
