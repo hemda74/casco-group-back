@@ -21,7 +21,7 @@ export async function GET(
 			include: {
 				images: true,
 				category: true,
-				coursetype: true,
+
 				// color: true,
 			},
 		});

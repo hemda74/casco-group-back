@@ -15,16 +15,25 @@ export async function POST(
 		const {
 			name,
 			name_ar,
-			price,
+			price_usd,
+			price_egp,
+			price_uae,
+			price_ksa,
 			categoryId,
 			images,
 			intro,
 			intro_ar,
+			short_intro,
+			short_intro_ar,
 			duaration,
 			duration_ar,
 			who_sh_att,
 			who_sh_att_ar,
+			c_obje_list,
+			c_obje_list_ar,
 			c_obje,
+			course_type,
+			course_type_ar,
 			c_obje_ar,
 			c_content,
 			c_content_ar,
@@ -34,13 +43,10 @@ export async function POST(
 			c_in_house_ar,
 			delv_and_leaders,
 			delv_and_leaders_ar,
-			date_and_rev_1,
-			date_and_rev_2,
-			date_and_rev_3,
-			date_and_rev_4,
-			date_and_rev_5,
-			date_and_rev_6,
+			course_date,
+			course_date_ar,
 			certification,
+			certification_ar,
 		} = body;
 
 		if (!userId) {
@@ -66,7 +72,22 @@ export async function POST(
 			});
 		}
 
-		if (!price) {
+		if (!price_egp) {
+			return new NextResponse('Price is required', {
+				status: 400,
+			});
+		}
+		if (!price_uae) {
+			return new NextResponse('Price is required', {
+				status: 400,
+			});
+		}
+		if (!price_ksa) {
+			return new NextResponse('Price is required', {
+				status: 400,
+			});
+		}
+		if (!price_usd) {
 			return new NextResponse('Price is required', {
 				status: 400,
 			});
@@ -171,8 +192,8 @@ export async function POST(
 				status: 400,
 			});
 		}
-		if (!date_and_rev_1) {
-			return new NextResponse('date and revnue is required', {
+		if (!course_type) {
+			return new NextResponse('date and vanue is required', {
 				status: 400,
 			});
 		}
@@ -223,16 +244,26 @@ export async function POST(
 		const product = await prismadb.course.create({
 			data: {
 				name,
-				price,
-				categoryId,
 				name_ar,
+				price_usd,
+				price_egp,
+				price_uae,
+				price_ksa,
+				categoryId,
+				images,
 				intro,
 				intro_ar,
+				short_intro,
+				short_intro_ar,
 				duaration,
 				duration_ar,
 				who_sh_att,
 				who_sh_att_ar,
+				c_obje_list,
+				c_obje_list_ar,
 				c_obje,
+				course_type,
+				course_type_ar,
 				c_obje_ar,
 				c_content,
 				c_content_ar,
@@ -242,14 +273,10 @@ export async function POST(
 				c_in_house_ar,
 				delv_and_leaders,
 				delv_and_leaders_ar,
-				date_and_rev_1,
-				date_and_rev_2,
-				date_and_rev_3,
-				date_and_rev_4,
-				date_and_rev_5,
-				date_and_rev_6,
+				course_date,
+				course_date_ar,
 				certification,
-
+				certification_ar,
 				storeId: params.storeId,
 				images: {
 					createMany: {

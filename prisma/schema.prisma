@@ -68,10 +68,10 @@ model Course {
     category                 CoursesCategory    @relation("CategoryToCourse", fields: [categoryId], references: [id])
     name                     String 
     name_ar                  String 
-    priceegp                 Decimal
-    priceuae                 Decimal
-    priceksa                 Decimal
-    priceusd                 Decimal
+    price_egp                 Decimal
+    price_uae                 Decimal
+    price_ksa                 Decimal
+    price_usd                 Decimal
     images                   Image[] // Relation to Image model
     intro                    String 
     intro_ar                 String 
@@ -84,7 +84,7 @@ model Course {
     c_obje                   String 
     c_obje_ar                String 
     c_obje_list              String 
-    c_obje_ar_list           String 
+    c_obje_list_ar           String 
     c_content                String 
     c_content_ar             String 
     wh_we_bnfi               String 
@@ -97,7 +97,10 @@ model Course {
     certification            String 
     certification_ar         String 
     course_type              String
-    courseDate               DateTime?    
+    course_type_ar           String
+    course_date               DateTime?   
+    course_date_ar               DateTime?    
+ 
     @@index([storeId])
     @@index([categoryId])
 }
