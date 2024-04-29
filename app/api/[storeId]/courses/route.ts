@@ -15,12 +15,12 @@ export async function POST(
 		const {
 			name,
 			name_ar,
+			categoryId,
+			images,
 			price_usd,
 			price_egp,
 			price_uae,
 			price_ksa,
-			categoryId,
-			images,
 			intro,
 			intro_ar,
 			short_intro,
@@ -54,7 +54,6 @@ export async function POST(
 				status: 403,
 			});
 		}
-
 		if (!name) {
 			return new NextResponse('Name is required', {
 				status: 400,
@@ -65,13 +64,11 @@ export async function POST(
 				status: 400,
 			});
 		}
-
 		if (!images || !images.length) {
 			return new NextResponse('Images are required', {
 				status: 400,
 			});
 		}
-
 		if (!price_egp) {
 			return new NextResponse('Price is required', {
 				status: 400,
@@ -92,7 +89,6 @@ export async function POST(
 				status: 400,
 			});
 		}
-
 		if (!categoryId) {
 			return new NextResponse('Category id is required', {
 				status: 400,
@@ -104,6 +100,19 @@ export async function POST(
 			});
 		}
 		if (!intro_ar) {
+			return new NextResponse(
+				'introduction in arabic is required',
+				{
+					status: 400,
+				}
+			);
+		}
+		if (!short_intro) {
+			return new NextResponse('intro is required', {
+				status: 400,
+			});
+		}
+		if (!short_intro_ar) {
 			return new NextResponse(
 				'introduction in arabic is required',
 				{
@@ -149,6 +158,22 @@ export async function POST(
 			);
 		}
 		if (!c_obje_ar) {
+			return new NextResponse(
+				'course objective is required',
+				{
+					status: 400,
+				}
+			);
+		}
+		if (!c_obje_list) {
+			return new NextResponse(
+				'course objective in arabic is required',
+				{
+					status: 400,
+				}
+			);
+		}
+		if (!c_obje_list_ar) {
 			return new NextResponse(
 				'course objective in arabic is required',
 				{
@@ -197,6 +222,11 @@ export async function POST(
 				status: 400,
 			});
 		}
+		if (!course_type_ar) {
+			return new NextResponse('date and vanue is required', {
+				status: 400,
+			});
+		}
 		if (!delv_and_leaders) {
 			return new NextResponse(
 				'delviary and course leaders is required',
@@ -214,6 +244,30 @@ export async function POST(
 			);
 		}
 		if (!certification) {
+			return new NextResponse(
+				'delviary and course leaders in arabic is required',
+				{
+					status: 400,
+				}
+			);
+		}
+		if (!certification_ar) {
+			return new NextResponse(
+				'delviary and course leaders in arabic is required',
+				{
+					status: 400,
+				}
+			);
+		}
+		if (!course_date) {
+			return new NextResponse(
+				'delviary and course leaders in arabic is required',
+				{
+					status: 400,
+				}
+			);
+		}
+		if (!course_date_ar) {
 			return new NextResponse(
 				'delviary and course leaders in arabic is required',
 				{
@@ -250,7 +304,6 @@ export async function POST(
 				price_uae,
 				price_ksa,
 				categoryId,
-				images,
 				intro,
 				intro_ar,
 				short_intro,

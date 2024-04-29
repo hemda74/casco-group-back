@@ -90,16 +90,25 @@ export async function PATCH(
 		const {
 			name,
 			name_ar,
-			price,
 			categoryId,
 			images,
+			price_usd,
+			price_egp,
+			price_uae,
+			price_ksa,
 			intro,
 			intro_ar,
+			short_intro,
+			short_intro_ar,
 			duaration,
 			duration_ar,
 			who_sh_att,
 			who_sh_att_ar,
+			c_obje_list,
+			c_obje_list_ar,
 			c_obje,
+			course_type,
+			course_type_ar,
 			c_obje_ar,
 			c_content,
 			c_content_ar,
@@ -109,9 +118,10 @@ export async function PATCH(
 			c_in_house_ar,
 			delv_and_leaders,
 			delv_and_leaders_ar,
-			date_and_rev,
-
+			course_date,
+			course_date_ar,
 			certification,
+			certification_ar,
 		} = body;
 
 		if (!userId) {
@@ -119,20 +129,13 @@ export async function PATCH(
 				status: 403,
 			});
 		}
-
-		if (!params.courseId) {
-			return new NextResponse('Course Id is required', {
-				status: 400,
-			});
-		}
-
 		if (!name) {
 			return new NextResponse('Name is required', {
 				status: 400,
 			});
 		}
 		if (!name_ar) {
-			return new NextResponse('Name is required', {
+			return new NextResponse(' Arabic Name is required', {
 				status: 400,
 			});
 		}
@@ -141,13 +144,26 @@ export async function PATCH(
 				status: 400,
 			});
 		}
-
-		if (!price) {
+		if (!price_egp) {
 			return new NextResponse('Price is required', {
 				status: 400,
 			});
 		}
-
+		if (!price_uae) {
+			return new NextResponse('Price is required', {
+				status: 400,
+			});
+		}
+		if (!price_ksa) {
+			return new NextResponse('Price is required', {
+				status: 400,
+			});
+		}
+		if (!price_usd) {
+			return new NextResponse('Price is required', {
+				status: 400,
+			});
+		}
 		if (!categoryId) {
 			return new NextResponse('Category id is required', {
 				status: 400,
@@ -159,6 +175,19 @@ export async function PATCH(
 			});
 		}
 		if (!intro_ar) {
+			return new NextResponse(
+				'introduction in arabic is required',
+				{
+					status: 400,
+				}
+			);
+		}
+		if (!short_intro) {
+			return new NextResponse('intro is required', {
+				status: 400,
+			});
+		}
+		if (!short_intro_ar) {
 			return new NextResponse(
 				'introduction in arabic is required',
 				{
@@ -205,6 +234,22 @@ export async function PATCH(
 		}
 		if (!c_obje_ar) {
 			return new NextResponse(
+				'course objective is required',
+				{
+					status: 400,
+				}
+			);
+		}
+		if (!c_obje_list) {
+			return new NextResponse(
+				'course objective in arabic is required',
+				{
+					status: 400,
+				}
+			);
+		}
+		if (!c_obje_list_ar) {
+			return new NextResponse(
 				'course objective in arabic is required',
 				{
 					status: 400,
@@ -247,23 +292,16 @@ export async function PATCH(
 				status: 400,
 			});
 		}
-		if (!date_and_rev) {
-			return new NextResponse(
-				'At Least date and revnue is required',
-				{
-					status: 400,
-				}
-			);
+		if (!course_type) {
+			return new NextResponse('date and vanue is required', {
+				status: 400,
+			});
 		}
-		if (!certification) {
-			return new NextResponse(
-				'Course Certification is required',
-				{
-					status: 400,
-				}
-			);
+		if (!course_type_ar) {
+			return new NextResponse('date and vanue is required', {
+				status: 400,
+			});
 		}
-
 		if (!delv_and_leaders) {
 			return new NextResponse(
 				'delviary and course leaders is required',
@@ -280,6 +318,39 @@ export async function PATCH(
 				}
 			);
 		}
+		if (!certification) {
+			return new NextResponse(
+				'delviary and course leaders in arabic is required',
+				{
+					status: 400,
+				}
+			);
+		}
+		if (!certification_ar) {
+			return new NextResponse(
+				'delviary and course leaders in arabic is required',
+				{
+					status: 400,
+				}
+			);
+		}
+		if (!course_date) {
+			return new NextResponse(
+				'delviary and course leaders in arabic is required',
+				{
+					status: 400,
+				}
+			);
+		}
+		if (!course_date_ar) {
+			return new NextResponse(
+				'delviary and course leaders in arabic is required',
+				{
+					status: 400,
+				}
+			);
+		}
+
 		const storeByUserId = await prismadb.store.findFirst({
 			where: {
 				id: params.storeId,
@@ -299,16 +370,25 @@ export async function PATCH(
 			},
 			data: {
 				name,
-				price,
-				categoryId,
 				name_ar,
+				price_usd,
+				price_egp,
+				price_uae,
+				price_ksa,
+				categoryId,
 				intro,
 				intro_ar,
+				short_intro,
+				short_intro_ar,
 				duaration,
 				duration_ar,
 				who_sh_att,
 				who_sh_att_ar,
+				c_obje_list,
+				c_obje_list_ar,
 				c_obje,
+				course_type,
+				course_type_ar,
 				c_obje_ar,
 				c_content,
 				c_content_ar,
@@ -318,7 +398,10 @@ export async function PATCH(
 				c_in_house_ar,
 				delv_and_leaders,
 				delv_and_leaders_ar,
+				course_date,
+				course_date_ar,
 				certification,
+				certification_ar,
 
 				images: {
 					deleteMany: {},
