@@ -67,20 +67,27 @@ model Course {
     store                    Store       @relation("StoreToCourse", fields: [storeId], references: [id])
     categoryId               String // Foreign Key to Courses Category
     category                 CoursesCategory    @relation("CategoryToCourse", fields: [categoryId], references: [id])
-    coursetypeId              String   // Foreign Key to CourseType
-    coursetype       CourseType        @relation(fields: [coursetypeId], references: [id])
+    coursetypeId             String   // Foreign Key to CourseType
+    coursetype               CourseType        @relation(fields: [coursetypeId], references: [id])
     name                     String 
     name_ar                  String 
-    price                    Decimal
+    priceegp                    Decimal
+    priceuae                    Decimal
+    priceksa                    Decimal
+    priceusd                    Decimal
     images                   Image[] // Relation to Image model
     intro                    String 
     intro_ar                 String 
+    short_intro              String
+    short_intro_ar              String
     duaration                String 
     duration_ar              String 
     who_sh_att               String 
     who_sh_att_ar            String 
     c_obje                   String 
     c_obje_ar                String 
+      c_obje_list                   String 
+    c_obje_ar_list                String 
     c_content                String 
     c_content_ar             String 
     wh_we_bnfi               String 
@@ -91,10 +98,8 @@ model Course {
     delv_and_leaders_ar      String 
     date_and_rev             String 
     certification            String 
-    currancyegp              String
-    currancyksa              String
-    currancyuae              String
-    currancyusd              String
+        certification_ar            String 
+
     courseDate               DateTime?    
     
     @@index([storeId])
