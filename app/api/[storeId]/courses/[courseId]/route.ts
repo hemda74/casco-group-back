@@ -402,7 +402,6 @@ export async function PATCH(
 				course_date_ar,
 				certification,
 				certification_ar,
-
 				images: {
 					deleteMany: {},
 				},

@@ -11,11 +11,14 @@ export type ProductColumn = {
 	intro_ar: string;
 	duaration: string;
 	duration_ar: string;
-
 	who_sh_att: string;
 	who_sh_att_ar: string;
 	c_obje: string;
 	c_obje_ar: string;
+	course_type: string;
+	c_obje_list: string;
+	c_obje_list_ar: string;
+	course_type_ar: string;
 	c_content: string;
 	c_content_ar: string;
 	wh_we_bnfi: string;
@@ -24,8 +27,17 @@ export type ProductColumn = {
 	c_in_house_ar: string;
 	delv_and_leaders: string;
 	delv_and_leaders_ar: string;
-	price: string;
+	price_egp: number;
+	price_ksa: number;
+	price_uae: number;
+	price_usd: number;
 	category: string;
+	short_intro: string;
+	short_intro_ar: string;
+	certification: string;
+	certification_ar: string;
+	course_date: string;
+	course_date_ar: string;
 };
 
 export const columns: ColumnDef<ProductColumn>[] = [
@@ -112,31 +124,6 @@ export const columns: ColumnDef<ProductColumn>[] = [
 	{
 		accessorKey: 'category',
 		header: 'Course_Category___________________________________',
-	},
-
-	{
-		accessorKey: 'date_and_rev_1',
-		header: 'Course_Date_1___________________________________',
-	},
-	{
-		accessorKey: 'date_and_rev_2',
-		header: 'Course_Date_2___________________________________',
-	},
-	{
-		accessorKey: 'date_and_rev_3',
-		header: 'Course_Date_3___________________________________',
-	},
-	{
-		accessorKey: 'date_and_rev_4',
-		header: 'Course_Date_4___________________________________',
-	},
-	{
-		accessorKey: 'date_and_rev_5',
-		header: 'Course_Date_5___________________________________',
-	},
-	{
-		accessorKey: 'date_and_rev_6',
-		header: 'Course_Date_6___________________________________',
 	},
 
 	{
