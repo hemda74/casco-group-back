@@ -93,7 +93,6 @@ model Course {
     c_in_house_ar            String 
     delv_and_leaders         String 
     delv_and_leaders_ar      String 
-    date_and_rev             String 
     certification            String 
     certification_ar         String 
     course_type              String
