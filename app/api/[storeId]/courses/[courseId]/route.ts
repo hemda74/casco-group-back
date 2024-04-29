@@ -21,7 +21,7 @@ export async function GET(
 			include: {
 				images: true,
 				category: true,
-				// size: true,
+				coursetype: true,
 				// color: true,
 			},
 		});
@@ -109,12 +109,8 @@ export async function PATCH(
 			c_in_house_ar,
 			delv_and_leaders,
 			delv_and_leaders_ar,
-			date_and_rev_1,
-			date_and_rev_2,
-			date_and_rev_3,
-			date_and_rev_4,
-			date_and_rev_5,
-			date_and_rev_6,
+			date_and_rev,
+
 			certification,
 		} = body;
 
@@ -251,7 +247,7 @@ export async function PATCH(
 				status: 400,
 			});
 		}
-		if (!date_and_rev_1) {
+		if (!date_and_rev) {
 			return new NextResponse(
 				'At Least date and revnue is required',
 				{
@@ -322,12 +318,6 @@ export async function PATCH(
 				c_in_house_ar,
 				delv_and_leaders,
 				delv_and_leaders_ar,
-				date_and_rev_1,
-				date_and_rev_2,
-				date_and_rev_3,
-				date_and_rev_4,
-				date_and_rev_5,
-				date_and_rev_6,
 				certification,
 
 				images: {

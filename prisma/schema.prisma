@@ -69,7 +69,6 @@ model Course {
     category                 CoursesCategory    @relation("CategoryToCourse", fields: [categoryId], references: [id])
     coursetypeId              String   // Foreign Key to CourseType
     coursetype       CourseType        @relation(fields: [coursetypeId], references: [id])
-
     name                     String 
     name_ar                  String 
     price                    Decimal

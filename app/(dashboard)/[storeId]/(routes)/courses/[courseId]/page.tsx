@@ -22,11 +22,11 @@ const ProductPage = async ({
 		},
 	});
 
-	// const sizes = await prismadb.size.findMany({
-	//   where: {
-	//     storeId: params.storeId,
-	//   },
-	// });
+	const types = await prismadb.courseType.findMany({
+		where: {
+			storeId: params.storeId,
+		},
+	});
 
 	// const colors = await prismadb.color.findMany({
 	//   where: {
@@ -38,6 +38,7 @@ const ProductPage = async ({
 		<div className="flex-row">
 			<div className="flex-1 space-x-4 p-8 pt-6">
 				<CourseForm
+					types={types}
 					categories={categories}
 					initialData={Course}
 				/>

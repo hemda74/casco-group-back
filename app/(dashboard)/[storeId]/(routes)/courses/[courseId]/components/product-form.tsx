@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
-import { CoursesCategory, Image, Course } from '@prisma/client';
+import { CoursesCategory, Image, Course, CourseType } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 
 import { Input } from '@/components/ui/input';
@@ -57,14 +57,9 @@ const formSchema = z.object({
 	c_in_house_ar: z.string().min(1),
 	delv_and_leaders: z.string().min(1),
 	delv_and_leaders_ar: z.string().min(1),
-	date_and_rev_1: z.string().min(1),
-	date_and_rev_2: z.string().min(1),
-	date_and_rev_3: z.string().min(1),
-	date_and_rev_4: z.string().min(1),
-	date_and_rev_5: z.string().min(1),
-	date_and_rev_6: z.string().min(1),
+	date_and_rev: z.string().min(1),
 	certification: z.string().min(1),
-
+	coursetypeId: z.string().min(1),
 	// colorId: z.string().min(1),
 	// sizeId: z.string().min(1),
 	// isFeatured: z.boolean().default(false).optional(),
@@ -80,13 +75,14 @@ interface CourseFormProps {
 		  })
 		| null;
 	categories: CoursesCategory[];
-	// colors: Color[];
+	types: CourseType[];
 	// sizes: Size[];
 }
 
 export const CourseForm: React.FC<CourseFormProps> = ({
 	initialData,
 	categories,
+	types,
 }) => {
 	const params = useParams();
 	const router = useRouter();
@@ -112,6 +108,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 				images: [],
 				price: 0,
 				categoryId: '',
+				coursetypeId: '',
 				intro: '',
 				intro_ar: '',
 				duaration: '',
@@ -128,12 +125,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 				c_in_house_ar: '',
 				delv_and_leaders: '',
 				delv_and_leaders_ar: '',
-				date_and_rev_1: '',
-				date_and_rev_2: '',
-				date_and_rev_3: '',
-				date_and_rev_4: '',
-				date_and_rev_5: '',
-				date_and_rev_6: '',
+				date_and_rev: '',
 				certification: '',
 		  };
 
@@ -711,136 +703,17 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 								</FormItem>
 							)}
 						/>
+
 						<FormField
 							control={form.control}
-							name="date_and_rev_1"
+							name="date_and_rev"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
 										Course
 										Date
 										&
-										Revuene_1
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="date_and_rev_2"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Date
-										&
-										Revuene_2
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="date_and_rev_3"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Date
-										&
-										Revuene_3
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="date_and_rev_4"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Date
-										&
-										Revuene_4
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="date_and_rev_5"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Date
-										&
-										Revuene_5
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="date_and_rev_6"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Date
-										&
-										Revuene_6
+										Revuene
 									</FormLabel>
 									<FormControl>
 										<Input
@@ -925,6 +798,64 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 													>
 														{
 															category.name
+														}
+													</SelectItem>
+												)
+											)}
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="coursetypeId"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Course
+										Type{' '}
+									</FormLabel>
+									<Select
+										disabled={
+											loading
+										}
+										onValueChange={
+											field.onChange
+										}
+										value={
+											field.value
+										}
+										defaultValue={
+											field.value
+										}
+									>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue
+													defaultValue={
+														field.value
+													}
+													placeholder="Select a type"
+												/>
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											{types.map(
+												(
+													type
+												) => (
+													<SelectItem
+														key={
+															type.id
+														}
+														value={
+															type.id
+														}
+													>
+														{
+															type.name
 														}
 													</SelectItem>
 												)
