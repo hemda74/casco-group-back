@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
-import { CoursesCategory, Image, Course, CourseType } from '@prisma/client';
+import { CoursesCategory, Image, Course } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 
 import { Input } from '@/components/ui/input';
@@ -38,16 +38,25 @@ import { Checkbox } from '@/components/ui/checkbox';
 const formSchema = z.object({
 	name: z.string().min(1),
 	name_ar: z.string().min(1),
+	price_usd: z.coerce.number().min(1),
 	images: z.object({ url: z.string() }).array(),
-	price: z.coerce.number().min(1),
+	price_egp: z.coerce.number().min(1),
+	price_uae: z.coerce.number().min(1),
+	price_ksa: z.coerce.number().min(1),
 	categoryId: z.string().min(1),
 	intro: z.string().min(1),
 	intro_ar: z.string().min(1),
+	short_intro: z.string().min(1),
+	short_intro_ar: z.string().min(1),
 	duaration: z.string().min(1),
 	duration_ar: z.string().min(1),
 	who_sh_att: z.string().min(1),
 	who_sh_att_ar: z.string().min(1),
+	c_obje_list: z.string().min(1),
+	c_obje_list_ar: z.string().min(1),
 	c_obje: z.string().min(1),
+	course_type: z.string().min(1),
+	course_type_ar: z.string().min(1),
 	c_obje_ar: z.string().min(1),
 	c_content: z.string().min(1),
 	c_content_ar: z.string().min(1),
@@ -57,13 +66,10 @@ const formSchema = z.object({
 	c_in_house_ar: z.string().min(1),
 	delv_and_leaders: z.string().min(1),
 	delv_and_leaders_ar: z.string().min(1),
-	date_and_rev: z.string().min(1),
+	course_date: z.string().min(1),
+	course_date_ar: z.string().min(1),
 	certification: z.string().min(1),
-	coursetypeId: z.string().min(1),
-	// colorId: z.string().min(1),
-	// sizeId: z.string().min(1),
-	// isFeatured: z.boolean().default(false).optional(),
-	// isArchived: z.boolean().default(false).optional(),
+	certification_ar: z.string().min(1),
 });
 
 type CourseFormValues = z.infer<typeof formSchema>;
@@ -75,14 +81,13 @@ interface CourseFormProps {
 		  })
 		| null;
 	categories: CoursesCategory[];
-	types: CourseType[];
+
 	// sizes: Size[];
 }
 
 export const CourseForm: React.FC<CourseFormProps> = ({
 	initialData,
 	categories,
-	types,
 }) => {
 	const params = useParams();
 	const router = useRouter();
@@ -100,22 +105,42 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 	const defaultValues = initialData
 		? {
 				...initialData,
-				price: parseFloat(String(initialData?.price)),
+				price_egp: parseFloat(
+					String(initialData?.price_egp)
+				),
+				price_uae: parseFloat(
+					String(initialData?.price_uae)
+				),
+
+				price_usd: parseFloat(
+					String(initialData?.price_usd)
+				),
+
+				price_ksa: parseFloat(
+					String(initialData?.price_ksa)
+				),
 		  }
 		: {
 				name: '',
 				name_ar: '',
-				images: [],
-				price: 0,
+				price_usd: 0,
+				price_egp: 0,
+				price_uae: 0,
+				price_ksa: 0,
 				categoryId: '',
-				coursetypeId: '',
 				intro: '',
 				intro_ar: '',
+				short_intro: '',
+				short_intro_ar: '',
 				duaration: '',
 				duration_ar: '',
 				who_sh_att: '',
 				who_sh_att_ar: '',
+				c_obje_list: '',
+				c_obje_list_ar: '',
 				c_obje: '',
+				course_type: '',
+				course_type_ar: '',
 				c_obje_ar: '',
 				c_content: '',
 				c_content_ar: '',
@@ -125,8 +150,11 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 				c_in_house_ar: '',
 				delv_and_leaders: '',
 				delv_and_leaders_ar: '',
-				date_and_rev: '',
+				course_date: '',
+				course_date_ar: '',
 				certification: '',
+				certification_ar: '',
+				images: [],
 		  };
 
 	const form = useForm<CourseFormValues>({
@@ -280,7 +308,6 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 								</FormItem>
 							)}
 						/>
-
 						<FormField
 							control={form.control}
 							name="name_ar"
@@ -706,21 +733,19 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 
 						<FormField
 							control={form.control}
-							name="date_and_rev"
+							name="price_egp"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Course
-										Date
-										&
-										Revuene
+										Price
 									</FormLabel>
 									<FormControl>
 										<Input
+											type="number"
 											disabled={
 												loading
 											}
-											placeholder="Enter a Value"
+											placeholder="9.99"
 											{...field}
 										/>
 									</FormControl>
@@ -728,10 +753,53 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 								</FormItem>
 							)}
 						/>
-
 						<FormField
 							control={form.control}
-							name="price"
+							name="price_ksa"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Price
+									</FormLabel>
+									<FormControl>
+										<Input
+											type="number"
+											disabled={
+												loading
+											}
+											placeholder="9.99"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="price_uae"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Price
+									</FormLabel>
+									<FormControl>
+										<Input
+											type="number"
+											disabled={
+												loading
+											}
+											placeholder="9.99"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="price_usd"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
@@ -798,64 +866,6 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 													>
 														{
 															category.name
-														}
-													</SelectItem>
-												)
-											)}
-										</SelectContent>
-									</Select>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="coursetypeId"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Type{' '}
-									</FormLabel>
-									<Select
-										disabled={
-											loading
-										}
-										onValueChange={
-											field.onChange
-										}
-										value={
-											field.value
-										}
-										defaultValue={
-											field.value
-										}
-									>
-										<FormControl>
-											<SelectTrigger>
-												<SelectValue
-													defaultValue={
-														field.value
-													}
-													placeholder="Select a type"
-												/>
-											</SelectTrigger>
-										</FormControl>
-										<SelectContent>
-											{types.map(
-												(
-													type
-												) => (
-													<SelectItem
-														key={
-															type.id
-														}
-														value={
-															type.id
-														}
-													>
-														{
-															type.name
 														}
 													</SelectItem>
 												)

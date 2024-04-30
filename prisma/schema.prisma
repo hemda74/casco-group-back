@@ -97,8 +97,8 @@ model Course {
     certification_ar         String 
     course_type              String
     course_type_ar           String
-    course_date               DateTime?   
-    course_date_ar               DateTime?    
+    course_date              String   
+    course_date_ar           String   
  
     @@index([storeId])
     @@index([categoryId])

@@ -1,6 +1,6 @@
 import prismadb from '@/lib/prismadb';
 
-import { CourseForm } from './components/product-form';
+import { CourseForm } from './components/course-form';
 
 const ProductPage = async ({
 	params,
@@ -22,12 +22,6 @@ const ProductPage = async ({
 		},
 	});
 
-	const types = await prismadb.courseType.findMany({
-		where: {
-			storeId: params.storeId,
-		},
-	});
-
 	// const colors = await prismadb.color.findMany({
 	//   where: {
 	//     storeId: params.storeId,
@@ -38,7 +32,6 @@ const ProductPage = async ({
 		<div className="flex-row">
 			<div className="flex-1 space-x-4 p-8 pt-6">
 				<CourseForm
-					types={types}
 					categories={categories}
 					initialData={Course}
 				/>

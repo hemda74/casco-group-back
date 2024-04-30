@@ -2,6 +2,7 @@
 import { ColumnDef } from '@tanstack/react-table';
 
 import { CellAction } from './cell-action';
+import { Decimal } from '@prisma/client/runtime';
 
 export type ProductColumn = {
 	id: string;
@@ -27,10 +28,10 @@ export type ProductColumn = {
 	c_in_house_ar: string;
 	delv_and_leaders: string;
 	delv_and_leaders_ar: string;
-	price_egp: number;
-	price_ksa: number;
-	price_uae: number;
-	price_usd: number;
+	price_egp: Decimal;
+	price_ksa: Decimal;
+	price_uae: Decimal;
+	price_usd: Decimal;
 	category: string;
 	short_intro: string;
 	short_intro_ar: string;
@@ -48,6 +49,14 @@ export const columns: ColumnDef<ProductColumn>[] = [
 	{
 		accessorKey: 'name_ar',
 		header: 'Course_Arabic_Name___________________________________',
+	},
+	{
+		accessorKey: 'short_intro',
+		header: 'Course_Short_Description___________________________________',
+	},
+	{
+		accessorKey: 'short_intro_ar',
+		header: 'Course_Short_Description_in_Arabic___________________________________',
 	},
 	{
 		accessorKey: 'intro',
