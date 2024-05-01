@@ -123,6 +123,8 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 		: {
 				name: '',
 				name_ar: '',
+				duaration: '',
+				duration_ar: '',
 				price_usd: 0,
 				price_egp: 0,
 				price_uae: 0,
@@ -132,8 +134,6 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 				intro_ar: '',
 				short_intro: '',
 				short_intro_ar: '',
-				duaration: '',
-				duration_ar: '',
 				who_sh_att: '',
 				who_sh_att_ar: '',
 				c_obje_list: '',
@@ -175,6 +175,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 					`/api/${params.storeId}/courses`,
 					data
 				);
+				console.log('dddddd');
 			}
 			router.refresh();
 			router.push(`/${params.storeId}/courses`);
@@ -182,6 +183,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 		} catch (error: any) {
 			toast.error('Something went wrong.');
 			console.log(error);
+			console.log('dddddd');
 		} finally {
 			setLoading(false);
 		}
@@ -296,7 +298,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 										Name
 									</FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={
 												loading
 											}
@@ -318,7 +320,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 										Name
 									</FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={
 												loading
 											}
@@ -339,7 +341,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 										Duration
 									</FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={
 												loading
 											}
@@ -362,7 +364,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 										Arabic
 									</FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={
 												loading
 											}
@@ -418,7 +420,52 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 								</FormItem>
 							)}
 						/>
-
+						<FormField
+							control={form.control}
+							name="short_intro"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Short
+										Introduction
+									</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={
+												loading
+											}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="short_intro_ar"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Short
+										Introduction
+										in
+										Arabic
+									</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={
+												loading
+											}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 						<FormField
 							control={form.control}
 							name="who_sh_att"
@@ -519,6 +566,102 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
+							name="c_obje_list"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Course
+										Objective
+										List
+										in
+										Arabic
+									</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={
+												loading
+											}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="c_obje_list_ar"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Course
+										Objective
+										List
+										in
+										Arabic
+									</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={
+												loading
+											}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="course_date"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Course
+										Date
+									</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={
+												loading
+											}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="course_date_ar"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Course
+										Date
+										in
+										Arabic
+									</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={
+												loading
+											}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
 							name="c_content"
 							render={({ field }) => (
 								<FormItem>
@@ -547,6 +690,52 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 									<FormLabel>
 										Course
 										Content
+										in
+										Arabic
+									</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={
+												loading
+											}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="course_type"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Course
+										Type
+									</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={
+												loading
+											}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="course_type_ar"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Course
+										Type
 										in
 										Arabic
 									</FormLabel>
@@ -731,7 +920,30 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 								</FormItem>
 							)}
 						/>
-
+						<FormField
+							control={form.control}
+							name="certification_ar"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Course
+										Certification
+										In
+										Arabic
+									</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={
+												loading
+											}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 						<FormField
 							control={form.control}
 							name="price_egp"
