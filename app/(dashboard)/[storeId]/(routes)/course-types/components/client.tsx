@@ -29,7 +29,7 @@ export const SizesClient: React.FC<SizesClientProps> = ({ data }) => {
 				<Button
 					onClick={() =>
 						router.push(
-							`/${params.storeId}/coursetypes/new`
+							`/${params.storeId}/course-types/new`
 						)
 					}
 				>
