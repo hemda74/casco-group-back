@@ -24,7 +24,6 @@ model Store {
   team                    Team[]                          @relation("StoreToTeam")
   teammember              TeamMember[]                    @relation("StoreToTeamMember")
   industrydetailes         IndustryDetailes[]             @relation("StoreToIndustryDetailes")
-  coursetypes      CourseType[]      @relation("StoreToCourseType")
   createdAt               DateTime                        @default(now())
   updatedAt               DateTime                        @updatedAt
 }
@@ -67,21 +66,25 @@ model Course {
     store                    Store       @relation("StoreToCourse", fields: [storeId], references: [id])
     categoryId               String // Foreign Key to Courses Category
     category                 CoursesCategory    @relation("CategoryToCourse", fields: [categoryId], references: [id])
-    coursetypeId              String   // Foreign Key to CourseType
-    coursetype       CourseType        @relation(fields: [coursetypeId], references: [id])
-
     name                     String 
     name_ar                  String 
-    price                    Decimal
+    price_egp                 Decimal
+    price_uae                 Decimal
+    price_ksa                 Decimal
+    price_usd                 Decimal
     images                   Image[] // Relation to Image model
     intro                    String 
     intro_ar                 String 
+    short_intro              String
+    short_intro_ar           String
     duaration                String 
     duration_ar              String 
     who_sh_att               String 
     who_sh_att_ar            String 
     c_obje                   String 
     c_obje_ar                String 
+    c_obje_list              String 
+    c_obje_list_ar           String 
     c_content                String 
     c_content_ar             String 
     wh_we_bnfi               String 
@@ -90,17 +93,15 @@ model Course {
     c_in_house_ar            String 
     delv_and_leaders         String 
     delv_and_leaders_ar      String 
-    date_and_rev             String 
     certification            String 
-    currancyegp              String
-    currancyksa              String
-    currancyuae              String
-    currancyusd              String
-    courseDate               DateTime?    
-    
+    certification_ar         String 
+    course_type              String
+    course_type_ar           String
+    course_date              String   
+    course_date_ar           String   
+ 
     @@index([storeId])
     @@index([categoryId])
-    @@index([coursetypeId])
 }
 
 model Team {
@@ -312,17 +313,4 @@ model Image4 {
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
   @@index([teamId])
-}
-model CourseType {
-  id        String    @id @default(uuid())
-  storeId   String // Foreign Key to Store
-  store     Store     @relation("StoreToCourseType", fields: [storeId], references: [id])
-  name      String
-  name_ar   String
-  value     String
-  courses  Course[] // Relation to Product model
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  @@index([storeId])
 }

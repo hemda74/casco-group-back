@@ -15,16 +15,25 @@ export async function POST(
 		const {
 			name,
 			name_ar,
-			price,
 			categoryId,
 			images,
+			price_usd,
+			price_egp,
+			price_uae,
+			price_ksa,
 			intro,
 			intro_ar,
+			short_intro,
+			short_intro_ar,
 			duaration,
 			duration_ar,
 			who_sh_att,
 			who_sh_att_ar,
+			c_obje_list,
+			c_obje_list_ar,
 			c_obje,
+			course_type,
+			course_type_ar,
 			c_obje_ar,
 			c_content,
 			c_content_ar,
@@ -34,13 +43,10 @@ export async function POST(
 			c_in_house_ar,
 			delv_and_leaders,
 			delv_and_leaders_ar,
-			date_and_rev_1,
-			date_and_rev_2,
-			date_and_rev_3,
-			date_and_rev_4,
-			date_and_rev_5,
-			date_and_rev_6,
+			course_date,
+			course_date_ar,
 			certification,
+			certification_ar,
 		} = body;
 
 		if (!userId) {
@@ -48,7 +54,6 @@ export async function POST(
 				status: 403,
 			});
 		}
-
 		if (!name) {
 			return new NextResponse('Name is required', {
 				status: 400,
@@ -59,19 +64,31 @@ export async function POST(
 				status: 400,
 			});
 		}
-
 		if (!images || !images.length) {
 			return new NextResponse('Images are required', {
 				status: 400,
 			});
 		}
-
-		if (!price) {
+		if (!price_egp) {
 			return new NextResponse('Price is required', {
 				status: 400,
 			});
 		}
-
+		if (!price_uae) {
+			return new NextResponse('Price is required', {
+				status: 400,
+			});
+		}
+		if (!price_ksa) {
+			return new NextResponse('Price is required', {
+				status: 400,
+			});
+		}
+		if (!price_usd) {
+			return new NextResponse('Price is required', {
+				status: 400,
+			});
+		}
 		if (!categoryId) {
 			return new NextResponse('Category id is required', {
 				status: 400,
@@ -83,6 +100,19 @@ export async function POST(
 			});
 		}
 		if (!intro_ar) {
+			return new NextResponse(
+				'introduction in arabic is required',
+				{
+					status: 400,
+				}
+			);
+		}
+		if (!short_intro) {
+			return new NextResponse('intro is required', {
+				status: 400,
+			});
+		}
+		if (!short_intro_ar) {
 			return new NextResponse(
 				'introduction in arabic is required',
 				{
@@ -129,6 +159,22 @@ export async function POST(
 		}
 		if (!c_obje_ar) {
 			return new NextResponse(
+				'course objective is required',
+				{
+					status: 400,
+				}
+			);
+		}
+		if (!c_obje_list) {
+			return new NextResponse(
+				'course objective in arabic is required',
+				{
+					status: 400,
+				}
+			);
+		}
+		if (!c_obje_list_ar) {
+			return new NextResponse(
 				'course objective in arabic is required',
 				{
 					status: 400,
@@ -171,8 +217,13 @@ export async function POST(
 				status: 400,
 			});
 		}
-		if (!date_and_rev_1) {
-			return new NextResponse('date and revnue is required', {
+		if (!course_type) {
+			return new NextResponse('date and vanue is required', {
+				status: 400,
+			});
+		}
+		if (!course_type_ar) {
+			return new NextResponse('date and vanue is required', {
 				status: 400,
 			});
 		}
@@ -193,6 +244,30 @@ export async function POST(
 			);
 		}
 		if (!certification) {
+			return new NextResponse(
+				'delviary and course leaders in arabic is required',
+				{
+					status: 400,
+				}
+			);
+		}
+		if (!certification_ar) {
+			return new NextResponse(
+				'delviary and course leaders in arabic is required',
+				{
+					status: 400,
+				}
+			);
+		}
+		if (!course_date) {
+			return new NextResponse(
+				'delviary and course leaders in arabic is required',
+				{
+					status: 400,
+				}
+			);
+		}
+		if (!course_date_ar) {
 			return new NextResponse(
 				'delviary and course leaders in arabic is required',
 				{
@@ -223,16 +298,25 @@ export async function POST(
 		const product = await prismadb.course.create({
 			data: {
 				name,
-				price,
-				categoryId,
 				name_ar,
+				price_usd,
+				price_egp,
+				price_uae,
+				price_ksa,
+				categoryId,
 				intro,
 				intro_ar,
+				short_intro,
+				short_intro_ar,
 				duaration,
 				duration_ar,
 				who_sh_att,
 				who_sh_att_ar,
+				c_obje_list,
+				c_obje_list_ar,
 				c_obje,
+				course_type,
+				course_type_ar,
 				c_obje_ar,
 				c_content,
 				c_content_ar,
@@ -242,14 +326,10 @@ export async function POST(
 				c_in_house_ar,
 				delv_and_leaders,
 				delv_and_leaders_ar,
-				date_and_rev_1,
-				date_and_rev_2,
-				date_and_rev_3,
-				date_and_rev_4,
-				date_and_rev_5,
-				date_and_rev_6,
+				course_date,
+				course_date_ar,
 				certification,
-
+				certification_ar,
 				storeId: params.storeId,
 				images: {
 					createMany: {
@@ -279,9 +359,6 @@ export async function GET(
 	try {
 		const { searchParams } = new URL(req.url);
 		const categoryId = searchParams.get('categoryId') || undefined;
-		const colorId = searchParams.get('colorId') || undefined;
-		const sizeId = searchParams.get('sizeId') || undefined;
-		const isFeatured = searchParams.get('isFeatured');
 
 		if (!params.storeId) {
 			return new NextResponse('Store id is required', {
