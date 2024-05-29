@@ -68,10 +68,10 @@ model Course {
     category                 CoursesCategory    @relation("CategoryToCourse", fields: [categoryId], references: [id])
     name                     String 
     name_ar                  String 
-    price_egp                 Decimal
-    price_uae                 Decimal
-    price_ksa                 Decimal
-    price_usd                 Decimal
+    price_egp                Decimal
+    price_uae                Decimal
+    price_ksa                Decimal
+    price_usd                Decimal
     images                   Image[] // Relation to Image model
     intro                    String 
     intro_ar                 String 

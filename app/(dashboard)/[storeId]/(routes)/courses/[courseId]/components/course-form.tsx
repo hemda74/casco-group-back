@@ -76,10 +76,10 @@ type CourseFormValues = z.infer<typeof formSchema>;
 
 interface CourseFormProps {
 	initialData:
-		| (Course & {
-				images: Image[];
-		  })
-		| null;
+	| (Course & {
+		images: Image[];
+	})
+	| null;
 	categories: CoursesCategory[];
 
 	// sizes: Size[];
@@ -104,58 +104,58 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 
 	const defaultValues = initialData
 		? {
-				...initialData,
-				price_egp: parseFloat(
-					String(initialData?.price_egp)
-				),
-				price_uae: parseFloat(
-					String(initialData?.price_uae)
-				),
+			...initialData,
+			price_egp: parseFloat(
+				String(initialData?.price_egp)
+			),
+			price_uae: parseFloat(
+				String(initialData?.price_uae)
+			),
 
-				price_usd: parseFloat(
-					String(initialData?.price_usd)
-				),
+			price_usd: parseFloat(
+				String(initialData?.price_usd)
+			),
 
-				price_ksa: parseFloat(
-					String(initialData?.price_ksa)
-				),
-		  }
+			price_ksa: parseFloat(
+				String(initialData?.price_ksa)
+			),
+		}
 		: {
-				name: '',
-				name_ar: '',
-				duaration: '',
-				duration_ar: '',
-				price_usd: 0,
-				price_egp: 0,
-				price_uae: 0,
-				price_ksa: 0,
-				categoryId: '',
-				intro: '',
-				intro_ar: '',
-				short_intro: '',
-				short_intro_ar: '',
-				who_sh_att: '',
-				who_sh_att_ar: '',
-				c_obje_list: '',
-				c_obje_list_ar: '',
-				c_obje: '',
-				course_type: '',
-				course_type_ar: '',
-				c_obje_ar: '',
-				c_content: '',
-				c_content_ar: '',
-				wh_we_bnfi: '',
-				wh_we_bnfi_ar: '',
-				c_in_house: '',
-				c_in_house_ar: '',
-				delv_and_leaders: '',
-				delv_and_leaders_ar: '',
-				course_date: '',
-				course_date_ar: '',
-				certification: '',
-				certification_ar: '',
-				images: [],
-		  };
+			name: '',
+			name_ar: '',
+			duaration: '',
+			duration_ar: '',
+			price_usd: 0,
+			price_egp: 0,
+			price_uae: 0,
+			price_ksa: 0,
+			categoryId: '',
+			intro: '',
+			intro_ar: '',
+			short_intro: '',
+			short_intro_ar: '',
+			who_sh_att: '',
+			who_sh_att_ar: '',
+			c_obje_list: '',
+			c_obje_list_ar: '',
+			c_obje: '',
+			course_type: '',
+			course_type_ar: '',
+			c_obje_ar: '',
+			c_content: '',
+			c_content_ar: '',
+			wh_we_bnfi: '',
+			wh_we_bnfi_ar: '',
+			c_in_house: '',
+			c_in_house_ar: '',
+			delv_and_leaders: '',
+			delv_and_leaders_ar: '',
+			course_date: '',
+			course_date_ar: '',
+			certification: '',
+			certification_ar: '',
+			images: [],
+		};
 
 	const form = useForm<CourseFormValues>({
 		resolver: zodResolver(formSchema),
