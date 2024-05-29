@@ -4,22 +4,23 @@ import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
 import { Decimal } from '@prisma/client/runtime';
 
-export type ProductColumn = {
+// Define the ProductColumn type with all required properties
+export interface ProductColumn {
 	id: string;
 	name: string;
 	name_ar: string;
 	intro: string;
 	intro_ar: string;
+	short_intro: string;
+	short_intro_ar: string;
 	duaration: string;
 	duration_ar: string;
 	who_sh_att: string;
 	who_sh_att_ar: string;
 	c_obje: string;
 	c_obje_ar: string;
-	course_type: string;
 	c_obje_list: string;
 	c_obje_list_ar: string;
-	course_type_ar: string;
 	c_content: string;
 	c_content_ar: string;
 	wh_we_bnfi: string;
@@ -28,18 +29,18 @@ export type ProductColumn = {
 	c_in_house_ar: string;
 	delv_and_leaders: string;
 	delv_and_leaders_ar: string;
+	category: string;
+	course_type: string;
+	course_type_ar: string;
+	course_date: string;
+	course_date_ar: string;
+	certification: string;
+	certification_ar: string;
 	price_egp: Decimal;
 	price_ksa: Decimal;
 	price_uae: Decimal;
 	price_usd: Decimal;
-	category: string;
-	short_intro: string;
-	short_intro_ar: string;
-	certification: string;
-	certification_ar: string;
-	course_date: string;
-	course_date_ar: string;
-};
+}
 
 export const columns: ColumnDef<ProductColumn>[] = [
 	{
@@ -91,6 +92,14 @@ export const columns: ColumnDef<ProductColumn>[] = [
 		header: 'course_objective_in_Arabic___________________________________',
 	},
 	{
+		accessorKey: 'c_obje_list',
+		header: 'course_objective___________________________________',
+	},
+	{
+		accessorKey: 'c_obje_list_ar',
+		header: 'course_objective_in_Arabic___________________________________',
+	},
+	{
 		accessorKey: 'c_content',
 		header: 'course_Content___________________________________',
 	},
@@ -123,18 +132,45 @@ export const columns: ColumnDef<ProductColumn>[] = [
 		header: 'Style_of_Delivery_and_Course_Leaders_in_Arabic___________________________________',
 	},
 	{
+		accessorKey: 'course_type',
+		header: 'Course_Type_____________________________________________________________________',
+	},
+	{
+		accessorKey: 'course_type_ar',
+		header: 'Course_Type_in_Arabic_____________________________________________________________________',
+	},
+	{
+		accessorKey: 'course_date',
+		header: 'Course_Date_____________________________________________________________________',
+	},
+	{
+		accessorKey: 'course_date_ar',
+		header: 'Course_Date_in_Arabic_____________________________________________________________________',
+	},
+	{
 		accessorKey: 'certification',
 		header: 'Course_Certification___________________________________',
 	},
 	{
-		accessorKey: 'price',
-		header: 'Course_Price___________________________________',
+		accessorKey: 'price_egp',
+		header: 'Course_Price in Egypt___________________________________',
+	},
+	{
+		accessorKey: 'price_ksa',
+		header: 'Course_Price in KSA___________________________________',
+	},
+	{
+		accessorKey: 'price_uae',
+		header: 'Course_Price in UAE___________________________________',
+	},
+	{
+		accessorKey: 'price_usd',
+		header: 'Course_Price in USD___________________________________',
 	},
 	{
 		accessorKey: 'category',
 		header: 'Course_Category___________________________________',
 	},
-
 	{
 		id: 'actions',
 		cell: ({ row }) => <CellAction data={row.original} />,
