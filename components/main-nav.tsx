@@ -62,6 +62,11 @@ export function MainNav({
 			label: 'Services',
 			active: pathname === `/${params.storeId}/services`,
 		},
+		{
+			href: `/${params.storeId}/news-categories`,
+			label: 'News categories',
+			active: pathname === `/${params.storeId}/news-categories`,
+		},
 		// {
 		// 	href: `/${params.storeId}/orders`,
 		// 	label: 'Orders',

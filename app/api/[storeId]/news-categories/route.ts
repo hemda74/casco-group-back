@@ -12,7 +12,7 @@ export async function POST(
 
 		const body = await req.json();
 
-		const { name, name_ar, value } = body;
+		const { name, name_ar, billboardId } = body;
 
 		if (!userId) {
 			return new NextResponse('Unauthenticated', {
@@ -26,13 +26,13 @@ export async function POST(
 			});
 		}
 		if (!name_ar) {
-			return new NextResponse('Name is required', {
+			return new NextResponse('Arabic Name is required', {
 				status: 400,
 			});
 		}
 
-		if (!value) {
-			return new NextResponse('Value is required', {
+		if (!billboardId) {
+			return new NextResponse('Billboard ID is required', {
 				status: 400,
 			});
 		}
@@ -56,18 +56,18 @@ export async function POST(
 			});
 		}
 
-		const size = await prismadb.courseType.create({
+		const category = await prismadb.newsCategory.create({
 			data: {
 				name,
 				name_ar,
-				value,
+				billboardId,
 				storeId: params.storeId,
 			},
 		});
 
-		return NextResponse.json(size);
+		return NextResponse.json(category);
 	} catch (error) {
-		console.log('[SIZES_POST]', error);
+		console.log('[CATEGORIES_POST]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
@@ -83,15 +83,15 @@ export async function GET(
 			});
 		}
 
-		const sizes = await prismadb.courseType.findMany({
+		const categories = await prismadb.newsCategory.findMany({
 			where: {
 				storeId: params.storeId,
 			},
 		});
 
-		return NextResponse.json(sizes);
+		return NextResponse.json(categories);
 	} catch (error) {
-		console.log('[SIZES_GET]', error);
+		console.log('[CATEGORIES_GET]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }

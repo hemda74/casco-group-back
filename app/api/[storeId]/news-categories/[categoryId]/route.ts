@@ -1,35 +1,38 @@
 import { NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs';
 
 import prismadb from '@/lib/prismadb';
-import { auth } from '@clerk/nextjs';
 
 export async function GET(
 	req: Request,
-	{ params }: { params: { coursetypeId: string } }
+	{ params }: { params: { categoryId: string } }
 ) {
 	try {
-		if (!params.coursetypeId) {
-			return new NextResponse('Type id is required', {
+		if (!params.categoryId) {
+			return new NextResponse('Category id is required', {
 				status: 400,
 			});
 		}
 
-		const type = await prismadb.courseType.findUnique({
+		const category = await prismadb.newsCategory.findUnique({
 			where: {
-				id: params.coursetypeId,
+				id: params.categoryId,
+			},
+			include: {
+				billboard: true,
 			},
 		});
 
-		return NextResponse.json(type);
+		return NextResponse.json(category);
 	} catch (error) {
-		console.log('[SIZE_GET]', error);
+		console.log('[CATEGORY_GET]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { coursetypeId: string; storeId: string } }
+	{ params }: { params: { categoryId: string; storeId: string } }
 ) {
 	try {
 		const { userId } = auth();
@@ -40,8 +43,8 @@ export async function DELETE(
 			});
 		}
 
-		if (!params.coursetypeId) {
-			return new NextResponse('Size id is required', {
+		if (!params.categoryId) {
+			return new NextResponse('Category id is required', {
 				status: 400,
 			});
 		}
@@ -59,33 +62,39 @@ export async function DELETE(
 			});
 		}
 
-		const type = await prismadb.courseType.delete({
+		const category = await prismadb.newsCategory.delete({
 			where: {
-				id: params.coursetypeId,
+				id: params.categoryId,
 			},
 		});
 
-		return NextResponse.json(type);
+		return NextResponse.json(category);
 	} catch (error) {
-		console.log('[SIZE_DELETE]', error);
+		console.log('[CATEGORY_DELETE]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { coursetypeId: string; storeId: string } }
+	{ params }: { params: { categoryId: string; storeId: string } }
 ) {
 	try {
 		const { userId } = auth();
 
 		const body = await req.json();
 
-		const { name, value } = body;
+		const { name, name_ar, billboardId } = body;
 
 		if (!userId) {
 			return new NextResponse('Unauthenticated', {
 				status: 403,
+			});
+		}
+
+		if (!billboardId) {
+			return new NextResponse('Billboard ID is required', {
+				status: 400,
 			});
 		}
 
@@ -95,14 +104,13 @@ export async function PATCH(
 			});
 		}
 
-		if (!value) {
-			return new NextResponse('Value is required', {
+		if (!name_ar) {
+			return new NextResponse('Arabic Name is required', {
 				status: 400,
 			});
 		}
-
-		if (!params.coursetypeId) {
-			return new NextResponse('Size id is required', {
+		if (!params.categoryId) {
+			return new NextResponse('Category id is required', {
 				status: 400,
 			});
 		}
@@ -120,19 +128,19 @@ export async function PATCH(
 			});
 		}
 
-		const type = await prismadb.courseType.update({
+		const category = await prismadb.newsCategory.update({
 			where: {
-				id: params.coursetypeId,
+				id: params.categoryId,
 			},
 			data: {
 				name,
-				value,
+				billboardId,
 			},
 		});
 
-		return NextResponse.json(type);
+		return NextResponse.json(category);
 	} catch (error) {
-		console.log('[SIZE_PATCH]', error);
+		console.log('[CATEGORY_PATCH]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
