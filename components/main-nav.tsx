@@ -82,7 +82,7 @@ export function MainNav({
 	return (
 		<div
 			className={cn(
-				'flex mt-5 items-start flex-col space-y-4 lg:space-y-6',
+				'flex ml-0 mt-5 items-start flex-col p-0 space-y-4 space-x-0 ',
 				className
 			)}
 			{...props}
@@ -92,7 +92,7 @@ export function MainNav({
 					key={route.href}
 					href={route.href}
 					className={cn(
-						'text-sm font-medium transition-colors hover:text-primary',
+						'text-sm items-start font-medium transition-colors hover:text-primary',
 						route.active
 							? 'text-black dark:text-white'
 							: 'text-muted-foreground'

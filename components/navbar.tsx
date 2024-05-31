@@ -21,9 +21,9 @@ const Navbar = async () => {
 
 	return (
 		<div className="">
-			<div className="flex h-24 flex-col items-center px-4">
+			<div className="flex h-24 flex-col items-stert px-5">
 				<StoreSwitcher items={stores} />
-				<MainNav className="mx-6" />
+				<MainNav className="mx-5" />
 				<div className=" flex flex-start space-x-4 mt-12">
 					<ThemeToggle />
 					<div className="mt-1">
