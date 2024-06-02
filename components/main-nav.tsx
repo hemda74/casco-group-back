@@ -42,6 +42,11 @@ export function MainNav({
 				pathname ===
 				`/${params.storeId}/industries-categories`,
 		},
+		{
+			href: `/${params.storeId}/news-categories`,
+			label: 'News categories',
+			active: pathname === `/${params.storeId}/news-categories`,
+		},
 		// {
 		// 	href: `/${params.storeId}/sizes`,
 		// 	label: 'Sizes',
@@ -62,16 +67,12 @@ export function MainNav({
 			label: 'Services',
 			active: pathname === `/${params.storeId}/services`,
 		},
+
 		{
-			href: `/${params.storeId}/news-categories`,
-			label: 'News categories',
-			active: pathname === `/${params.storeId}/news-categories`,
+			href: `/${params.storeId}/news`,
+			label: 'News',
+			active: pathname === `/${params.storeId}/news`,
 		},
-		// {
-		// 	href: `/${params.storeId}/orders`,
-		// 	label: 'Orders',
-		// 	active: pathname === `/${params.storeId}/orders`,
-		// },
 		{
 			href: `/${params.storeId}/settings`,
 			label: 'Settings',
