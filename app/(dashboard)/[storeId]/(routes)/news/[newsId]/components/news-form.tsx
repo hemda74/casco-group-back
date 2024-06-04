@@ -108,23 +108,22 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 			setLoading(true);
 			if (initialData) {
 				await axios.patch(
-					`/api/${params.storeId}/Newss/${params.NewsId}`,
+					`/api/${params.storeId}/news/${params.NewsId}`,
 					data
 				);
 			} else {
 				await axios.post(
-					`/api/${params.storeId}/Newss`,
+					`/api/${params.storeId}/news`,
 					data
 				);
 				console.log('dddddd');
 			}
 			router.refresh();
-			router.push(`/${params.storeId}/Newss`);
+			router.push(`/${params.storeId}/news`);
 			toast.success(toastMessage);
 		} catch (error: any) {
 			toast.error('Something went wrong.');
 			console.log(error);
-			console.log('dddddd');
 		} finally {
 			setLoading(false);
 		}
@@ -134,10 +133,10 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 		try {
 			setLoading(true);
 			await axios.delete(
-				`/api/${params.storeId}/Newss/${params.NewsId}`
+				`/api/${params.storeId}/news/${params.NewsId}`
 			);
 			router.refresh();
-			router.push(`/${params.storeId}/Newss`);
+			router.push(`/${params.storeId}/news`);
 			toast.success('News deleted.');
 		} catch (error: any) {
 			toast.error('Something went wrong.');

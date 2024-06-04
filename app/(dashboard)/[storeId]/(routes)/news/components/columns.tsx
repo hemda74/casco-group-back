@@ -9,61 +9,68 @@ export interface ProductColumn {
 	id: string;
 	title: string;
 	title_ar: string;
-
+	category: string;
+	paragraph_1: string;
+	paragraph_1_ar: string;
+	paragraph_2: string;
+	paragraph_2_ar: string;
+	paragraph_3: string;
+	paragraph_3_ar: string;
+	paragraph_4: string;
+	paragraph_4_ar: string;
+	paragraph_5: string;
+	paragraph_5_ar: string;
 }
 
 export const columns: ColumnDef<ProductColumn>[] = [
 	{
-		accessorKey: 'name',
-		header: 'Course_Name___________________________________',
+		accessorKey: 'title',
+		header: 'News_title___________________________________',
 	},
 	{
-		accessorKey: 'name_ar',
-		header: 'Course_Arabic_Name___________________________________',
+		accessorKey: 'title_ar',
+		header: 'News_Arabic_title___________________________________',
 	},
 	{
-		accessorKey: 'short_intro',
-		header: 'Course_Short_Description___________________________________',
+		accessorKey: 'paragraph_1',
+		header: 'paragraph_1___________________________________',
 	},
 	{
-		accessorKey: 'short_intro_ar',
-		header: 'Course_Short_Description_in_Arabic___________________________________',
+		accessorKey: 'paragraph_1_ar',
+		header: 'paragraph_1_in_Arabic___________________________________',
 	},
 	{
-		accessorKey: 'intro',
-		header: 'Course_Introduction___________________________________',
+		accessorKey: 'paragraph_1',
+		header: 'paragraph_1___________________________________',
 	},
 	{
-		accessorKey: 'intro_ar',
-		header: 'Introduction_in_Arabic___________________________________',
+		accessorKey: 'paragraph_1_ar',
+		header: 'paragraph_1_in_Arabic___________________________________',
+	}, {
+		accessorKey: 'paragraph_1',
+		header: 'paragraph_1___________________________________',
 	},
 	{
-		accessorKey: 'duaration',
-		header: 'Course_duration___________________________________',
+		accessorKey: 'paragraph_1_ar',
+		header: 'paragraph_1_in_Arabic___________________________________',
+	}, {
+		accessorKey: 'paragraph_2',
+		header: 'paragraph_2___________________________________',
 	},
 	{
-		accessorKey: 'duration_ar',
-		header: 'Course_duration_in_Arabic___________________________________',
+		accessorKey: 'paragraph_3_ar',
+		header: 'paragraph_3_in_Arabic___________________________________',
+	}, {
+		accessorKey: 'paragraph_4',
+		header: 'paragraph_4___________________________________',
 	},
 	{
-		accessorKey: 'who_sh_att',
-		header: 'who_should_attend_this_course___________________________________',
+		accessorKey: 'paragraph_5_ar',
+		header: 'paragraph_5_in_Arabic___________________________________',
 	},
 	{
-		accessorKey: 'who_sh_att_ar',
-		header: 'who_should_attend_this_course_in_Arabic___________________________________',
-	},
-	{
-		accessorKey: 'c_obje',
-		header: 'course_objective___________________________________',
-	},
-	{
-		accessorKey: 'c_obje_ar',
-		header: 'course_objective_in_Arabic___________________________________',
-	},
-	{
-		accessorKey: 'c_obje_list',
-		header: 'course_objective___________________________________',
+		accessorKey: 'category',
+		header: 'Category___________________________________',
 	},
 
 	{
