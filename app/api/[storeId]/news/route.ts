@@ -154,6 +154,7 @@ export async function POST(
 				paragraph_4_ar,
 				paragraph_5,
 				paragraph_5_ar,
+				categoryId,
 				storeId: params.storeId,
 				images: {
 					createMany: {
