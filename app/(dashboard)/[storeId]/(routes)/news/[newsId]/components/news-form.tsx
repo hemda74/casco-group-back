@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
-import { CoursesCategory, Image, Course } from '@prisma/client';
+import { News, Image5, NewsCategory } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 
 import { Input } from '@/components/ui/input';
@@ -36,51 +36,32 @@ import ImageUpload from '@/components/ui/image-upload';
 import { Checkbox } from '@/components/ui/checkbox';
 
 const formSchema = z.object({
-	name: z.string().min(1),
-	name_ar: z.string().min(1),
-	price_usd: z.coerce.number().min(1),
 	images: z.object({ url: z.string() }).array(),
-	price_egp: z.coerce.number().min(1),
-	price_uae: z.coerce.number().min(1),
-	price_ksa: z.coerce.number().min(1),
-	categoryId: z.string().min(1),
-	intro: z.string().min(1),
-	intro_ar: z.string().min(1),
-	short_intro: z.string().min(1),
-	short_intro_ar: z.string().min(1),
-	duaration: z.string().min(1),
-	duration_ar: z.string().min(1),
-	who_sh_att: z.string().min(1),
-	who_sh_att_ar: z.string().min(1),
-	c_obje_list: z.string().min(1),
-	c_obje_list_ar: z.string().min(1),
-	c_obje: z.string().min(1),
-	course_type: z.string().min(1),
-	course_type_ar: z.string().min(1),
-	c_obje_ar: z.string().min(1),
-	c_content: z.string().min(1),
-	c_content_ar: z.string().min(1),
-	wh_we_bnfi: z.string().min(1),
-	wh_we_bnfi_ar: z.string().min(1),
-	c_in_house: z.string().min(1),
-	c_in_house_ar: z.string().min(1),
-	delv_and_leaders: z.string().min(1),
-	delv_and_leaders_ar: z.string().min(1),
-	course_date: z.string().min(1),
-	course_date_ar: z.string().min(1),
-	certification: z.string().min(1),
-	certification_ar: z.string().min(1),
+
+	title: z.string().min(1),
+	title_ar: z.string().min(1),
+	paragraph_1: z.string().min(1),
+	paragraph_1_ar: z.string().min(1),
+	paragraph_2: z.string().min(1),
+	paragraph_2_ar: z.string().min(1),
+	paragraph_3: z.string().min(1),
+	paragraph_3_ar: z.string().min(1),
+	paragraph_4: z.string().min(1),
+	paragraph_4_ar: z.string().min(1),
+	paragraph_5: z.string().min(1),
+	paragraph_5_ar: z.string().min(1),
+	categoryId: z.string().min(1)
 });
 
 type NewsFormValues = z.infer<typeof formSchema>;
 
 interface NewsFormProps {
 	initialData:
-	| (Course & {
-		images: Image[];
+	| (News & {
+		images: Image5[];
 	})
 	| null;
-	categories: CoursesCategory[];
+	categories: NewsCategory[];
 
 	// sizes: Size[];
 }
@@ -95,71 +76,31 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 
-	const title = initialData ? 'Edit course' : 'Create course';
-	const description = initialData ? 'Edit a course.' : 'Add a new Course';
+	const title = initialData ? 'Edit News' : 'Create News';
+	const description = initialData ? 'Edit a News.' : 'Add a new News';
 	const toastMessage = initialData
-		? 'Course updated.'
-		: 'Course created.';
+		? 'News updated.'
+		: 'News created.';
 	const action = initialData ? 'Save changes' : 'Create';
-
-	const defaultValues = initialData
-		? {
-			...initialData,
-			price_egp: parseFloat(
-				String(initialData?.price_egp)
-			),
-			price_uae: parseFloat(
-				String(initialData?.price_uae)
-			),
-
-			price_usd: parseFloat(
-				String(initialData?.price_usd)
-			),
-
-			price_ksa: parseFloat(
-				String(initialData?.price_ksa)
-			),
-		}
-		: {
-			name: '',
-			name_ar: '',
-			duaration: '',
-			duration_ar: '',
-			price_usd: 0,
-			price_egp: 0,
-			price_uae: 0,
-			price_ksa: 0,
-			categoryId: '',
-			intro: '',
-			intro_ar: '',
-			short_intro: '',
-			short_intro_ar: '',
-			who_sh_att: '',
-			who_sh_att_ar: '',
-			c_obje_list: '',
-			c_obje_list_ar: '',
-			c_obje: '',
-			course_type: '',
-			course_type_ar: '',
-			c_obje_ar: '',
-			c_content: '',
-			c_content_ar: '',
-			wh_we_bnfi: '',
-			wh_we_bnfi_ar: '',
-			c_in_house: '',
-			c_in_house_ar: '',
-			delv_and_leaders: '',
-			delv_and_leaders_ar: '',
-			course_date: '',
-			course_date_ar: '',
-			certification: '',
-			certification_ar: '',
-			images: [],
-		};
 
 	const form = useForm<NewsFormValues>({
 		resolver: zodResolver(formSchema),
-		defaultValues,
+		defaultValues: initialData || {
+			title: '',
+			title_ar: '',
+			categoryId: '',
+			paragraph_1: '',
+			paragraph_1_ar: '',
+			paragraph_2: '',
+			paragraph_2_ar: '',
+			paragraph_3: '',
+			paragraph_3_ar: '',
+			paragraph_4: '',
+			paragraph_4_ar: '',
+			paragraph_5: '',
+			paragraph_5_ar: '',
+			images: []
+		},
 	});
 
 	const onSubmit = async (data: NewsFormValues) => {
@@ -167,18 +108,18 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 			setLoading(true);
 			if (initialData) {
 				await axios.patch(
-					`/api/${params.storeId}/courses/${params.courseId}`,
+					`/api/${params.storeId}/Newss/${params.NewsId}`,
 					data
 				);
 			} else {
 				await axios.post(
-					`/api/${params.storeId}/courses`,
+					`/api/${params.storeId}/Newss`,
 					data
 				);
 				console.log('dddddd');
 			}
 			router.refresh();
-			router.push(`/${params.storeId}/courses`);
+			router.push(`/${params.storeId}/Newss`);
 			toast.success(toastMessage);
 		} catch (error: any) {
 			toast.error('Something went wrong.');
@@ -193,11 +134,11 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 		try {
 			setLoading(true);
 			await axios.delete(
-				`/api/${params.storeId}/courses/${params.courseId}`
+				`/api/${params.storeId}/Newss/${params.NewsId}`
 			);
 			router.refresh();
-			router.push(`/${params.storeId}/courses`);
-			toast.success('Course deleted.');
+			router.push(`/${params.storeId}/Newss`);
+			toast.success('News deleted.');
 		} catch (error: any) {
 			toast.error('Something went wrong.');
 		} finally {
@@ -291,11 +232,11 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 					<div className="md:grid md:grid-cols-3 gap-8">
 						<FormField
 							control={form.control}
-							name="name"
+							name="title"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Name
+										Title
 									</FormLabel>
 									<FormControl>
 										<Textarea
@@ -312,7 +253,7 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="name_ar"
+							name="title_ar"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
@@ -334,11 +275,11 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="duaration"
+							name="paragraph_1"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Duration
+										First paragraph
 									</FormLabel>
 									<FormControl>
 										<Textarea
@@ -355,13 +296,11 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="duration_ar"
+							name="paragraph_1_ar"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Duration
-										in
-										Arabic
+										First paragraph in Arabic
 									</FormLabel>
 									<FormControl>
 										<Textarea
@@ -378,11 +317,11 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="intro"
+							name="paragraph_2"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Introduction
+										Second paragraph
 									</FormLabel>
 									<FormControl>
 										<Textarea
@@ -399,13 +338,11 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="intro_ar"
+							name="paragraph_2_ar"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Introduction
-										in
-										Arabic
+										Second paragraph in Arabic
 									</FormLabel>
 									<FormControl>
 										<Textarea
@@ -422,12 +359,11 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="short_intro"
+							name="paragraph_3"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Short
-										Introduction
+										third paragraph
 									</FormLabel>
 									<FormControl>
 										<Textarea
@@ -444,14 +380,11 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="short_intro_ar"
+							name="paragraph_3_ar"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Short
-										Introduction
-										in
-										Arabic
+										Third paragraph in Arabic
 									</FormLabel>
 									<FormControl>
 										<Textarea
@@ -468,15 +401,11 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="who_sh_att"
+							name="paragraph_4"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										How
-										Should
-										Attend
-										this
-										Course
+										Fourth paragraph
 									</FormLabel>
 									<FormControl>
 										<Textarea
@@ -493,17 +422,11 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="who_sh_att_ar"
+							name="paragraph_4_ar"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										How
-										Should
-										Attend
-										this
-										Course
-										in
-										Arabic
+										Fourth paragraph in Arabic
 									</FormLabel>
 									<FormControl>
 										<Textarea
@@ -520,12 +443,11 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="c_obje"
+							name="paragraph_5"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Course
-										Objective
+										Fifth paragraph
 									</FormLabel>
 									<FormControl>
 										<Textarea
@@ -542,14 +464,11 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="c_obje_ar"
+							name="paragraph_5_ar"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Course
-										Objective
-										in
-										Arabic
+										Fifth paragraph in Arabic
 									</FormLabel>
 									<FormControl>
 										<Textarea
@@ -557,478 +476,6 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 												loading
 											}
 											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_obje_list"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Objective
-										List
-										in
-										Arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_obje_list_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Objective
-										List
-										in
-										Arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="course_date"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Date
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="course_date_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Date
-										in
-										Arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_content"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Content
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder=" Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_content_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Content
-										in
-										Arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="course_type"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Type
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="course_type_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Type
-										in
-										Arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="wh_we_bnfi"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										What
-										we
-										benfite
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="wh_we_bnfi_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										what
-										we
-										benfite
-										in
-										arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_in_house"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										in
-										house
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_in_house_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										in
-										house
-										in
-										arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="delv_and_leaders"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										delvairy
-										and
-										leaders
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="delv_and_leaders_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										delvairy
-										and
-										leaders
-										in
-										arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="certification"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Certification
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="certification_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Certification
-										In
-										Arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="price_egp"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										EGP
-										Price
-									</FormLabel>
-									<FormControl>
-										<Input
-											type="number"
-											disabled={
-												loading
-											}
-											placeholder="9.99"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="price_ksa"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										KSA
-										Price
-									</FormLabel>
-									<FormControl>
-										<Input
-											type="number"
-											disabled={
-												loading
-											}
-											placeholder="9.99"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="price_uae"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										UAE
-										Price
-									</FormLabel>
-									<FormControl>
-										<Input
-											type="number"
-											disabled={
-												loading
-											}
-											placeholder="9.99"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="price_usd"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										USD
-										Price
-									</FormLabel>
-									<FormControl>
-										<Input
-											type="number"
-											disabled={
-												loading
-											}
-											placeholder="9.99"
 											{...field}
 										/>
 									</FormControl>
@@ -1042,7 +489,7 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Course
+										News
 										Category
 									</FormLabel>
 									<Select
