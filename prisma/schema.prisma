@@ -311,6 +311,15 @@ model Image5 {
   updatedAt             DateTime @updatedAt
   @@index([newsId])
 }
+model paragrph {
+  id                    String   @id @default(uuid())
+  newsId                String
+  news                  News  @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  url                  String // URL of the image
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  @@index([newsId])
+}
 model IndustryDetailes{
 id                         String @id @default(uuid())
 storeId                    String // Foreign Key to Store
@@ -347,6 +356,8 @@ model News {
     title                     String 
     title_ar                  String 
     images                    Image5[] // Relation to Image model
+   paragraph                    paragrph[] // Relation to Image model
+
    paragraph_1                    String 
    paragraph_1_ar                 String 
    paragraph_2                    String 

@@ -13,6 +13,7 @@ const ProductPage = async ({
 		},
 		include: {
 			images: true,
+			paragraph: true
 		},
 	});
 

@@ -20,6 +20,7 @@ export async function GET(
 			},
 			include: {
 				images: true,
+				paragraph: true,
 				category: true,
 
 				// color: true,
@@ -102,6 +103,7 @@ export async function PATCH(
 			paragraph_5,
 			paragraph_5_ar,
 			categoryId,
+			paragraph,
 		} = body;
 
 		if (!userId) {
@@ -124,7 +126,11 @@ export async function PATCH(
 				status: 400,
 			});
 		}
-
+		if (!paragraph || !paragraph.length) {
+			return new NextResponse('Images are required', {
+				status: 400,
+			});
+		}
 		if (!categoryId) {
 			return new NextResponse('Category id is required', {
 				status: 400,
@@ -228,6 +234,9 @@ export async function PATCH(
 				images: {
 					deleteMany: {},
 				},
+				paragraph: {
+					deleteMany: {},
+				},
 			},
 		});
 
@@ -243,6 +252,11 @@ export async function PATCH(
 								(image: {
 									url: string;
 								}) => image
+							),
+							...paragraph.map(
+								(paragraph: {
+									d: string;
+								}) => paragraph
 							),
 						],
 					},

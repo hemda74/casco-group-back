@@ -27,6 +27,7 @@ export async function POST(
 			paragraph_5,
 			paragraph_5_ar,
 			categoryId,
+			paragraph,
 		} = body;
 
 		if (!userId) {
@@ -49,7 +50,11 @@ export async function POST(
 				status: 400,
 			});
 		}
-
+		if (!paragraph || !paragraph.length) {
+			return new NextResponse('Images are required', {
+				status: 400,
+			});
+		}
 		if (!categoryId) {
 			return new NextResponse('Category id is required', {
 				status: 400,
@@ -167,6 +172,17 @@ export async function POST(
 						],
 					},
 				},
+				paragraph: {
+					createMany: {
+						data: [
+							...images.map(
+								(image: {
+									url: string;
+								}) => image
+							),
+						],
+					},
+				},
 			},
 		});
 
@@ -198,6 +214,7 @@ export async function GET(
 			},
 			include: {
 				images: true,
+				paragraph: true,
 				category: true,
 			},
 			orderBy: {
