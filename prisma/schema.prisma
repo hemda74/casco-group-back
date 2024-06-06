@@ -315,24 +315,12 @@ model paragrph {
   id                    String   @id @default(uuid())
   newsId                String
   news                  News  @relation(fields: [newsId], references: [id], onDelete: Cascade)
-  url                  String // URL of the image
+  text                  String // URL of the image
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
   @@index([newsId])
 }
-model IndustryDetailes{
-id                         String @id @default(uuid())
-storeId                    String // Foreign Key to Store
-store                      Store     @relation("StoreToIndustryDetailes", fields: [storeId], references: [id])
-industryId                  String// Foreign Key To Industry
-idustry                    Industry @relation("IndustryToIndustryDetailes",fields: [industryId],references: [id])
-title                      String 
-title_ar                   String 
-point                      String 
-point_ar                   String 
-@@index([storeId])
-@@index([industryId])
-}
+
 model NewsCategory {
   id                String    @id @default(uuid())
   storeId           String // Foreign Key to Store
@@ -348,28 +336,39 @@ model NewsCategory {
   @@index([billboardId])
 }
 model News {
-    id                       String       @id @default(uuid())
-    storeId                  String // Foreign Key to Store
-    store                    Store       @relation("StoreToNews", fields: [storeId], references: [id])
-    categoryId               String // Foreign Key to Courses Category
-    category                 NewsCategory    @relation("CategoryToNews", fields: [categoryId], references: [id])
-    title                     String 
-    title_ar                  String 
-    images                    Image5[] // Relation to Image model
-   paragraph                    paragrph[] // Relation to Image model
-
-   paragraph_1                    String 
-   paragraph_1_ar                 String 
-   paragraph_2                    String 
-   paragraph_2_ar                 String 
-    paragraph_3                    String 
-   paragraph_3_ar                 String
-    paragraph_4                    String 
-   paragraph_4_ar                 String
-    paragraph_5                    String 
-   paragraph_5_ar                 String
-   createdAt                 DateTime               @default(now())
-
+    id                            String       @id @default(uuid())
+    storeId                       String // Foreign Key to Store
+    store                         Store       @relation("StoreToNews", fields: [storeId], references: [id])
+    categoryId                    String // Foreign Key to Courses Category
+    category                      NewsCategory    @relation("CategoryToNews", fields: [categoryId], references: [id])
+    title                         String 
+    title_ar                      String 
+    images                        Image5[] // Relation to Image model
+    paragraph                      paragrph[] // Relation to Image model
+    paragraph_1                    String 
+    paragraph_1_ar                 String 
+    paragraph_2                    String 
+    paragraph_2_ar                 String 
+    paragraph_3                   String 
+    paragraph_3_ar                 String
+    paragraph_4                   String 
+    paragraph_4_ar                 String
+    paragraph_5                   String 
+    paragraph_5_ar                 String
+    createdAt                      DateTime               @default(now())
     @@index([storeId])
     @@index([categoryId])
+}
+model IndustryDetailes{
+id                         String @id @default(uuid())
+storeId                    String // Foreign Key to Store
+store                      Store     @relation("StoreToIndustryDetailes", fields: [storeId], references: [id])
+industryId                  String// Foreign Key To Industry
+idustry                    Industry @relation("IndustryToIndustryDetailes",fields: [industryId],references: [id])
+title                      String 
+title_ar                   String 
+point                      String 
+point_ar                   String 
+@@index([storeId])
+@@index([industryId])
 }

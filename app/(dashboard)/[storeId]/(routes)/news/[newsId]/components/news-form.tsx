@@ -533,7 +533,7 @@ const formSchema = z.object({
 	paragraph_5: z.string().min(1),
 	paragraph_5_ar: z.string().min(1),
 	categoryId: z.string().min(1),
-	paragraph: z.array(z.object({ url: z.string() })), // Updated this line
+	paragraph: z.array(z.string()),
 });
 
 type NewsFormValues = z.infer<typeof formSchema>;
@@ -558,7 +558,7 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [paragraph, setParagraph] = useState<string[]>(
-		initialData?.paragraph.map((p) => p.url) || ['']
+		initialData?.paragraph.map((p) => p.text) || ['']
 	);
 
 	const title = initialData ? 'Edit News' : 'Create News';
