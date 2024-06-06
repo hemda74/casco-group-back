@@ -12,7 +12,14 @@ export async function POST(
 
 		const body = await req.json();
 
-		const { title, title_ar, images, categoryId, paragraph } = body;
+		const {
+			title,
+			title_ar,
+			images,
+			categoryId,
+			paragraph_news,
+			paragraph_news_ar,
+		} = body;
 
 		if (!userId) {
 			return new NextResponse('Unauthenticated', {
@@ -34,10 +41,21 @@ export async function POST(
 				status: 400,
 			});
 		}
-		if (!paragraph || !paragraph.length) {
-			return new NextResponse('Images are required', {
-				status: 400,
-			});
+		if (!paragraph_news || !paragraph_news.length) {
+			return new NextResponse(
+				'one pargraph at least is required are required',
+				{
+					status: 400,
+				}
+			);
+		}
+		if (!paragraph_news_ar || !paragraph_news_ar.length) {
+			return new NextResponse(
+				'one pargraph at least is required are required',
+				{
+					status: 400,
+				}
+			);
 		}
 		if (!categoryId) {
 			return new NextResponse('Category id is required', {
@@ -81,10 +99,31 @@ export async function POST(
 						],
 					},
 				},
-				paragraph: {
+				paragraph_news: {
 					createMany: {
 						data: [
-							...paragraph.map(
+							...paragraph_news.map(
+								(paragraph: {
+									text: string;
+								}) => paragraph
+							),
+							...paragraph_news_ar.map(
+								(paragraph: {
+									text: string;
+								}) => paragraph
+							),
+						],
+					},
+				},
+				paragraph_news_ar: {
+					createMany: {
+						data: [
+							...paragraph_news.map(
+								(paragraph: {
+									text: string;
+								}) => paragraph
+							),
+							...paragraph_news_ar.map(
 								(paragraph: {
 									text: string;
 								}) => paragraph
@@ -123,7 +162,8 @@ export async function GET(
 			},
 			include: {
 				images: true,
-				paragraph: true,
+				paragraph_news: true,
+				paragraph_news_ar: true,
 				category: true,
 			},
 			orderBy: {

@@ -311,16 +311,20 @@ model Image5 {
   updatedAt             DateTime @updatedAt
   @@index([newsId])
 }
-model paragrph {
+model paragrph_news {
   id                    String   @id @default(uuid())
   newsId                String
   news                  News  @relation(fields: [newsId], references: [id], onDelete: Cascade)
-  text                  String // URL of the image
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  text                  String 
   @@index([newsId])
 }
-
+model paragrph_news_ar {
+  id                    String   @id @default(uuid())
+  newsId                String
+  news                  News  @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  text                  String 
+  @@index([newsId])
+}
 model NewsCategory {
   id                String    @id @default(uuid())
   storeId           String // Foreign Key to Store
@@ -344,7 +348,9 @@ model News {
     title                         String 
     title_ar                      String 
     images                        Image5[] // Relation to Image model
-    paragraph                      paragrph[] // Relation to Image model
+    paragraph_news                paragrph_news[] // Relation to paragraph_news model
+    paragraph_news_ar             paragrph_news_ar[] // Relation to paragraph_news_ar model
+
     createdAt                      DateTime               @default(now())
     @@index([storeId])
     @@index([categoryId])
