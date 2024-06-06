@@ -345,16 +345,6 @@ model News {
     title_ar                      String 
     images                        Image5[] // Relation to Image model
     paragraph                      paragrph[] // Relation to Image model
-    paragraph_1                    String 
-    paragraph_1_ar                 String 
-    paragraph_2                    String 
-    paragraph_2_ar                 String 
-    paragraph_3                   String 
-    paragraph_3_ar                 String
-    paragraph_4                   String 
-    paragraph_4_ar                 String
-    paragraph_5                   String 
-    paragraph_5_ar                 String
     createdAt                      DateTime               @default(now())
     @@index([storeId])
     @@index([categoryId])

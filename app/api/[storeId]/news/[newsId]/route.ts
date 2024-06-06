@@ -88,23 +88,7 @@ export async function PATCH(
 
 		const body = await req.json();
 
-		const {
-			title,
-			title_ar,
-			images,
-			paragraph_1,
-			paragraph_1_ar,
-			paragraph_2,
-			paragraph_2_ar,
-			paragraph_3,
-			paragraph_3_ar,
-			paragraph_4,
-			paragraph_4_ar,
-			paragraph_5,
-			paragraph_5_ar,
-			categoryId,
-			paragraph,
-		} = body;
+		const { title, title_ar, images, categoryId, paragraph } = body;
 
 		if (!userId) {
 			return new NextResponse('Unauthenticated', {
@@ -136,71 +120,7 @@ export async function PATCH(
 				status: 400,
 			});
 		}
-		if (!paragraph_1) {
-			return new NextResponse('intro is required', {
-				status: 400,
-			});
-		}
-		if (!paragraph_1_ar) {
-			return new NextResponse(
-				'introduction in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!paragraph_2) {
-			return new NextResponse('intro is required', {
-				status: 400,
-			});
-		}
-		if (!paragraph_2_ar) {
-			return new NextResponse(
-				'introduction in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!paragraph_3) {
-			return new NextResponse('intro is required', {
-				status: 400,
-			});
-		}
-		if (!paragraph_3_ar) {
-			return new NextResponse(
-				'introduction in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!paragraph_4) {
-			return new NextResponse('intro is required', {
-				status: 400,
-			});
-		}
-		if (!paragraph_4_ar) {
-			return new NextResponse(
-				'introduction in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!paragraph_5) {
-			return new NextResponse('intro is required', {
-				status: 400,
-			});
-		}
-		if (!paragraph_5_ar) {
-			return new NextResponse(
-				'introduction in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
+
 		const storeByUserId = await prismadb.store.findFirst({
 			where: {
 				id: params.storeId,
@@ -221,16 +141,7 @@ export async function PATCH(
 			data: {
 				title,
 				title_ar,
-				paragraph_1,
-				paragraph_1_ar,
-				paragraph_2,
-				paragraph_2_ar,
-				paragraph_3,
-				paragraph_3_ar,
-				paragraph_4,
-				paragraph_4_ar,
-				paragraph_5,
-				paragraph_5_ar,
+
 				images: {
 					deleteMany: {},
 				},

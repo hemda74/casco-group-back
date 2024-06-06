@@ -22,13 +22,6 @@ const ProductPage = async ({
 			storeId: params.storeId,
 		},
 	});
-
-	// const colors = await prismadb.color.findMany({
-	//   where: {
-	//     storeId: params.storeId,
-	//   },
-	// });
-
 	return (
 		<div className="flex-row">
 			<div className="flex-1 space-x-4 p-8 pt-6">
