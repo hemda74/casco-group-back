@@ -600,7 +600,7 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 	const onSubmit = async (data: NewsFormValues) => {
 		try {
 			setLoading(true);
-			data.paragraph = paragraph.map((url) => ({ url })); // Include paragraph data
+			data.paragraph = paragraph.map((text) => ({ text })); // Include paragraph data
 			if (initialData) {
 				await axios.patch(`/api/${params.storeId}/news/${params.NewsId}`, data);
 			} else {
@@ -616,7 +616,6 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 			setLoading(false);
 		}
 	};
-
 	const onDelete = async () => {
 		try {
 			setLoading(true);
@@ -945,9 +944,6 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 							</FormItem>
 						))}
 					</div>
-
-
-
 					<Button disabled={loading} className="ml-auto" type="submit">
 						{action}
 					</Button>

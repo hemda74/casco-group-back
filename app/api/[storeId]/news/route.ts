@@ -175,10 +175,10 @@ export async function POST(
 				paragraph: {
 					createMany: {
 						data: [
-							...images.map(
-								(image: {
-									url: string;
-								}) => image
+							...paragraph.map(
+								(paragraph: {
+									text: string;
+								}) => paragraph
 							),
 						],
 					},

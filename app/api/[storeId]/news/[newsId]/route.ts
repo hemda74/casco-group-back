@@ -253,9 +253,15 @@ export async function PATCH(
 									url: string;
 								}) => image
 							),
+						],
+					},
+				},
+				paragraph: {
+					createMany: {
+						data: [
 							...paragraph.map(
 								(paragraph: {
-									d: string;
+									text: string;
 								}) => paragraph
 							),
 						],
