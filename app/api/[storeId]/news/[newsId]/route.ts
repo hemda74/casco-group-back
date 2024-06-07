@@ -198,6 +198,18 @@ export async function PATCH(
 						],
 					},
 				},
+				paragraph_news_ar: {
+					createMany: {
+						data: [
+							...paragraph_news_ar.map(
+								(paragraph_news_ar: {
+									text: string;
+								}) =>
+									paragraph_news_ar
+							),
+						],
+					},
+				},
 			},
 		});
 

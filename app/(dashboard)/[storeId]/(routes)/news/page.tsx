@@ -13,7 +13,8 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
 		},
 		include: {
 			category: true,
-			paragraph: true
+			paragraph_news: true,
+			paragraph_news_ar: true
 		},
 		orderBy: {
 			title: 'desc',
@@ -25,7 +26,9 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
 		title: item.title,
 		title_ar: item.title_ar,
 		category: item.category.name,
-		paragraph: item.paragraph.map(p => p.text),
+		paragraph_news: item.paragraph_news.map(p => p.text),
+		paragraph_news_ar: item.paragraph_news_ar.map(p => p.text),
+
 	}));
 
 	return (

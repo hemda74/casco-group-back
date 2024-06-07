@@ -6,10 +6,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { Trash, PlusCircle } from 'lucide-react';
-import { News, Image5, NewsCategory, paragrph } from '@prisma/client';
+import { News, Image5, NewsCategory, paragrph_news, paragrph_news_ar } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation'; // Corrected from 'next/navigation'
-
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
 	Form,
@@ -37,7 +35,8 @@ const formSchema = z.object({
 	title: z.string().min(1),
 	title_ar: z.string().min(1),
 	categoryId: z.string().min(1),
-	paragraph: z.array(z.string()),
+	paragraph_news: z.array(z.string()),
+	paragraph_news_ar: z.array(z.string())
 });
 
 type NewsFormValues = z.infer<typeof formSchema>;
@@ -46,7 +45,8 @@ interface NewsFormProps {
 	initialData:
 	| (News & {
 		images: Image5[];
-		paragraph: paragrph[];
+		paragraph_news: paragrph_news[];
+		paragraph_news_ar: paragrph_news_ar[];
 	})
 	| null;
 	categories: NewsCategory[];
@@ -61,8 +61,11 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [paragraph, setParagraph] = useState<string[]>(
-		initialData?.paragraph.map((p) => p.text) || ['']
+	const [paragraph_news, setParagraph_news] = useState<string[]>(
+		initialData?.paragraph_news.map((p) => p.text) || ['']
+	);
+	const [paragraph_news_ar, setParagraph_news_ar] = useState<string[]>(
+		initialData?.paragraph_news_ar.map((p) => p.text) || ['']
 	);
 
 	const title = initialData ? 'Edit News' : 'Create News';
@@ -72,29 +75,45 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 
 	const form = useForm<NewsFormValues>({
 		resolver: zodResolver(formSchema),
-		defaultValues: initialData || {
+		defaultValues: initialData ? {
 			title: '',
 			title_ar: '',
 			categoryId: '',
 			images: [],
-			paragraph: [],
+			paragraph_news: initialData.paragraph_news.map(p => ({ text: p.text })),
+			paragraph_news_ar: initialData.paragraph_news_ar.map(p => ({ text: p.text })),
+		} : {
+			title: '',
+			title_ar: '',
+			categoryId: '',
+			images: [],
+			paragraph_news: [],
+			paragraph_news_ar: [],
 		},
 	});
 
-	const handleAddParagraph = () => {
-		setParagraph([...paragraph, '']);
+	const handleAddParagraphNews = () => {
+		setParagraph_news([...paragraph_news, '']);
+	};
+	const handleAddParagraphNewsAr = () => {
+		setParagraph_news_ar([...paragraph_news_ar, '']);
 	};
 
-	const handleParagraphChange = (index: number, value: string) => {
-		const newParagraph = [...paragraph];
-		newParagraph[index] = value;
-		setParagraph(newParagraph);
+	const handleParagraphChangeNews = (index: number, value: string) => {
+		const newParagraphNews = [...paragraph_news];
+		newParagraphNews[index] = value;
+		setParagraph_news(newParagraphNews);
 	};
-
+	const handleParagraphChangeNewsAr = (index: number, value: string) => {
+		const newParagraphNewsAr = [...paragraph_news_ar];
+		newParagraphNewsAr[index] = value;
+		setParagraph_news_ar(newParagraphNewsAr);
+	};
 	const onSubmit = async (data: NewsFormValues) => {
 		try {
 			setLoading(true);
-			data.paragraph = paragraph.map((text) => ({ text })); // Include paragraph data
+			data.paragraph_news = paragraph_news.map(text => ({ text }));
+			data.paragraph_news_ar = paragraph_news_ar.map(text => ({ text }));
 			if (initialData) {
 				await axios.patch(`/api/${params.storeId}/news/${params.NewsId}`, data);
 			} else {
@@ -244,7 +263,7 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 								</FormItem>
 							)}
 						/>
-						{paragraph.map((p, index) => (
+						{paragraph_news.map((p, index) => (
 							<FormItem key={index}>
 								<FormLabel>Paragraph {index + 1}</FormLabel>
 								<FormControl>
@@ -252,15 +271,39 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 										disabled={loading}
 										placeholder="Enter a Value"
 										value={p}
-										onChange={(e) => handleParagraphChange(index, e.target.value)}
+										onChange={(e) => handleParagraphChangeNews(index, e.target.value)}
 									/>
 								</FormControl>
 								<FormMessage />
-								{index === paragraph.length - 1 && (
+								{index === paragraph_news.length - 1 && (
 									<Button
 										type="button"
 										variant="ghost"
-										onClick={handleAddParagraph}
+										onClick={handleAddParagraphNews}
+									>
+										<PlusCircle className="h-6 w-6 text-gray-600" />
+									</Button>
+								)}
+							</FormItem>
+						))}
+						<hr />
+						{paragraph_news_ar.map((p, index) => (
+							<FormItem key={index}>
+								<FormLabel>Paragraph {index + 1}</FormLabel>
+								<FormControl>
+									<Textarea
+										disabled={loading}
+										placeholder="Enter a Value"
+										value={p}
+										onChange={(e) => handleParagraphChangeNewsAr(index, e.target.value)}
+									/>
+								</FormControl>
+								<FormMessage />
+								{index === paragraph_news_ar.length - 1 && (
+									<Button
+										type="button"
+										variant="ghost"
+										onClick={handleAddParagraphNewsAr}
 									>
 										<PlusCircle className="h-6 w-6 text-gray-600" />
 									</Button>

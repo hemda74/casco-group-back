@@ -103,14 +103,10 @@ export async function POST(
 					createMany: {
 						data: [
 							...paragraph_news.map(
-								(paragraph: {
+								(paragraph_news: {
 									text: string;
-								}) => paragraph
-							),
-							...paragraph_news_ar.map(
-								(paragraph: {
-									text: string;
-								}) => paragraph
+								}) =>
+									paragraph_news
 							),
 						],
 					},
@@ -118,15 +114,11 @@ export async function POST(
 				paragraph_news_ar: {
 					createMany: {
 						data: [
-							...paragraph_news.map(
-								(paragraph: {
-									text: string;
-								}) => paragraph
-							),
 							...paragraph_news_ar.map(
-								(paragraph: {
+								(paragraph_news_ar: {
 									text: string;
-								}) => paragraph
+								}) =>
+									paragraph_news_ar
 							),
 						],
 					},
@@ -165,9 +157,6 @@ export async function GET(
 				paragraph_news: true,
 				paragraph_news_ar: true,
 				category: true,
-			},
-			orderBy: {
-				title: 'desc',
 			},
 		});
 

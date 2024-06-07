@@ -10,7 +10,8 @@ export interface ProductColumn {
 	title: string;
 	title_ar: string;
 	category: string;
-	paragraph: string[];
+	paragraph_news: string[];
+	paragraph_news_ar: string[];
 
 }
 
@@ -26,7 +27,12 @@ export const columns: ColumnDef<ProductColumn>[] = [
 	{
 		id: 'paragraphs',
 		header: 'Paragraphs___________________________________',
-		cell: ({ row }) => row.original.paragraph.join(', '),
+		cell: ({ row }) => row.original.paragraph_news.join('--------------------------- '),
+	},
+	{
+		id: 'paragraphs',
+		header: 'Paragraphs___________________________________',
+		cell: ({ row }) => row.original.paragraph_news_ar.join('-------------------------------'),
 	},
 
 	{
