@@ -1,13 +1,11 @@
 generator client {
   provider = "prisma-client-js"
 }
-
 datasource db {
   provider     = "postgresql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
-
 model Store {
   id                      String                          @id @default(uuid())
   name                    String
@@ -21,6 +19,7 @@ model Store {
   Services                Service[]                       @relation("StoreToService")
   Industries              Industry[]                      @relation("StoreToIndustry")
   news                    News[]                          @relation("StoreToNews")
+  events                    Event[]                          @relation("StoreToEvent")
   casestudies             CaseStudy[]                     @relation("StoreToCaseStudy")
   expert                  Expert[]                        @relation("StoreToExpert")
   team                    Team[]                          @relation("StoreToTeam")
@@ -29,7 +28,6 @@ model Store {
   createdAt               DateTime                        @default(now())
   updatedAt               DateTime                        @updatedAt
 }
-
 model Billboard {
   id                        String                @id @default(uuid())
   storeId                   String
@@ -43,10 +41,8 @@ model Billboard {
   teams                     Team[]
   createdAt                 DateTime               @default(now())
   updatedAt                 DateTime               @updatedAt
-
   @@index([storeId])
 }
-
 model CoursesCategory {
   id                String    @id @default(uuid())
   storeId           String // Foreign Key to Store
@@ -61,8 +57,6 @@ model CoursesCategory {
   @@index([storeId])
   @@index([billboardId])
 }
-
-
 model Course {
     id                       String       @id @default(uuid())
     storeId                  String // Foreign Key to Store
@@ -106,7 +100,6 @@ model Course {
     @@index([storeId])
     @@index([categoryId])
 }
-
 model Team {
  id               String @id @default(uuid())
  storeId          String 
@@ -120,7 +113,6 @@ model Team {
  @@index([storeId])
  @@index([billboardId])
 }
-
 model IndustryCategory {
   id                String    @id @default(uuid())
   storeId           String // Foreign Key to Store
@@ -136,7 +128,6 @@ model IndustryCategory {
   @@index([storeId])
   @@index([billboardId])
 }
-
 model ServicesCategory {
   id                String    @id @default(uuid())
   storeId           String // Foreign Key to Store
@@ -152,7 +143,6 @@ model ServicesCategory {
   @@index([storeId])
   @@index([billboardId])
 }
-
 model TeamMember{
     id                      String @id @default(uuid())
     storeId                 String // Foreign Key to Store
@@ -170,7 +160,6 @@ model TeamMember{
     @@index([storeId])
     @@index([teamId])
 }
-
 model Service {
    id                       String       @id @default(uuid())
    storeId                  String   //Foreign Key to Store
@@ -189,7 +178,6 @@ model Service {
    @@index([storeId])
    @@index([categoryId])
 }
-
 model Industry {
    id                       String              @id @default(uuid())
    storeId                  String   //Foreign Key to Store
@@ -242,7 +230,6 @@ model CaseStudy {
   @@index([storeId])
   @@index([industryId])
 }
-
 model Image {
   id              String   @id @default(uuid())
   courseId        String
@@ -252,7 +239,6 @@ model Image {
   updatedAt       DateTime @updatedAt
   @@index([courseId])
 }
-
 model Expert{
   id                     String    @id @default(uuid())
   storeId                String // Foreign Key to Store
@@ -282,7 +268,6 @@ model Image2 {
   updatedAt             DateTime @updatedAt
   @@index([expertId])
 }
-
 model Image3 {
   id                    String   @id @default(uuid())
   casestudyId           String
@@ -292,7 +277,6 @@ model Image3 {
   updatedAt             DateTime @updatedAt
   @@index([casestudyId])
 }
-
 model Image4 {
   id                    String   @id @default(uuid())
   teamId                String
@@ -334,6 +318,7 @@ model NewsCategory {
   name              String
   name_ar           String
   news           News[] @relation("CategoryToNews")
+  event           Event[] @relation("CategoryToEvent")
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
   @@index([storeId])
@@ -350,12 +335,49 @@ model News {
     images                        Image5[] // Relation to Image model
     paragraph_news                paragrph_news[] // Relation to paragraph_news model
     paragraph_news_ar             paragrph_news_ar[] // Relation to paragraph_news_ar model
-
     createdAt                      DateTime               @default(now())
     @@index([storeId])
     @@index([categoryId])
 }
-model IndustryDetailes{
+model Image6 {
+  id                    String   @id @default(uuid())
+  eventId                String
+  event                 Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  url                   String // URL of the image
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  @@index([eventId])
+}
+model paragrph_event {
+  id                    String   @id @default(uuid())
+  eventId                String
+  event                  Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  text                  String 
+  @@index([eventId])
+}
+model paragrph_event_ar {
+  id                    String   @id @default(uuid())
+  eventId                String
+  event                  Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  text                  String 
+  @@index([eventId])
+}
+model Event {
+    id                            String       @id @default(uuid())
+    storeId                       String // Foreign Key to Store
+    store                         Store       @relation("StoreToEvent", fields: [storeId], references: [id])
+    categoryId                    String // Foreign Key to Courses Category
+    category                      NewsCategory    @relation("CategoryToEvent", fields: [categoryId], references: [id])
+    title                         String 
+    title_ar                      String 
+    images                        Image6[] // Relation to Image model
+    paragraph_event                paragrph_event[] // Relation to paragraph_event model
+    paragraph_event_ar             paragrph_event_ar[] // Relation to paragraph_event_ar model
+    createdAt                      DateTime               @default(now())
+    @@index([storeId])
+    @@index([categoryId])
+}
+model IndustryDetailes {
 id                         String @id @default(uuid())
 storeId                    String // Foreign Key to Store
 store                      Store     @relation("StoreToIndustryDetailes", fields: [storeId], references: [id])
