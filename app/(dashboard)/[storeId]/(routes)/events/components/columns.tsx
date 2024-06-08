@@ -12,6 +12,7 @@ export interface ProductColumn {
 	category: string;
 	paragraph_event: string[];
 	paragraph_event_ar: string[];
+	createdAt: string;
 
 }
 
@@ -38,6 +39,10 @@ export const columns: ColumnDef<ProductColumn>[] = [
 	{
 		accessorKey: 'category',
 		header: 'Category___________________________________',
+	},
+	{
+		accessorKey: 'createdAt',
+		header: 'Date',
 	},
 
 	{
