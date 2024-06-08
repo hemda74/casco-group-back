@@ -13,6 +13,8 @@ export interface ProductColumn {
 	paragraph_news: string[];
 	paragraph_news_ar: string[];
 	createdAt: string;
+	date_of_news: string;
+	date_of_news_ar: string;
 }
 
 export const columns: ColumnDef<ProductColumn>[] = [
@@ -23,6 +25,14 @@ export const columns: ColumnDef<ProductColumn>[] = [
 	{
 		accessorKey: 'title_ar',
 		header: 'News_Arabic_title___________________________________',
+	},
+	{
+		accessorKey: 'date_of_news',
+		header: 'English_Date___________________________________',
+	},
+	{
+		accessorKey: 'date_of_news_ar',
+		header: 'Arabic_Date___________________________________',
 	},
 	{
 		id: 'paragraphs',

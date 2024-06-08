@@ -25,12 +25,12 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
 		id: item.id,
 		title: item.title,
 		title_ar: item.title_ar,
+		date_of_event: item.date_of_event,
+		date_of_event_ar: item.date_of_event_ar,
 		category: item.category.name,
 		paragraph_event: item.paragraph_event.map(p => p.text),
 		paragraph_event_ar: item.paragraph_event_ar.map(p => p.text),
 		createdAt: format(item.createdAt, 'MMMM do, yyyy'),
-
-
 	}));
 
 	return (

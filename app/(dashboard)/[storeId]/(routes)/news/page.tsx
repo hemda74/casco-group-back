@@ -28,6 +28,8 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
 		category: item.category.name,
 		paragraph_news: item.paragraph_news.map(p => p.text),
 		paragraph_news_ar: item.paragraph_news_ar.map(p => p.text),
+		date_of_news: item.date_of_news,
+		date_of_news_ar: item.date_of_news_ar,
 		createdAt: format(item.createdAt, 'MMMM do, yyyy'),
 
 	}));

@@ -96,6 +96,8 @@ export async function PATCH(
 			categoryId,
 			paragraph_event,
 			paragraph_event_ar,
+			date_of_event,
+			date_of_event_ar,
 		} = body;
 
 		if (!userId) {
@@ -134,6 +136,16 @@ export async function PATCH(
 				}
 			);
 		}
+		if (!date_of_event) {
+			return new NextResponse(' this field is required', {
+				status: 400,
+			});
+		}
+		if (!date_of_event_ar) {
+			return new NextResponse(' this field is required', {
+				status: 400,
+			});
+		}
 		if (!categoryId) {
 			return new NextResponse('Category id is required', {
 				status: 400,
@@ -160,7 +172,8 @@ export async function PATCH(
 			data: {
 				title,
 				title_ar,
-
+				date_of_event,
+				date_of_event_ar,
 				images: {
 					deleteMany: {},
 				},

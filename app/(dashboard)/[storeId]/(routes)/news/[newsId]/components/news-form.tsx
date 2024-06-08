@@ -36,7 +36,9 @@ const formSchema = z.object({
 	title_ar: z.string().min(1),
 	categoryId: z.string().min(1),
 	paragraph_news: z.array(z.string()),
-	paragraph_news_ar: z.array(z.string())
+	paragraph_news_ar: z.array(z.string()),
+	date_of_news: z.string().min(1),
+	date_of_news_ar: z.string().min(1)
 });
 
 type NewsFormValues = z.infer<typeof formSchema>;
@@ -79,6 +81,8 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 			title: '',
 			title_ar: '',
 			categoryId: '',
+			date_of_news: '',
+			date_of_news_ar: '',
 			images: [],
 			paragraph_news: initialData.paragraph_news.map(p => ({ text: p.text })),
 			paragraph_news_ar: initialData.paragraph_news_ar.map(p => ({ text: p.text })),
@@ -86,6 +90,8 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 			title: '',
 			title_ar: '',
 			categoryId: '',
+			date_of_news: '',
+			date_of_news_ar: '',
 			images: [],
 			paragraph_news: [],
 			paragraph_news_ar: [],
@@ -196,6 +202,38 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 					/>
 					{/* Rest of your form fields */}
 					<div className="md:grid md:grid-cols-1 gap-8">
+						<FormField
+							control={form.control}
+							name="categoryId"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Category</FormLabel>
+									<Select
+										disabled={loading}
+										onValueChange={field.onChange}
+										value={field.value}
+										defaultValue={field.value}
+									>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue
+													defaultValue={field.value}
+													placeholder="Select a category"
+												/>
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											{categories.map((category) => (
+												<SelectItem key={category.id} value={category.id}>
+													{category.name}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 						{/* Other form fields */}
 						<FormField
 							control={form.control}
@@ -233,36 +271,38 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="categoryId"
+							name="date_of_news"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Category</FormLabel>
-									<Select
-										disabled={loading}
-										onValueChange={field.onChange}
-										value={field.value}
-										defaultValue={field.value}
-									>
-										<FormControl>
-											<SelectTrigger>
-												<SelectValue
-													defaultValue={field.value}
-													placeholder="Select a category"
-												/>
-											</SelectTrigger>
-										</FormControl>
-										<SelectContent>
-											{categories.map((category) => (
-												<SelectItem key={category.id} value={category.id}>
-													{category.name}
-												</SelectItem>
-											))}
-										</SelectContent>
-									</Select>
+									<FormLabel>News Date In English</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={loading}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>	<FormField
+							control={form.control}
+							name="date_of_news_ar"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>News Date in Arabic</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={loading}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
 									<FormMessage />
 								</FormItem>
 							)}
 						/>
+						<h5> The Pargraphs in English</h5>
 						{paragraph_news.map((p, index) => (
 							<FormItem key={index}>
 								<FormLabel>Paragraph {index + 1}</FormLabel>
@@ -287,6 +327,8 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 							</FormItem>
 						))}
 						<hr />
+						<h5> The Pargraphs in Arabic</h5>
+
 						{paragraph_news_ar.map((p, index) => (
 							<FormItem key={index}>
 								<FormLabel>Paragraph {index + 1}</FormLabel>

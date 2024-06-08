@@ -23,8 +23,6 @@ export async function GET(
 				paragraph_news: true,
 				paragraph_news_ar: true,
 				category: true,
-
-				// color: true,
 			},
 		});
 
@@ -96,6 +94,8 @@ export async function PATCH(
 			categoryId,
 			paragraph_news,
 			paragraph_news_ar,
+			date_of_news,
+			date_of_news_ar,
 		} = body;
 
 		if (!userId) {
@@ -109,7 +109,17 @@ export async function PATCH(
 			});
 		}
 		if (!title_ar) {
-			return new NextResponse(' Arabic Name is required', {
+			return new NextResponse(' this field is required', {
+				status: 400,
+			});
+		}
+		if (!date_of_news) {
+			return new NextResponse(' this field is required', {
+				status: 400,
+			});
+		}
+		if (!date_of_news_ar) {
+			return new NextResponse(' this field is required', {
 				status: 400,
 			});
 		}
@@ -157,7 +167,8 @@ export async function PATCH(
 			data: {
 				title,
 				title_ar,
-
+				date_of_news,
+				date_of_news_ar,
 				images: {
 					deleteMany: {},
 				},

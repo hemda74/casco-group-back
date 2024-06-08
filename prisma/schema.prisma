@@ -336,6 +336,8 @@ model News {
     paragraph_news                paragrph_news[] // Relation to paragraph_news model
     paragraph_news_ar             paragrph_news_ar[] // Relation to paragraph_news_ar model
     createdAt                      DateTime               @default(now())
+    date_of_news                  String
+    date_of_news_ar                 String
     @@index([storeId])
     @@index([categoryId])
 }
@@ -371,9 +373,11 @@ model Event {
     title                         String 
     title_ar                      String 
     images                        Image6[] // Relation to Image model
-    paragraph_event                paragrph_event[] // Relation to paragraph_event model
-    paragraph_event_ar             paragrph_event_ar[] // Relation to paragraph_event_ar model
-    createdAt                      DateTime               @default(now())
+    paragraph_event               paragrph_event[] // Relation to paragraph_event model
+    paragraph_event_ar            paragrph_event_ar[] // Relation to paragraph_event_ar model
+    createdAt                     DateTime               @default(now())
+    date_of_event                 String
+    date_of_event_ar                 String
     @@index([storeId])
     @@index([categoryId])
 }

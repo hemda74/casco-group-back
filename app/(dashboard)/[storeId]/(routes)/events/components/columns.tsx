@@ -10,6 +10,8 @@ export interface ProductColumn {
 	title: string;
 	title_ar: string;
 	category: string;
+	date_of_event: string;
+	date_of_event_ar: string;
 	paragraph_event: string[];
 	paragraph_event_ar: string[];
 	createdAt: string;
@@ -44,7 +46,14 @@ export const columns: ColumnDef<ProductColumn>[] = [
 		accessorKey: 'createdAt',
 		header: 'Created_Date___________________________________',
 	},
-
+	{
+		accessorKey: 'date_of_event',
+		header: 'Event_Date_in_English___________________________________',
+	},
+	{
+		accessorKey: 'date_of_event_ar',
+		header: 'Event_Date_in_Arabic___________________________________',
+	},
 	{
 		id: 'actions',
 		cell: ({ row }) => <CellAction data={row.original} />,

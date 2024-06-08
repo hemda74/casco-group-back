@@ -36,20 +36,22 @@ const formSchema = z.object({
 	title_ar: z.string().min(1),
 	categoryId: z.string().min(1),
 	paragraph_event: z.array(z.string()),
-	paragraph_event_ar: z.array(z.string())
+	paragraph_event_ar: z.array(z.string()),
+	date_of_event: z.string().min(1),
+	date_of_event_ar: z.string().min(1)
 });
 
 type EventFormValues = z.infer<typeof formSchema>;
 
 interface EventFormProps {
 	initialData:
-	| (event & {
+	| (Event & {
 		images: Image6[];
 		paragraph_event: paragrph_event[];
 		paragraph_event_ar: paragrph_event_ar[];
 	})
 	| null;
-	categories: newsCategory[];
+	categories: NewsCategory[];
 }
 
 export const EventForm: React.FC<EventFormProps> = ({
@@ -80,6 +82,8 @@ export const EventForm: React.FC<EventFormProps> = ({
 			title_ar: '',
 			categoryId: '',
 			images: [],
+			date_of_event: '',
+			date_of_event_ar: '',
 			paragraph_event: initialData.paragraph_event.map(p => ({ text: p.text })),
 			paragraph_event_ar: initialData.paragraph_event_ar.map(p => ({ text: p.text })),
 		} : {
@@ -87,6 +91,8 @@ export const EventForm: React.FC<EventFormProps> = ({
 			title_ar: '',
 			categoryId: '',
 			images: [],
+			date_of_event: '',
+			date_of_event_ar: '',
 			paragraph_event: [],
 			paragraph_event_ar: [],
 		},
@@ -199,6 +205,38 @@ export const EventForm: React.FC<EventFormProps> = ({
 						{/* Other form fields */}
 						<FormField
 							control={form.control}
+							name="categoryId"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Category</FormLabel>
+									<Select
+										disabled={loading}
+										onValueChange={field.onChange}
+										value={field.value}
+										defaultValue={field.value}
+									>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue
+													defaultValue={field.value}
+													placeholder="Select a category"
+												/>
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											{categories.map((category) => (
+												<SelectItem key={category.id} value={category.id}>
+													{category.name}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
 							name="title"
 							render={({ field }) => (
 								<FormItem>
@@ -233,36 +271,39 @@ export const EventForm: React.FC<EventFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="categoryId"
+							name="date_of_event"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Category</FormLabel>
-									<Select
-										disabled={loading}
-										onValueChange={field.onChange}
-										value={field.value}
-										defaultValue={field.value}
-									>
-										<FormControl>
-											<SelectTrigger>
-												<SelectValue
-													defaultValue={field.value}
-													placeholder="Select a category"
-												/>
-											</SelectTrigger>
-										</FormControl>
-										<SelectContent>
-											{categories.map((category) => (
-												<SelectItem key={category.id} value={category.id}>
-													{category.name}
-												</SelectItem>
-											))}
-										</SelectContent>
-									</Select>
+									<FormLabel>Date Of Event in English</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={loading}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
 									<FormMessage />
 								</FormItem>
 							)}
 						/>
+						<FormField
+							control={form.control}
+							name="date_of_event_ar"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Date Of Event in Arabic</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={loading}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
 						{paragraph_event.map((p, index) => (
 							<FormItem key={index}>
 								<FormLabel>Paragraph {index + 1}</FormLabel>

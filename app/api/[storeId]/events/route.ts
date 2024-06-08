@@ -19,6 +19,8 @@ export async function POST(
 			categoryId,
 			paragraph_event,
 			paragraph_event_ar,
+			date_of_event,
+			date_of_event_ar,
 		} = body;
 
 		if (!userId) {
@@ -27,12 +29,22 @@ export async function POST(
 			});
 		}
 		if (!title) {
-			return new NextResponse('Name is required', {
+			return new NextResponse('this field is required', {
 				status: 400,
 			});
 		}
 		if (!title_ar) {
-			return new NextResponse(' Arabic Name is required', {
+			return new NextResponse(' this field is required', {
+				status: 400,
+			});
+		}
+		if (!date_of_event) {
+			return new NextResponse(' this field is required', {
+				status: 400,
+			});
+		}
+		if (!date_of_event_ar) {
+			return new NextResponse(' this field is required', {
 				status: 400,
 			});
 		}
@@ -87,6 +99,8 @@ export async function POST(
 				title,
 				title_ar,
 				categoryId,
+				date_of_event,
+				date_of_event_ar,
 				storeId: params.storeId,
 				images: {
 					createMany: {

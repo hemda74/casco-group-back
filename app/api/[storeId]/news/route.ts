@@ -19,6 +19,8 @@ export async function POST(
 			categoryId,
 			paragraph_news,
 			paragraph_news_ar,
+			date_of_news,
+			date_of_news_ar,
 		} = body;
 
 		if (!userId) {
@@ -27,12 +29,22 @@ export async function POST(
 			});
 		}
 		if (!title) {
-			return new NextResponse('Name is required', {
+			return new NextResponse('this field is required', {
 				status: 400,
 			});
 		}
 		if (!title_ar) {
-			return new NextResponse(' Arabic Name is required', {
+			return new NextResponse(' this field is required', {
+				status: 400,
+			});
+		}
+		if (!date_of_news) {
+			return new NextResponse(' this field is required', {
+				status: 400,
+			});
+		}
+		if (!date_of_news_ar) {
+			return new NextResponse(' this field is required', {
 				status: 400,
 			});
 		}
@@ -86,6 +98,8 @@ export async function POST(
 			data: {
 				title,
 				title_ar,
+				date_of_news,
+				date_of_news_ar,
 				categoryId,
 				storeId: params.storeId,
 				images: {
