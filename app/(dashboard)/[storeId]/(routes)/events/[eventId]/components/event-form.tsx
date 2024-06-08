@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { Trash, PlusCircle } from 'lucide-react';
-import { event, Image6, newsCategory, paragrph_event, paragrph_event_ar } from '@prisma/client';
+import { Event, Image6, NewsCategory, paragrph_event, paragrph_event_ar } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation'; // Corrected from 'next/navigation'
 import { Button } from '@/components/ui/button';
 import {
@@ -120,10 +120,10 @@ export const EventForm: React.FC<EventFormProps> = ({
 				await axios.post(`/api/${params.storeId}/event`, data);
 			}
 			router.refresh();
-			router.push(`/${params.storeId}/event`);
+			router.push(`/${params.storeId}/events`);
 			toast.success(toastMessage);
 		} catch (error: any) {
-			toast.error('Something went wrong.');
+			toast.error('Something went wrong.', error);
 			console.log(error);
 		} finally {
 			setLoading(false);
