@@ -108,7 +108,7 @@ model Team {
  name             String
  name_ar          String
  image            Image4[]
- billboard         Billboard @relation(fields: [billboardId],references: [id])
+ billboard        Billboard @relation(fields: [billboardId],references: [id])
  teammember       TeamMember[]  @relation("TeamToTeamMember")
  @@index([storeId])
  @@index([billboardId])
@@ -377,7 +377,7 @@ model Event {
     paragraph_event_ar            paragrph_event_ar[] // Relation to paragraph_event_ar model
     createdAt                     DateTime               @default(now())
     date_of_event                 String
-    date_of_event_ar                 String
+    date_of_event_ar              String
     @@index([storeId])
     @@index([categoryId])
 }
