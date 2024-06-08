@@ -11,11 +11,6 @@ export function MainNav({
 	const params = useParams();
 
 	const routes = [
-		// {
-		// 	href: `/${params.storeId}`,
-		// 	label: 'Overview',
-		// 	active: pathname === `/${params.storeId}`,
-		// },
 		{
 			href: `/${params.storeId}/billboards`,
 			label: 'Main Categories',
@@ -44,19 +39,9 @@ export function MainNav({
 		},
 		{
 			href: `/${params.storeId}/news-categories`,
-			label: 'News categories',
+			label: 'News & Events categories',
 			active: pathname === `/${params.storeId}/news-categories`,
 		},
-		// {
-		// 	href: `/${params.storeId}/sizes`,
-		// 	label: 'Sizes',
-		// 	active: pathname === `/${params.storeId}/sizes`,
-		// },
-		// {
-		// 	href: `/${params.storeId}/colors`,
-		// 	label: 'Colors',
-		// 	active: pathname === `/${params.storeId}/colors`,
-		// },
 		{
 			href: `/${params.storeId}/courses`,
 			label: 'Courses',
@@ -72,6 +57,11 @@ export function MainNav({
 			href: `/${params.storeId}/news`,
 			label: 'News',
 			active: pathname === `/${params.storeId}/news`,
+		},
+		{
+			href: `/${params.storeId}/events`,
+			label: 'Events',
+			active: pathname === `/${params.storeId}/events`,
 		},
 		{
 			href: `/${params.storeId}/settings`,
