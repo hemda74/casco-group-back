@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { Trash, PlusCircle } from 'lucide-react';
-import { News, Image5, NewsCategory, paragrph_news, paragrph_news_ar } from '@prisma/client';
+import { event, Image6, newsCategory, paragrph_event, paragrph_event_ar } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation'; // Corrected from 'next/navigation'
 import { Button } from '@/components/ui/button';
 import {
@@ -35,24 +35,24 @@ const formSchema = z.object({
 	title: z.string().min(1),
 	title_ar: z.string().min(1),
 	categoryId: z.string().min(1),
-	paragraph_news: z.array(z.string()),
-	paragraph_news_ar: z.array(z.string())
+	paragraph_event: z.array(z.string()),
+	paragraph_event_ar: z.array(z.string())
 });
 
-type NewsFormValues = z.infer<typeof formSchema>;
+type EventFormValues = z.infer<typeof formSchema>;
 
-interface NewsFormProps {
+interface EventFormProps {
 	initialData:
-	| (News & {
-		images: Image5[];
-		paragraph_news: paragrph_news[];
-		paragraph_news_ar: paragrph_news_ar[];
+	| (event & {
+		images: Image6[];
+		paragraph_event: paragrph_event[];
+		paragraph_event_ar: paragrph_event_ar[];
 	})
 	| null;
-	categories: NewsCategory[];
+	categories: newsCategory[];
 }
 
-export const NewsForm: React.FC<NewsFormProps> = ({
+export const EventForm: React.FC<EventFormProps> = ({
 	initialData,
 	categories,
 }) => {
@@ -61,66 +61,66 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [paragraph_news, setParagraph_news] = useState<string[]>(
-		initialData?.paragraph_news.map((p) => p.text) || ['']
+	const [paragraph_event, setParagraph_event] = useState<string[]>(
+		initialData?.paragraph_event.map((p) => p.text) || ['']
 	);
-	const [paragraph_news_ar, setParagraph_news_ar] = useState<string[]>(
-		initialData?.paragraph_news_ar.map((p) => p.text) || ['']
+	const [paragraph_event_ar, setParagraph_event_ar] = useState<string[]>(
+		initialData?.paragraph_event_ar.map((p) => p.text) || ['']
 	);
 
-	const title = initialData ? 'Edit News' : 'Create News';
-	const description = initialData ? 'Edit a News.' : 'Add a new News';
-	const toastMessage = initialData ? 'News updated.' : 'News created.';
+	const title = initialData ? 'Edit event' : 'Create event';
+	const description = initialData ? 'Edit a event.' : 'Add a new event';
+	const toastMessage = initialData ? 'event updated.' : 'event created.';
 	const action = initialData ? 'Save changes' : 'Create';
 
-	const form = useForm<NewsFormValues>({
+	const form = useForm<EventFormValues>({
 		resolver: zodResolver(formSchema),
 		defaultValues: initialData ? {
 			title: '',
 			title_ar: '',
 			categoryId: '',
 			images: [],
-			paragraph_news: initialData.paragraph_news.map(p => ({ text: p.text })),
-			paragraph_news_ar: initialData.paragraph_news_ar.map(p => ({ text: p.text })),
+			paragraph_event: initialData.paragraph_event.map(p => ({ text: p.text })),
+			paragraph_event_ar: initialData.paragraph_event_ar.map(p => ({ text: p.text })),
 		} : {
 			title: '',
 			title_ar: '',
 			categoryId: '',
 			images: [],
-			paragraph_news: [],
-			paragraph_news_ar: [],
+			paragraph_event: [],
+			paragraph_event_ar: [],
 		},
 	});
 
-	const handleAddParagraphNews = () => {
-		setParagraph_news([...paragraph_news, '']);
+	const handleAddParagraphevent = () => {
+		setParagraph_event([...paragraph_event, '']);
 	};
-	const handleAddParagraphNewsAr = () => {
-		setParagraph_news_ar([...paragraph_news_ar, '']);
+	const handleAddParagrapheventAr = () => {
+		setParagraph_event_ar([...paragraph_event_ar, '']);
 	};
 
-	const handleParagraphChangeNews = (index: number, value: string) => {
-		const newParagraphNews = [...paragraph_news];
-		newParagraphNews[index] = value;
-		setParagraph_news(newParagraphNews);
+	const handleParagraphChangeevent = (index: number, value: string) => {
+		const newParagraphevent = [...paragraph_event];
+		newParagraphevent[index] = value;
+		setParagraph_event(newParagraphevent);
 	};
-	const handleParagraphChangeNewsAr = (index: number, value: string) => {
-		const newParagraphNewsAr = [...paragraph_news_ar];
-		newParagraphNewsAr[index] = value;
-		setParagraph_news_ar(newParagraphNewsAr);
+	const handleParagraphChangeeventAr = (index: number, value: string) => {
+		const newParagrapheventAr = [...paragraph_event_ar];
+		newParagrapheventAr[index] = value;
+		setParagraph_event_ar(newParagrapheventAr);
 	};
-	const onSubmit = async (data: NewsFormValues) => {
+	const onSubmit = async (data: EventFormValues) => {
 		try {
 			setLoading(true);
-			data.paragraph_news = paragraph_news.map(text => ({ text }));
-			data.paragraph_news_ar = paragraph_news_ar.map(text => ({ text }));
+			data.paragraph_event = paragraph_event.map(text => ({ text }));
+			data.paragraph_event_ar = paragraph_event_ar.map(text => ({ text }));
 			if (initialData) {
-				await axios.patch(`/api/${params.storeId}/news/${params.NewsId}`, data);
+				await axios.patch(`/api/${params.storeId}/event/${params.eventId}`, data);
 			} else {
-				await axios.post(`/api/${params.storeId}/news`, data);
+				await axios.post(`/api/${params.storeId}/event`, data);
 			}
 			router.refresh();
-			router.push(`/${params.storeId}/news`);
+			router.push(`/${params.storeId}/event`);
 			toast.success(toastMessage);
 		} catch (error: any) {
 			toast.error('Something went wrong.');
@@ -132,10 +132,10 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 	const onDelete = async () => {
 		try {
 			setLoading(true);
-			await axios.delete(`/api/${params.storeId}/news/${params.NewsId}`);
+			await axios.delete(`/api/${params.storeId}/event/${params.eventId}`);
 			router.refresh();
-			router.push(`/${params.storeId}/news`);
-			toast.success('News deleted.');
+			router.push(`/${params.storeId}/event`);
+			toast.success('event deleted.');
 		} catch (error: any) {
 			toast.error('Something went wrong.');
 		} finally {
@@ -263,7 +263,7 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 								</FormItem>
 							)}
 						/>
-						{paragraph_news.map((p, index) => (
+						{paragraph_event.map((p, index) => (
 							<FormItem key={index}>
 								<FormLabel>Paragraph {index + 1}</FormLabel>
 								<FormControl>
@@ -271,15 +271,15 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 										disabled={loading}
 										placeholder="Enter a Value"
 										value={p}
-										onChange={(e) => handleParagraphChangeNews(index, e.target.value)}
+										onChange={(e) => handleParagraphChangeevent(index, e.target.value)}
 									/>
 								</FormControl>
 								<FormMessage />
-								{index === paragraph_news.length - 1 && (
+								{index === paragraph_event.length - 1 && (
 									<Button
 										type="button"
 										variant="ghost"
-										onClick={handleAddParagraphNews}
+										onClick={handleAddParagraphevent}
 									>
 										<PlusCircle className="h-6 w-6 text-gray-600" />
 									</Button>
@@ -287,7 +287,7 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 							</FormItem>
 						))}
 						<hr />
-						{paragraph_news_ar.map((p, index) => (
+						{paragraph_event_ar.map((p, index) => (
 							<FormItem key={index}>
 								<FormLabel>Paragraph {index + 1}</FormLabel>
 								<FormControl>
@@ -295,15 +295,15 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 										disabled={loading}
 										placeholder="Enter a Value"
 										value={p}
-										onChange={(e) => handleParagraphChangeNewsAr(index, e.target.value)}
+										onChange={(e) => handleParagraphChangeeventAr(index, e.target.value)}
 									/>
 								</FormControl>
 								<FormMessage />
-								{index === paragraph_news_ar.length - 1 && (
+								{index === paragraph_event_ar.length - 1 && (
 									<Button
 										type="button"
 										variant="ghost"
-										onClick={handleAddParagraphNewsAr}
+										onClick={handleAddParagrapheventAr}
 									>
 										<PlusCircle className="h-6 w-6 text-gray-600" />
 									</Button>

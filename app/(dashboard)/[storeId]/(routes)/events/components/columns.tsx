@@ -10,29 +10,29 @@ export interface ProductColumn {
 	title: string;
 	title_ar: string;
 	category: string;
-	paragraph_news: string[];
-	paragraph_news_ar: string[];
+	paragraph_event: string[];
+	paragraph_event_ar: string[];
 
 }
 
 export const columns: ColumnDef<ProductColumn>[] = [
 	{
 		accessorKey: 'title',
-		header: 'News_title___________________________________',
+		header: 'event_title___________________________________',
 	},
 	{
 		accessorKey: 'title_ar',
-		header: 'News_Arabic_title___________________________________',
+		header: 'event_Arabic_title___________________________________',
 	},
 	{
 		id: 'paragraphs',
 		header: 'Paragraphs___________________________________',
-		cell: ({ row }) => row.original.paragraph_news.join('--------------------------- '),
+		cell: ({ row }) => row.original.paragraph_event.join('___________________________________ '),
 	},
 	{
 		id: 'paragraphs',
 		header: 'Paragraphs___________________________________',
-		cell: ({ row }) => row.original.paragraph_news_ar.join('-------------------------------'),
+		cell: ({ row }) => row.original.paragraph_event_ar.join('___________________________________'),
 	},
 
 	{

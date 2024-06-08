@@ -48,7 +48,7 @@ export const ProductsClient: React.FC<ProductsClientProps> = ({ data }) => {
 			<Separator />
 			<ApiList
 				entityName="news"
-				entityIdName="courseId"
+				entityIdName="newsId"
 			/>
 		</>
 	);

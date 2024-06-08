@@ -17,8 +17,8 @@ export async function POST(
 			title_ar,
 			images,
 			categoryId,
-			paragraph_news,
-			paragraph_news_ar,
+			paragraph_event,
+			paragraph_event_ar,
 		} = body;
 
 		if (!userId) {
@@ -41,7 +41,7 @@ export async function POST(
 				status: 400,
 			});
 		}
-		if (!paragraph_news || !paragraph_news.length) {
+		if (!paragraph_event || !paragraph_event.length) {
 			return new NextResponse(
 				'one pargraph at least is required are required',
 				{
@@ -49,7 +49,7 @@ export async function POST(
 				}
 			);
 		}
-		if (!paragraph_news_ar || !paragraph_news_ar.length) {
+		if (!paragraph_event_ar || !paragraph_event_ar.length) {
 			return new NextResponse(
 				'one pargraph at least is required are required',
 				{
@@ -82,7 +82,7 @@ export async function POST(
 			});
 		}
 
-		const product = await prismadb.news.create({
+		const product = await prismadb.event.create({
 			data: {
 				title,
 				title_ar,
@@ -99,26 +99,26 @@ export async function POST(
 						],
 					},
 				},
-				paragraph_news: {
+				paragraph_event: {
 					createMany: {
 						data: [
-							...paragraph_news.map(
-								(paragraph_news: {
+							...paragraph_event.map(
+								(paragraph_event: {
 									text: string;
 								}) =>
-									paragraph_news
+									paragraph_event
 							),
 						],
 					},
 				},
-				paragraph_news_ar: {
+				paragraph_event_ar: {
 					createMany: {
 						data: [
-							...paragraph_news_ar.map(
-								(paragraph_news_ar: {
+							...paragraph_event_ar.map(
+								(paragraph_event_ar: {
 									text: string;
 								}) =>
-									paragraph_news_ar
+									paragraph_event_ar
 							),
 						],
 					},
@@ -147,15 +147,15 @@ export async function GET(
 			});
 		}
 
-		const courses = await prismadb.news.findMany({
+		const courses = await prismadb.event.findMany({
 			where: {
 				storeId: params.storeId,
 				categoryId,
 			},
 			include: {
 				images: true,
-				paragraph_news: true,
-				paragraph_news_ar: true,
+				paragraph_event: true,
+				paragraph_event_ar: true,
 				category: true,
 			},
 		});

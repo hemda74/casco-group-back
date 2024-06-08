@@ -32,9 +32,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 		try {
 			setLoading(true);
 			await axios.delete(
-				`/api/${params.storeId}/news/${data.id}`
+				`/api/${params.storeId}/event/${data.id}`
 			);
-			toast.success('news deleted.');
+			toast.success('event deleted.');
 			router.refresh();
 		} catch (error) {
 			toast.error('Something went wrong');
@@ -46,7 +46,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
 	const onCopy = (id: string) => {
 		navigator.clipboard.writeText(id);
-		toast.success('news ID copied to clipboard.');
+		toast.success('event ID copied to clipboard.');
 	};
 
 	return (
@@ -82,7 +82,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 					<DropdownMenuItem
 						onClick={() =>
 							router.push(
-								`/${params.storeId}/news/${data.id}`
+								`/${params.storeId}/event/${data.id}`
 							)
 						}
 					>

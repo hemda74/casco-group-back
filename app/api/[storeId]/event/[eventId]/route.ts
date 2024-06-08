@@ -5,39 +5,39 @@ import prismadb from '@/lib/prismadb';
 
 export async function GET(
 	req: Request,
-	{ params }: { params: { newsId: string } }
+	{ params }: { params: { eventId: string } }
 ) {
 	try {
-		if (!params.newsId) {
-			return new NextResponse('news id is required', {
+		if (!params.eventId) {
+			return new NextResponse('event id is required', {
 				status: 400,
 			});
 		}
 
-		const news = await prismadb.news.findUnique({
+		const event = await prismadb.event.findUnique({
 			where: {
-				id: params.newsId,
+				id: params.eventId,
 			},
 			include: {
 				images: true,
-				paragraph_news: true,
-				paragraph_news_ar: true,
+				paragraph_event: true,
+				paragraph_event_ar: true,
 				category: true,
 
 				// color: true,
 			},
 		});
 
-		return NextResponse.json(news);
+		return NextResponse.json(event);
 	} catch (error) {
-		console.log('[news_GET]', error);
+		console.log('[event_GET]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { newsId: string; storeId: string } }
+	{ params }: { params: { eventId: string; storeId: string } }
 ) {
 	try {
 		const { userId } = auth();
@@ -48,8 +48,8 @@ export async function DELETE(
 			});
 		}
 
-		if (!params.newsId) {
-			return new NextResponse('news id is required', {
+		if (!params.eventId) {
+			return new NextResponse('event id is required', {
 				status: 400,
 			});
 		}
@@ -67,22 +67,22 @@ export async function DELETE(
 			});
 		}
 
-		const news = await prismadb.news.delete({
+		const event = await prismadb.event.delete({
 			where: {
-				id: params.newsId,
+				id: params.eventId,
 			},
 		});
 
-		return NextResponse.json(news);
+		return NextResponse.json(event);
 	} catch (error) {
-		console.log('[news_DELETE]', error);
+		console.log('[event_DELETE]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { newsId: string; storeId: string } }
+	{ params }: { params: { eventId: string; storeId: string } }
 ) {
 	try {
 		const { userId } = auth();
@@ -94,8 +94,8 @@ export async function PATCH(
 			title_ar,
 			images,
 			categoryId,
-			paragraph_news,
-			paragraph_news_ar,
+			paragraph_event,
+			paragraph_event_ar,
 		} = body;
 
 		if (!userId) {
@@ -118,14 +118,17 @@ export async function PATCH(
 				status: 400,
 			});
 		}
-		if (!paragraph_news || !paragraph_news.length) {
-			return new NextResponse('paragraph_news are required', {
-				status: 400,
-			});
-		}
-		if (!paragraph_news_ar || !paragraph_news_ar.length) {
+		if (!paragraph_event || !paragraph_event.length) {
 			return new NextResponse(
-				'paragraph_news in arabic are required',
+				'paragraph_event are required',
+				{
+					status: 400,
+				}
+			);
+		}
+		if (!paragraph_event_ar || !paragraph_event_ar.length) {
+			return new NextResponse(
+				'paragraph_event in arabic are required',
 				{
 					status: 400,
 				}
@@ -150,9 +153,9 @@ export async function PATCH(
 			});
 		}
 
-		await prismadb.news.update({
+		await prismadb.event.update({
 			where: {
-				id: params.newsId,
+				id: params.eventId,
 			},
 			data: {
 				title,
@@ -161,18 +164,18 @@ export async function PATCH(
 				images: {
 					deleteMany: {},
 				},
-				paragraph_news: {
+				paragraph_event: {
 					deleteMany: {},
 				},
-				paragraph_news_ar: {
+				paragraph_event_ar: {
 					deleteMany: {},
 				},
 			},
 		});
 
-		const news = await prismadb.news.update({
+		const event = await prismadb.event.update({
 			where: {
-				id: params.newsId,
+				id: params.eventId,
 			},
 			data: {
 				images: {
@@ -186,26 +189,26 @@ export async function PATCH(
 						],
 					},
 				},
-				paragraph_news: {
+				paragraph_event: {
 					createMany: {
 						data: [
-							...paragraph_news.map(
-								(paragraph_news: {
+							...paragraph_event.map(
+								(paragraph_event: {
 									text: string;
 								}) =>
-									paragraph_news
+									paragraph_event
 							),
 						],
 					},
 				},
-				paragraph_news_ar: {
+				paragraph_event_ar: {
 					createMany: {
 						data: [
-							...paragraph_news_ar.map(
-								(paragraph_news_ar: {
+							...paragraph_event_ar.map(
+								(paragraph_event_ar: {
 									text: string;
 								}) =>
-									paragraph_news_ar
+									paragraph_event_ar
 							),
 						],
 					},
@@ -213,9 +216,9 @@ export async function PATCH(
 			},
 		});
 
-		return NextResponse.json(news);
+		return NextResponse.json(event);
 	} catch (error) {
-		console.log('[news_PATCH]', error);
+		console.log('[event_PATCH]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }

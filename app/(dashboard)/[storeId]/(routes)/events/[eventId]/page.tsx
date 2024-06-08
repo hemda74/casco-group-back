@@ -1,20 +1,20 @@
 import prismadb from '@/lib/prismadb';
 
-import { NewsForm } from './components/news-form';
+import { EventForm } from './components/event-form';
 
 const ProductPage = async ({
 	params,
 }: {
-	params: { newsId: string; storeId: string };
+	params: { eventId: string; storeId: string };
 }) => {
-	const News = await prismadb.news.findUnique({
+	const event = await prismadb.event.findUnique({
 		where: {
-			id: params.newsId,
+			id: params.eventId,
 		},
 		include: {
 			images: true,
-			paragraph_news: true,
-			paragraph_news_ar: true
+			paragraph_event: true,
+			paragraph_event_ar: true
 		},
 	});
 
@@ -26,9 +26,9 @@ const ProductPage = async ({
 	return (
 		<div className="flex-row">
 			<div className="flex-1 space-x-4 p-8 pt-6">
-				<NewsForm
+				<EventForm
 					categories={categories}
-					initialData={News}
+					initialData={event}
 				/>
 			</div>
 		</div>

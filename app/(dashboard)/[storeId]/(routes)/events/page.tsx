@@ -7,27 +7,27 @@ import { ProductsClient } from './components/client';
 import { ProductColumn } from './components/columns';
 
 const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
-	const news = await prismadb.news.findMany({
+	const event = await prismadb.event.findMany({
 		where: {
 			storeId: params.storeId,
 		},
 		include: {
 			category: true,
-			paragraph_news: true,
-			paragraph_news_ar: true
+			paragraph_event: true,
+			paragraph_event_ar: true
 		},
 		orderBy: {
 			title: 'desc',
 		},
 	});
 
-	const formattedProducts: ProductColumn[] = news.map((item) => ({
+	const formattedProducts: ProductColumn[] = event.map((item) => ({
 		id: item.id,
 		title: item.title,
 		title_ar: item.title_ar,
 		category: item.category.name,
-		paragraph_news: item.paragraph_news.map(p => p.text),
-		paragraph_news_ar: item.paragraph_news_ar.map(p => p.text),
+		paragraph_event: item.paragraph_event.map(p => p.text),
+		paragraph_event_ar: item.paragraph_event_ar.map(p => p.text),
 
 	}));
 
