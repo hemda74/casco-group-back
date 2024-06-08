@@ -34,7 +34,7 @@ export default async function DashboardLayout({
 				<div className="col-start-1 col-end-3 border-r">
 					<Navbar />
 				</div>
-				<div className="col-start-3 col-end-10">
+				<div className="col-start-3 col-end-12">
 					{children}
 				</div>
 			</div>

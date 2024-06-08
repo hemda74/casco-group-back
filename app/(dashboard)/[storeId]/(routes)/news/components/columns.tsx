@@ -12,7 +12,7 @@ export interface ProductColumn {
 	category: string;
 	paragraph_news: string[];
 	paragraph_news_ar: string[];
-
+	createdAt: string;
 }
 
 export const columns: ColumnDef<ProductColumn>[] = [
@@ -27,19 +27,22 @@ export const columns: ColumnDef<ProductColumn>[] = [
 	{
 		id: 'paragraphs',
 		header: 'Paragraphs___________________________________',
-		cell: ({ row }) => row.original.paragraph_news.join('--------------------------- '),
+		cell: ({ row }) => row.original.paragraph_news.join('___________________________________'),
 	},
 	{
 		id: 'paragraphs',
 		header: 'Paragraphs___________________________________',
-		cell: ({ row }) => row.original.paragraph_news_ar.join('-------------------------------'),
+		cell: ({ row }) => row.original.paragraph_news_ar.join('___________________________________'),
 	},
 
 	{
 		accessorKey: 'category',
 		header: 'Category___________________________________',
 	},
-
+	{
+		accessorKey: 'createdAt',
+		header: 'Created_Date___________________________________',
+	},
 	{
 		id: 'actions',
 		cell: ({ row }) => <CellAction data={row.original} />,

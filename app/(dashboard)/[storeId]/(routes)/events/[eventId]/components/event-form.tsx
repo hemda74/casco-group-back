@@ -115,9 +115,9 @@ export const EventForm: React.FC<EventFormProps> = ({
 			data.paragraph_event = paragraph_event.map(text => ({ text }));
 			data.paragraph_event_ar = paragraph_event_ar.map(text => ({ text }));
 			if (initialData) {
-				await axios.patch(`/api/${params.storeId}/event/${params.eventId}`, data);
+				await axios.patch(`/api/${params.storeId}/events/${params.eventId}`, data);
 			} else {
-				await axios.post(`/api/${params.storeId}/event`, data);
+				await axios.post(`/api/${params.storeId}/events`, data);
 			}
 			router.refresh();
 			router.push(`/${params.storeId}/events`);
@@ -132,9 +132,9 @@ export const EventForm: React.FC<EventFormProps> = ({
 	const onDelete = async () => {
 		try {
 			setLoading(true);
-			await axios.delete(`/api/${params.storeId}/event/${params.eventId}`);
+			await axios.delete(`/api/${params.storeId}/events/${params.eventId}`);
 			router.refresh();
-			router.push(`/${params.storeId}/event`);
+			router.push(`/${params.storeId}/events`);
 			toast.success('event deleted.');
 		} catch (error: any) {
 			toast.error('Something went wrong.');

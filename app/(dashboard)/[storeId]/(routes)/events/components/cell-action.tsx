@@ -1,5 +1,4 @@
 'use client';
-
 import axios from 'axios';
 import { Copy, Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
@@ -32,7 +31,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 		try {
 			setLoading(true);
 			await axios.delete(
-				`/api/${params.storeId}/event/${data.id}`
+				`/api/${params.storeId}/events/${data.id}`
 			);
 			toast.success('event deleted.');
 			router.refresh();
@@ -82,7 +81,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 					<DropdownMenuItem
 						onClick={() =>
 							router.push(
-								`/${params.storeId}/event/${data.id}`
+								`/${params.storeId}/events/${data.id}`
 							)
 						}
 					>

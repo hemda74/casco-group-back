@@ -17,7 +17,7 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
 			paragraph_news_ar: true
 		},
 		orderBy: {
-			title: 'desc',
+			createdAt: 'desc',
 		},
 	});
 
@@ -28,6 +28,7 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
 		category: item.category.name,
 		paragraph_news: item.paragraph_news.map(p => p.text),
 		paragraph_news_ar: item.paragraph_news_ar.map(p => p.text),
+		createdAt: format(item.createdAt, 'MMMM do, yyyy'),
 
 	}));
 
