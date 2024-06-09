@@ -43,6 +43,11 @@ export function MainNav({
 			active: pathname === `/${params.storeId}/news-categories`,
 		},
 		{
+			href: `/${params.storeId}/teams`,
+			label: 'Teams',
+			active: pathname === `/${params.storeId}/teams`,
+		},
+		{
 			href: `/${params.storeId}/courses`,
 			label: 'Courses',
 			active: pathname === `/${params.storeId}/courses`,
