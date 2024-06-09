@@ -35,8 +35,8 @@ const formSchema = z.object({
 	title: z.string().min(1),
 	title_ar: z.string().min(1),
 	categoryId: z.string().min(1),
-	paragraph_news: z.array(z.string()),
-	paragraph_news_ar: z.array(z.string()),
+	paragraph_news: z.array(z.any()),
+	paragraph_news_ar: z.array(z.any()),
 	date_of_news: z.string().min(1),
 	date_of_news_ar: z.string().min(1)
 });

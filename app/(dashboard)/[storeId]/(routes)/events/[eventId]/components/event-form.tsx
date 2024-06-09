@@ -35,8 +35,8 @@ const formSchema = z.object({
 	title: z.string().min(1),
 	title_ar: z.string().min(1),
 	categoryId: z.string().min(1),
-	paragraph_event: z.array(z.string()),
-	paragraph_event_ar: z.array(z.string()),
+	paragraph_event: z.array(z.any()),
+	paragraph_event_ar: z.array(z.any()),
 	date_of_event: z.string().min(1),
 	date_of_event_ar: z.string().min(1)
 });
@@ -84,8 +84,8 @@ export const EventForm: React.FC<EventFormProps> = ({
 			images: [],
 			date_of_event: '',
 			date_of_event_ar: '',
-			paragraph_event: initialData.paragraph_event.map(p => ({ text: p.text })),
-			paragraph_event_ar: initialData.paragraph_event_ar.map(p => ({ text: p.text })),
+			paragraph_event: [],
+			paragraph_event_ar: [],
 		} : {
 			title: '',
 			title_ar: '',
@@ -118,8 +118,8 @@ export const EventForm: React.FC<EventFormProps> = ({
 	const onSubmit = async (data: EventFormValues) => {
 		try {
 			setLoading(true);
-			data.paragraph_event = paragraph_event.map(text => ({ text }));
-			data.paragraph_event_ar = paragraph_event_ar.map(text => ({ text }));
+			data.paragraph_event = paragraph_event.map((text) => ({ text }));
+			data.paragraph_event_ar = paragraph_event_ar.map((text) => ({ text }));
 			if (initialData) {
 				await axios.patch(`/api/${params.storeId}/events/${params.eventId}`, data);
 			} else {
