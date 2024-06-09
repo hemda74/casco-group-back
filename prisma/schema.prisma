@@ -107,7 +107,7 @@ model Team {
  billboardId      String
  name             String
  name_ar          String
- image            Image4[]
+ images            Image4[]
  billboard        Billboard @relation(fields: [billboardId],references: [id])
  teammember       TeamMember[]  @relation("TeamToTeamMember")
  @@index([storeId])
