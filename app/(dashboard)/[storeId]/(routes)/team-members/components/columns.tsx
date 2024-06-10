@@ -22,47 +22,47 @@ export interface CategoryColumn {
 
 export const columns: ColumnDef<CategoryColumn>[] = [
 	{
-		accessorKey: 'name___________________________________',
+		accessorKey: 'name',
 		header: 'Member_Name___________________________________',
 	},
 	{
-		accessorKey: 'name_ar___________________________________',
+		accessorKey: 'name_ar',
 		header: 'Member_Arabic_Name___________________________________',
 	},
 	{
-		accessorKey: 'title___________________________________',
+		accessorKey: 'title',
 		header: 'Title_in_English___________________________________',
 	},
 	{
-		accessorKey: 'title_ar___________________________________',
+		accessorKey: 'title_ar',
 		header: 'Title_Arabic_Name___________________________________',
 	},
 	{
-		accessorKey: 'brief_1___________________________________',
+		accessorKey: 'brief_1',
 		header: 'First_Brief___________________________________',
 	},
 	{
-		accessorKey: 'brief_1_ar___________________________________',
+		accessorKey: 'brief_1_ar',
 		header: 'First_Brief_in_Arabic___________________________________',
 	},
 	{
-		accessorKey: 'brief_2___________________________________',
+		accessorKey: 'brief_2',
 		header: 'Second_Brief___________________________________',
 	},
 	{
-		accessorKey: 'brief_2_ar___________________________________',
+		accessorKey: 'brief_2_ar',
 		header: 'Second_Brief_in_Arabic___________________________________',
 	}, {
-		accessorKey: 'brief_3___________________________________',
+		accessorKey: 'brief_3',
 		header: 'Third_Brief___________________________________',
 	},
 	{
-		accessorKey: 'brief_3_ar___________________________________',
+		accessorKey: 'brief_3_ar',
 		header: 'Third_Brief_in_Arabic___________________________________',
 	},
 	{
-		accessorKey: 'Team___________________________________',
-		header: 'team___________________________________',
+		accessorKey: 'team',
+		header: 'Team___________________________________',
 	},
 	{
 		id: 'actions___________________________________',

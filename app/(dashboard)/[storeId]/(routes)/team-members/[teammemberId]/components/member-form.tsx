@@ -72,11 +72,11 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 
-	const title = initialData ? 'Edit course' : 'Create course';
-	const description = initialData ? 'Edit a course.' : 'Add a new Course';
+	const title = initialData ? 'Edit Member' : 'Add Member';
+	const description = initialData ? 'Edit a Member.' : 'Add a new Member';
 	const toastMessage = initialData
-		? 'Course updated.'
-		: 'Course created.';
+		? 'Member updated.'
+		: 'Member created.';
 	const action = initialData ? 'Save changes' : 'Create';
 
 	const form = useForm<CourseFormValues>({

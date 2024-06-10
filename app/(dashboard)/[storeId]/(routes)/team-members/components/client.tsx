@@ -23,7 +23,7 @@ export const ProductsClient: React.FC<ProductsClientProps> = ({ data }) => {
 		<>
 			<div className="flex items-center justify-between">
 				<Heading
-					title={`teammembers (${data.length})`}
+					title={`Team Members (${data.length})`}
 					description="Manage teammembers"
 				/>
 				<Button
@@ -45,11 +45,11 @@ export const ProductsClient: React.FC<ProductsClientProps> = ({ data }) => {
 			/>
 			<Heading
 				title="API"
-				description="API Calls for teammembers"
+				description="API Calls for team members"
 			/>
 			<Separator />
 			<ApiList
-				entityName="teammembers"
+				entityName="team-members"
 				entityIdName="teammemberId"
 			/>
 		</>
