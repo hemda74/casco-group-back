@@ -1,4 +1,5 @@
 'use client';
+
 import * as z from 'zod';
 import axios from 'axios';
 import { useState } from 'react';
@@ -6,9 +7,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
-import { TeamMember, Team, Image } from '@prisma/client';
+import { Team, Image7, TeamMember } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
-import ImageUpload from '@/components/ui/image-upload';
+
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,6 +19,7 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
+	Textarea,
 } from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
 import { Heading } from '@/components/ui/heading';
@@ -29,34 +31,38 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
+import ImageUpload from '@/components/ui/image-upload';
+import { Checkbox } from '@/components/ui/checkbox';
+import { title } from 'process';
 
 const formSchema = z.object({
-	images: z.object({ url: z.string() }).array(),
-	name: z.string().min(2),
-	name_ar: z.string().min(2),
-	title: z.string().min(2),
-	title_ar: z.string().min(2),
+	name: z.string().min(1),
+	name_ar: z.string().min(1),
 	teamId: z.string().min(1),
+	title: z.string().min(1),
+	title_ar: z.string().min(1),
 	brief_1: z.string().min(1),
-	brief_2: z.string().min(1),
-	brief_3: z.string().min(1),
 	brief_1_ar: z.string().min(1),
 	brief_2_ar: z.string().min(1),
+	brief_2: z.string().min(1),
 	brief_3_ar: z.string().min(1),
+	brief_3: z.string().min(1),
+	images: z.object({ url: z.string() }).array(),
+
 });
 
-type CategoryFormValues = z.infer<typeof formSchema>;
+type CourseFormValues = z.infer<typeof formSchema>;
 
-interface CategoryFormProps {
+interface CourseFormProps {
 	initialData:
 	| (TeamMember & {
-		images: Image[];
+		images: Image7[];
 	})
 	| null;
 	teams: Team[];
 }
 
-export const CategoryForm: React.FC<CategoryFormProps> = ({
+export const CourseForm: React.FC<CourseFormProps> = ({
 	initialData,
 	teams,
 }) => {
@@ -66,16 +72,14 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 
-	const title = initialData ? 'Edit team' : 'Create team';
-	const description = initialData
-		? 'Edit a team.'
-		: 'Add a new team';
+	const title = initialData ? 'Edit course' : 'Create course';
+	const description = initialData ? 'Edit a course.' : 'Add a new Course';
 	const toastMessage = initialData
-		? 'team updated.'
-		: 'team created.';
+		? 'Course updated.'
+		: 'Course created.';
 	const action = initialData ? 'Save changes' : 'Create';
 
-	const form = useForm<CategoryFormValues>({
+	const form = useForm<CourseFormValues>({
 		resolver: zodResolver(formSchema),
 		defaultValues: initialData || {
 			name: '',
@@ -92,39 +96,31 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 			images: [],
 		},
 	});
-	const onSubmit = async (data: CategoryFormValues) => {
+
+	const onSubmit = async (data: CourseFormValues) => {
 		try {
 			setLoading(true);
 			if (initialData) {
-				await axios.patch(`/api/${params.storeId}/team-members/${params.teammemberId}`, data);
+				await axios.patch(
+					`/api/${params.storeId}/team-members/${params.teammemberId}`,
+					data
+				);
 			} else {
-				await axios.post(`/api/${params.storeId}/team-members`, data); // Ensure there's a POST handler
+				await axios.post(
+					`/api/${params.storeId}/team-members`,
+					data
+				);
 			}
 			router.refresh();
 			router.push(`/${params.storeId}/team-members`);
 			toast.success(toastMessage);
 		} catch (error: any) {
-			toast.error('Something went wrong.');
+			toast.error('Something went wrong.', error);
+			console.log(error);
 		} finally {
 			setLoading(false);
 		}
 	};
-
-	const onDelete = async () => {
-		try {
-			setLoading(true);
-			await axios.delete(`/api/${params.storeId}/team-members/${params.teammemberId}`);
-			router.refresh();
-			router.push(`/${params.storeId}/team-members`);
-			toast.success('Team member deleted.');
-		} catch (error: any) {
-			toast.error('Make sure you removed all products using this team first.');
-		} finally {
-			setLoading(false);
-			setOpen(false);
-		}
-	};
-
 
 	const onDelete = async () => {
 		try {
@@ -134,11 +130,9 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 			);
 			router.refresh();
 			router.push(`/${params.storeId}/team-members`);
-			toast.success('team deleted.');
+			toast.success('Course deleted.');
 		} catch (error: any) {
-			toast.error(
-				'Make sure you removed all products using this team first.'
-			);
+			toast.error('Something went wrong.');
 		} finally {
 			setLoading(false);
 			setOpen(false);
@@ -180,19 +174,45 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 						name="images"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Images</FormLabel>
+								<FormLabel>
+									Images
+								</FormLabel>
 								<FormControl>
 									<ImageUpload
-										value={field.value.map((image) => image.url)}
-										disabled={loading}
-										onChange={(url) =>
-											field.onChange([...field.value, { url }])
+										value={field.value.map(
+											(
+												image
+											) =>
+												image.url
+										)}
+										disabled={
+											loading
 										}
-										onRemove={(url) =>
+										onChange={(
+											url
+										) =>
 											field.onChange(
-												field.value.filter(
-													(current) => current.url !== url
-												)
+												[
+													...field.value,
+													{
+														url,
+													},
+												]
+											)
+										}
+										onRemove={(
+											url
+										) =>
+											field.onChange(
+												[
+													...field.value.filter(
+														(
+															current
+														) =>
+															current.url !==
+															url
+													),
+												]
 											)
 										}
 									/>
@@ -201,14 +221,14 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 							</FormItem>
 						)}
 					/>
-					<div className="md:grid md:grid-cols-3 gap-8">
+					<div className="md:grid md:grid-cols-1 gap-8">
 						<FormField
 							control={form.control}
 							name="teamId"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										team
+										Member Team
 									</FormLabel>
 									<Select
 										disabled={
@@ -230,25 +250,25 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 													defaultValue={
 														field.value
 													}
-													placeholder="Select a Team"
+													placeholder="Select a category"
 												/>
 											</SelectTrigger>
 										</FormControl>
 										<SelectContent>
 											{teams.map(
 												(
-													team
+													category
 												) => (
 													<SelectItem
 														key={
-															team.id
+															category.id
 														}
 														value={
-															team.id
+															category.id
 														}
 													>
 														{
-															team.name
+															category.name
 														}
 													</SelectItem>
 												)
@@ -268,11 +288,11 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 										Name
 									</FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={
 												loading
 											}
-											placeholder="Member name"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -290,11 +310,11 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 										Name
 									</FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={
 												loading
 											}
-											placeholder="Member name"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -308,14 +328,14 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Member Title
+										Title
 									</FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={
 												loading
 											}
-											placeholder="Member Title"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -329,14 +349,16 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Member Title in Arabic
+										Title
+										in
+										Arabic
 									</FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={
 												loading
 											}
-											placeholder="Member Title in Arabic"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -350,14 +372,14 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										First Brief
+										First Pargraph
 									</FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={
 												loading
 											}
-											placeholder="team name"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -371,14 +393,14 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										First Brief in Arabic
+										First Pargraph In Arabic
 									</FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={
 												loading
 											}
-											placeholder="First Brief in Arabic"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -392,14 +414,14 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Second Brief
+										Second Pargraph
 									</FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={
 												loading
 											}
-											placeholder="Second Brief"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -413,35 +435,34 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Second Brief in Arabic
+										Second Pargraph In Arabic
 									</FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={
 												loading
 											}
-											placeholder="Second Brief in Arabic"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
 									<FormMessage />
 								</FormItem>
 							)}
-						/>
-						<FormField
+						/>	<FormField
 							control={form.control}
 							name="brief_3"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Third Brief
+										Third Pargraph
 									</FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={
 												loading
 											}
-											placeholder="Third Brief"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>
@@ -455,14 +476,14 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Third Brief in Arabic
+										Third Pargraph In Arabic
 									</FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={
 												loading
 											}
-											placeholder="Third Brief in Arabic"
+											placeholder="Enter a Value"
 											{...field}
 										/>
 									</FormControl>

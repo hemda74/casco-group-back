@@ -11,11 +11,11 @@ import { ApiList } from '@/components/ui/api-list';
 
 import { CategoryColumn, columns } from './columns';
 
-interface CategoryColumnsClientProps {
+interface ProductsClientProps {
 	data: CategoryColumn[];
 }
 
-export const CategoriesClient: React.FC<CategoryColumnsClientProps> = ({ data }) => {
+export const ProductsClient: React.FC<ProductsClientProps> = ({ data }) => {
 	const params = useParams();
 	const router = useRouter();
 
@@ -23,8 +23,8 @@ export const CategoriesClient: React.FC<CategoryColumnsClientProps> = ({ data })
 		<>
 			<div className="flex items-center justify-between">
 				<Heading
-					title={`Team Members (${data.length})`}
-					description="Manage Team-Members"
+					title={`teammembers (${data.length})`}
+					description="Manage teammembers"
 				/>
 				<Button
 					onClick={() =>
@@ -45,12 +45,12 @@ export const CategoriesClient: React.FC<CategoryColumnsClientProps> = ({ data })
 			/>
 			<Heading
 				title="API"
-				description="API Calls for Team-Members"
+				description="API Calls for teammembers"
 			/>
 			<Separator />
 			<ApiList
-				entityName="Team-Members"
-				entityIdName="teamId"
+				entityName="teammembers"
+				entityIdName="teammemberId"
 			/>
 		</>
 	);

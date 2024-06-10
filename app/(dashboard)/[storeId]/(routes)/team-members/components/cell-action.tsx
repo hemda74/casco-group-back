@@ -34,7 +34,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 			await axios.delete(
 				`/api/${params.storeId}/team-members/${data.id}`
 			);
-			toast.success('Team deleted.');
+			toast.success('Course deleted.');
 			router.refresh();
 		} catch (error) {
 			toast.error('Something went wrong');
@@ -46,7 +46,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
 	const onCopy = (id: string) => {
 		navigator.clipboard.writeText(id);
-		toast.success('Team ID copied to clipboard.');
+		toast.success('Member ID copied to clipboard.');
 	};
 
 	return (

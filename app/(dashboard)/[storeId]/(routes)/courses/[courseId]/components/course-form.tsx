@@ -178,9 +178,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 			router.push(`/${params.storeId}/courses`);
 			toast.success(toastMessage);
 		} catch (error: any) {
-			toast.error('Something went wrong.');
-			console.log(error);
-			console.log('dddddd');
+			toast.error('Something went wrong.', error);
 		} finally {
 			setLoading(false);
 		}
@@ -285,7 +283,65 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 							</FormItem>
 						)}
 					/>
-					<div className="md:grid md:grid-cols-3 gap-8">
+					<div className="md:grid md:grid-cols-1 gap-8">
+						<FormField
+							control={form.control}
+							name="categoryId"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Course
+										Category
+									</FormLabel>
+									<Select
+										disabled={
+											loading
+										}
+										onValueChange={
+											field.onChange
+										}
+										value={
+											field.value
+										}
+										defaultValue={
+											field.value
+										}
+									>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue
+													defaultValue={
+														field.value
+													}
+													placeholder="Select a category"
+												/>
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											{categories.map(
+												(
+													category
+												) => (
+													<SelectItem
+														key={
+															category.id
+														}
+														value={
+															category.id
+														}
+													>
+														{
+															category.name
+														}
+													</SelectItem>
+												)
+											)}
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 						<FormField
 							control={form.control}
 							name="name"
@@ -1033,64 +1089,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 								</FormItem>
 							)}
 						/>
-						<FormField
-							control={form.control}
-							name="categoryId"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Category
-									</FormLabel>
-									<Select
-										disabled={
-											loading
-										}
-										onValueChange={
-											field.onChange
-										}
-										value={
-											field.value
-										}
-										defaultValue={
-											field.value
-										}
-									>
-										<FormControl>
-											<SelectTrigger>
-												<SelectValue
-													defaultValue={
-														field.value
-													}
-													placeholder="Select a category"
-												/>
-											</SelectTrigger>
-										</FormControl>
-										<SelectContent>
-											{categories.map(
-												(
-													category
-												) => (
-													<SelectItem
-														key={
-															category.id
-														}
-														value={
-															category.id
-														}
-													>
-														{
-															category.name
-														}
-													</SelectItem>
-												)
-											)}
-										</SelectContent>
-									</Select>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+
 					</div>
 					<Button
 						disabled={loading}

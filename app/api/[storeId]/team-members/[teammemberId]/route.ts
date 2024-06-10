@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
+
 import prismadb from '@/lib/prismadb';
 
 export async function GET(
@@ -8,19 +9,24 @@ export async function GET(
 ) {
 	try {
 		if (!params.teammemberId) {
-			return new NextResponse('Team member ID is required', {
+			return new NextResponse('course id is required', {
 				status: 400,
 			});
 		}
 
-		const teamMember = await prismadb.teamMember.findUnique({
-			where: { id: params.teammemberId },
-			include: { team: true },
+		const course = await prismadb.teamMember.findUnique({
+			where: {
+				id: params.teammemberId,
+			},
+			include: {
+				images: true,
+				team: true,
+			},
 		});
 
-		return NextResponse.json(teamMember);
+		return NextResponse.json(course);
 	} catch (error) {
-		console.error('[GET_TEAM_MEMBER]', error);
+		console.log('[course_GET]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
@@ -39,13 +45,16 @@ export async function DELETE(
 		}
 
 		if (!params.teammemberId) {
-			return new NextResponse('Team member ID is required', {
+			return new NextResponse('course id is required', {
 				status: 400,
 			});
 		}
 
 		const storeByUserId = await prismadb.store.findFirst({
-			where: { id: params.storeId, userId },
+			where: {
+				id: params.storeId,
+				userId,
+			},
 		});
 
 		if (!storeByUserId) {
@@ -54,13 +63,15 @@ export async function DELETE(
 			});
 		}
 
-		const teamMember = await prismadb.teamMember.delete({
-			where: { id: params.teammemberId },
+		const course = await prismadb.teamMember.delete({
+			where: {
+				id: params.teammemberId,
+			},
 		});
 
-		return NextResponse.json(teamMember);
+		return NextResponse.json(course);
 	} catch (error) {
-		console.error('[DELETE_TEAM_MEMBER]', error);
+		console.log('[course_DELETE]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
@@ -71,11 +82,14 @@ export async function PATCH(
 ) {
 	try {
 		const { userId } = auth();
+
 		const body = await req.json();
 
 		const {
 			name,
 			name_ar,
+			teamId,
+			images,
 			title,
 			title_ar,
 			brief_1,
@@ -84,7 +98,6 @@ export async function PATCH(
 			brief_2_ar,
 			brief_3,
 			brief_3_ar,
-			teamId,
 		} = body;
 
 		if (!userId) {
@@ -92,27 +105,72 @@ export async function PATCH(
 				status: 403,
 			});
 		}
-
-		if (
-			!teamId ||
-			!name ||
-			!name_ar ||
-			!title ||
-			!title_ar ||
-			!brief_1 ||
-			!brief_1_ar ||
-			!brief_2 ||
-			!brief_2_ar ||
-			!brief_3 ||
-			!brief_3_ar
-		) {
-			return new NextResponse('All fields are required', {
+		if (!name) {
+			return new NextResponse('Name is required', {
+				status: 400,
+			});
+		}
+		if (!name_ar) {
+			return new NextResponse(' Arabic Name is required', {
+				status: 400,
+			});
+		}
+		if (!title_ar) {
+			return new NextResponse(' this field is required', {
+				status: 400,
+			});
+		}
+		if (!title) {
+			return new NextResponse(' this field is required', {
+				status: 400,
+			});
+		}
+		if (!brief_1) {
+			return new NextResponse(' this field is required', {
+				status: 400,
+			});
+		}
+		if (!brief_1_ar) {
+			return new NextResponse(' this field is required', {
+				status: 400,
+			});
+		}
+		if (!brief_2) {
+			return new NextResponse(' this field is required', {
+				status: 400,
+			});
+		}
+		if (!brief_2_ar) {
+			return new NextResponse(' this field is required', {
+				status: 400,
+			});
+		}
+		if (!brief_3) {
+			return new NextResponse(' this field is required', {
+				status: 400,
+			});
+		}
+		if (!brief_3_ar) {
+			return new NextResponse(' this field is required', {
+				status: 400,
+			});
+		}
+		if (!images || !images.length) {
+			return new NextResponse('Images are required', {
+				status: 400,
+			});
+		}
+		if (!teamId) {
+			return new NextResponse('team id is required', {
 				status: 400,
 			});
 		}
 
 		const storeByUserId = await prismadb.store.findFirst({
-			where: { id: params.storeId, userId },
+			where: {
+				id: params.storeId,
+				userId,
+			},
 		});
 
 		if (!storeByUserId) {
@@ -121,8 +179,10 @@ export async function PATCH(
 			});
 		}
 
-		const teamMember = await prismadb.teamMember.update({
-			where: { id: params.teammemberId },
+		await prismadb.teamMember.update({
+			where: {
+				id: params.teammemberId,
+			},
 			data: {
 				name,
 				name_ar,
@@ -135,12 +195,34 @@ export async function PATCH(
 				brief_3,
 				brief_3_ar,
 				teamId,
+				images: {
+					deleteMany: {},
+				},
 			},
 		});
 
-		return NextResponse.json(teamMember);
+		const course = await prismadb.teamMember.update({
+			where: {
+				id: params.teammemberId,
+			},
+			data: {
+				images: {
+					createMany: {
+						data: [
+							...images.map(
+								(image: {
+									url: string;
+								}) => image
+							),
+						],
+					},
+				},
+			},
+		});
+
+		return NextResponse.json(course);
 	} catch (error) {
-		console.error('[PATCH_TEAM_MEMBER]', error);
+		console.log('[course_PATCH]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
