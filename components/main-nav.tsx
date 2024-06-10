@@ -69,6 +69,11 @@ export function MainNav({
 			active: pathname === `/${params.storeId}/events`,
 		},
 		{
+			href: `/${params.storeId}/team-members`,
+			label: 'Team Members',
+			active: pathname === `/${params.storeId}/team-members`,
+		},
+		{
 			href: `/${params.storeId}/settings`,
 			label: 'Settings',
 			active: pathname === `/${params.storeId}/settings`,

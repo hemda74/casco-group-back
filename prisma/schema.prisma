@@ -151,12 +151,15 @@ model TeamMember{
     store                   Store       @relation("StoreToTeamMember", fields: [storeId], references: [id])
     name                    String
     name_ar                 String
+    title                   String
+    title_ar                String
     brief_1                 String 
     brief_2                 String 
     brief_3                 String 
     brief_1_ar              String 
     brief_2_ar              String 
     brief_3_ar              String 
+    images                        Image[]
     @@index([storeId])
     @@index([teamId])
 }
@@ -230,15 +233,7 @@ model CaseStudy {
   @@index([storeId])
   @@index([industryId])
 }
-model Image {
-  id              String   @id @default(uuid())
-  courseId        String
-  course          Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  url             String // URL of the image
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  @@index([courseId])
-}
+
 model Expert{
   id                     String    @id @default(uuid())
   storeId                String // Foreign Key to Store
@@ -259,6 +254,18 @@ model Expert{
   @@index([industryId])
  }
 
+model Image {
+  id              String   @id @default(uuid())
+  courseId        String
+  teammemberId    String
+  course          Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  url             String // URL of the image
+  teammember                  TeamMember  @relation(fields: [teammemberId], references: [id], onDelete: Cascade)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  @@index([courseId])
+   @@index([teammemberId])
+}
 model Image2 {
   id                    String   @id @default(uuid())
   expertId              String
@@ -294,6 +301,15 @@ model Image5 {
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
   @@index([newsId])
+}
+model Image6 {
+  id                    String   @id @default(uuid())
+  eventId                String
+  event                 Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  url                   String // URL of the image
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  @@index([eventId])
 }
 model paragrph_news {
   id                    String   @id @default(uuid())
@@ -341,15 +357,7 @@ model News {
     @@index([storeId])
     @@index([categoryId])
 }
-model Image6 {
-  id                    String   @id @default(uuid())
-  eventId                String
-  event                 Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  url                   String // URL of the image
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
-  @@index([eventId])
-}
+
 model paragrph_event {
   id                    String   @id @default(uuid())
   eventId                String
