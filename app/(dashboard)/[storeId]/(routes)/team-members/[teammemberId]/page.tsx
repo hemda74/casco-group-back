@@ -5,18 +5,19 @@ import { CategoryForm } from './components/team-form';
 const ProductPage = async ({
 	params,
 }: {
-	params: { teamId: string; storeId: string };
+	params: { teammemberId: string; storeId: string };
 }) => {
-	const team = await prismadb.team.findUnique({
+	const team = await prismadb.teamMember.findUnique({
 		where: {
-			id: params.teamId,
+			id: params.teammemberId,
 		},
 		include: {
 			images: true,
+			team: true
 		},
 	});
 
-	const billboards = await prismadb.billboard.findMany({
+	const teams = await prismadb.team.findMany({
 		where: {
 			storeId: params.storeId,
 		},
@@ -25,7 +26,7 @@ const ProductPage = async ({
 		<div className="flex-row">
 			<div className="flex-1 space-x-4 p-8 pt-6">
 				<CategoryForm
-					billboards={billboards}
+					teams={teams}
 					initialData={team}
 				/>
 			</div>

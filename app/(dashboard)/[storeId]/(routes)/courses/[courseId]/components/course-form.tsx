@@ -81,8 +81,6 @@ interface CourseFormProps {
 	})
 	| null;
 	categories: CoursesCategory[];
-
-	// sizes: Size[];
 }
 
 export const CourseForm: React.FC<CourseFormProps> = ({
@@ -175,7 +173,6 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 					`/api/${params.storeId}/courses`,
 					data
 				);
-				console.log('dddddd');
 			}
 			router.refresh();
 			router.push(`/${params.storeId}/courses`);
