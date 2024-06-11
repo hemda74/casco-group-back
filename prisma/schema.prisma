@@ -19,13 +19,14 @@ model Store {
   Services                Service[]                       @relation("StoreToService")
   Industries              Industry[]                      @relation("StoreToIndustry")
   news                    News[]                          @relation("StoreToNews")
-  events                    Event[]                          @relation("StoreToEvent")
+  events                  Event[]                         @relation("StoreToEvent")
   casestudies             CaseStudy[]                     @relation("StoreToCaseStudy")
   expert                  Expert[]                        @relation("StoreToExpert")
   team                    Team[]                          @relation("StoreToTeam")
   teammember              TeamMember[]                    @relation("StoreToTeamMember")
-  industrydetailes         IndustryDetailes[]             @relation("StoreToIndustryDetailes")
-  servicedesc              ServiceDesc[]                  @relation("ServiceDesc")
+  industrydetailes        IndustryDetailes[]              @relation("StoreToIndustryDetailes")
+  servicedesc             ServiceDesc[]                   @relation("ServiceDesc")
+  servicedescar           ServiceDescAr[]                 @relation("ServiceDescAr")
   createdAt               DateTime                        @default(now())
   updatedAt               DateTime                        @updatedAt
 }
@@ -171,13 +172,34 @@ model Service {
    categoryId               String  // Foreign Key to Category
    expertId                 String //expert
    category                 ServicesCategory    @relation("CategoryToService", fields: [categoryId], references: [id])
-   expert                   Expert[]    @relation("ExpertToService")
+  experts          Expert[]          @relation("ExpertToService")
    name                     String 
    name_ar                  String 
    servicedesc              ServiceDesc[] @relation("ServiceToServiceDesc")
+   servicedescar              ServiceDescAr[] @relation("ServiceToServiceDescAr")
    @@index([storeId])
    @@index([categoryId])
 }
+model Expert{
+  id                     String    @id @default(uuid())
+  storeId                String // Foreign Key to Store
+  store                  Store     @relation("StoreToExpert", fields: [storeId], references: [id])
+  serviceId              String // Foreign Key to Service 
+  industryId             String // Foreign Key to Industry 
+  services        Service[]  @relation("ExpertToService")
+  idustry                Industry    @relation("ExpertToIndustry", fields: [industryId], references: [id])
+  name                   String
+  name_ar                String
+  bio                    String    
+  bio_ar                 String    
+  mail                   String
+  phone                  String
+  images                 Image2[]
+  @@index([storeId])
+  @@index([serviceId])
+  @@index([industryId])
+ }
+
 model ServiceDesc{
    id                       String              @id @default(uuid())
    storeId                  String   //Foreign Key to Store
@@ -187,6 +209,18 @@ model ServiceDesc{
    desc_1  String
    desc_2  String
    service                 Service    @relation("ServiceToServiceDesc", fields: [serviceId], references: [id])   
+   @@index([storeId])
+   @@index([serviceId])
+}
+model ServiceDescAr{
+   id                      String              @id @default(uuid())
+   storeId                 String   //Foreign Key to Store
+   store                   Store               @relation("ServiceDescAr", fields: [storeId], references: [id])
+   serviceId               String  // Foreign Key to service
+   title_ar                   String
+   desc_1_ar                  String
+   desc_2_ar                  String
+   service                 Service    @relation("ServiceToServiceDescAr", fields: [serviceId], references: [id])   
    @@index([storeId])
    @@index([serviceId])
 }
@@ -242,26 +276,6 @@ model CaseStudy {
   @@index([storeId])
   @@index([industryId])
 }
-model Expert{
-  id                     String    @id @default(uuid())
-  storeId                String // Foreign Key to Store
-  store                  Store     @relation("StoreToExpert", fields: [storeId], references: [id])
-  serviceId              String // Foreign Key to Service 
-  industryId             String // Foreign Key to Industry 
-  service                Service[]    @relation("ExpertToService")
-  idustry                Industry    @relation("ExpertToIndustry", fields: [industryId], references: [id])
-  name                   String
-  name_ar                String
-  bio                    String    
-  bio_ar                 String    
-  mail                   String
-  phone                  String
-  images                 Image2[]
-  @@index([storeId])
-  @@index([serviceId])
-  @@index([industryId])
- }
-
 model Image {
   id              String   @id @default(uuid())
   courseId        String

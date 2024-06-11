@@ -1,7 +1,26 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
-
 import prismadb from '@/lib/prismadb';
+
+// Define the expected request body type
+type ServiceRequestBody = {
+	name: string;
+	name_ar: string;
+	servicedesc: {
+		title: string;
+		desc_1: string;
+		desc_2: string;
+		store: { connect: { id: string } };
+	}[];
+	servicedescar: {
+		title_ar: string;
+		desc_1_ar: string;
+		desc_2_ar: string;
+		store: { connect: { id: string } };
+	}[];
+	categoryId: string;
+	expertIds: string[];
+};
 
 export async function POST(
 	req: Request,
@@ -10,10 +29,15 @@ export async function POST(
 	try {
 		const { userId } = auth();
 
-		const body = await req.json();
+		const body: ServiceRequestBody = await req.json();
 
 		const {
-			name
+			name,
+			name_ar,
+			servicedesc,
+			servicedescar,
+			categoryId,
+			expertIds,
 		} = body;
 
 		if (!userId) {
@@ -28,12 +52,7 @@ export async function POST(
 			});
 		}
 		if (!name_ar) {
-			return new NextResponse(' Arabic Name is required', {
-				status: 400,
-			});
-		}
-		if (!price) {
-			return new NextResponse('Price is required', {
+			return new NextResponse('Arabic Name is required', {
 				status: 400,
 			});
 		}
@@ -43,78 +62,6 @@ export async function POST(
 				status: 400,
 			});
 		}
-		if (!intro) {
-			return new NextResponse('intro is required', {
-				status: 400,
-			});
-		}
-		if (!intro_ar) {
-			return new NextResponse(
-				'introduction in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!duaration) {
-			return new NextResponse('duaration is required', {
-				status: 400,
-			});
-		}
-		if (!duration_ar) {
-			return new NextResponse(
-				'duaration in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!who_sh_att) {
-			return new NextResponse(
-				'who should attend is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!who_sh_att_ar) {
-			return new NextResponse(
-				'who should attend in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!c_obje) {
-			return new NextResponse(
-				'service objective is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!c_obje_ar) {
-			return new NextResponse(
-				'service objective in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!c_content) {
-			return new NextResponse('service conetent is required', {
-				status: 400,
-			});
-		}
-		if (!c_content_ar) {
-			return new NextResponse(
-				'service conetent in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-	
 
 		const storeByUserId = await prismadb.store.findFirst({
 			where: {
@@ -129,57 +76,48 @@ export async function POST(
 			});
 		}
 
-		const product = await prismadb.service.create({
+		const service = await prismadb.service.create({
 			data: {
 				storeId: params.storeId,
-				images: {
-					createMany: {
-						
-					},
+				name,
+				name_ar,
+				categoryId,
+				expertId: expertIds[0], // Assuming you have a single expertId for simplicity
+				servicedesc: {
+					create: servicedesc.map((desc) => ({
+						title: desc.title,
+						desc_1: desc.desc_1,
+						desc_2: desc.desc_2,
+						store: {
+							connect: {
+								id: params.storeId,
+							},
+						}, // Connect to the store
+					})),
+				},
+				servicedescar: {
+					create: servicedescar.map((descAr) => ({
+						title_ar: descAr.title_ar,
+						desc_1_ar: descAr.desc_1_ar,
+						desc_2_ar: descAr.desc_2_ar,
+						store: {
+							connect: {
+								id: params.storeId,
+							},
+						}, // Connect to the store
+					})),
+				},
+				experts: {
+					connect: expertIds.map((id) => ({
+						id,
+					})),
 				},
 			},
 		});
 
-		return NextResponse.json(product);
+		return NextResponse.json(service);
 	} catch (error) {
-		console.log('[PRODUCTS_POST]', error);
-		return new NextResponse('Internal error', { status: 500 });
-	}
-}
-
-export async function GET(
-	req: Request,
-	{ params }: { params: { storeId: string } }
-) {
-	try {
-		const { searchParams } = new URL(req.url);
-		const categoryId = searchParams.get('categoryId') || undefined;
-		const colorId = searchParams.get('colorId') || undefined;
-		const sizeId = searchParams.get('sizeId') || undefined;
-		const isFeatured = searchParams.get('isFeatured');
-
-		if (!params.storeId) {
-			return new NextResponse('Store id is required', {
-				status: 400,
-			});
-		}
-
-		const services = await prismadb.service.findMany({
-			where: {
-				storeId: params.storeId,
-				categoryId,
-			},
-			include: {
-				category: true,
-			},
-			orderBy: {
-				name: 'desc',
-			},
-		});
-
-		return NextResponse.json(services);
-	} catch (error) {
-		console.log('[serviceS_GET]', error);
+		console.log('[SERVICE_POST]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }

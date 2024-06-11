@@ -54,10 +54,10 @@ type ServiceFormValues = z.infer<typeof formSchema>;
 
 interface ServiceFormProps {
 	initialData:
-		| (Service & {
-				images: Image[];
-		  })
-		| null;
+	| (Service & {
+		images: Image[];
+	})
+	| null;
 	categories: ServicesCategory[];
 	// colors: Color[];
 	// sizes: Size[];
@@ -84,20 +84,20 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 
 	const defaultValues = initialData
 		? {
-				...initialData,
-		  }
+			...initialData,
+		}
 		: {
-				id: '',
-				categoryId: '',
-				name: '',
-				name_ar: '',
-				title: '',
-				title_ar: '',
-				explanation: '',
-				explanation_2: '',
-				explanation_2_ar: '',
-				explanation_ar: '',
-		  };
+			id: '',
+			categoryId: '',
+			name: '',
+			name_ar: '',
+			title: '',
+			title_ar: '',
+			explanation: '',
+			explanation_2: '',
+			explanation_2_ar: '',
+			explanation_ar: '',
+		};
 
 	const form = useForm<ServiceFormValues>({
 		resolver: zodResolver(formSchema),
