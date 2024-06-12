@@ -6,12 +6,12 @@ type ServicePatchRequestBody = {
 	categoryId: string;
 	name: string;
 	name_ar: string;
-	servicedesc: {
+	serviceDesc: {
 		title: string;
 		desc_1: string;
 		desc_2: string;
 	}[];
-	servicedescar: {
+	serviceDescAr: {
 		title_ar: string;
 		desc_1_ar: string;
 		desc_2_ar: string;
@@ -22,12 +22,12 @@ type ServicePostRequestBody = {
 	categoryId: string;
 	name: string;
 	name_ar: string;
-	servicedesc: {
+	serviceDesc: {
 		title: string;
 		desc_1: string;
 		desc_2: string;
 	}[];
-	servicedescar: {
+	serviceDescAr: {
 		title_ar: string;
 		desc_1_ar: string;
 		desc_2_ar: string;
@@ -46,8 +46,8 @@ export async function POST(
 		const {
 			name,
 			name_ar,
-			servicedesc,
-			servicedescar,
+			serviceDesc,
+			serviceDescAr,
 			categoryId,
 		} = body;
 
@@ -87,14 +87,14 @@ export async function POST(
 			});
 		}
 
-		const product = await prismadb.service.create({
+		const service = await prismadb.service.create({
 			data: {
 				storeId: params.storeId,
 				name,
 				name_ar,
 				categoryId,
-				servicedesc: {
-					create: servicedesc.map((desc) => ({
+				serviceDesc: {
+					create: serviceDesc.map((desc) => ({
 						title: desc.title,
 						desc_1: desc.desc_1,
 						desc_2: desc.desc_2,
@@ -105,8 +105,8 @@ export async function POST(
 						},
 					})),
 				},
-				servicedescar: {
-					create: servicedescar.map((descAr) => ({
+				serviceDescAr: {
+					create: serviceDescAr.map((descAr) => ({
 						title_ar: descAr.title_ar,
 						desc_1_ar: descAr.desc_1_ar,
 						desc_2_ar: descAr.desc_2_ar,
@@ -117,17 +117,16 @@ export async function POST(
 						},
 					})),
 				},
-				expertId: '', // Make expertId optional by providing null
 			},
 			include: {
-				servicedesc: true,
-				servicedescar: true,
+				serviceDesc: true,
+				serviceDescAr: true,
 			},
 		});
 
-		return NextResponse.json(product);
+		return NextResponse.json(service);
 	} catch (error) {
-		console.log('[PRODUCTS_POST]', error);
+		console.log('[SERVICE_POST]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
@@ -148,16 +147,20 @@ export async function GET(
 				id: params.serviceId,
 			},
 			include: {
-				experts: true,
 				category: true,
-				servicedesc: true,
-				servicedescar: true,
+				serviceDesc: true,
+				serviceDescAr: true,
+				expertServices: {
+					include: {
+						expert: true,
+					},
+				},
 			},
 		});
 
 		return NextResponse.json(service);
 	} catch (error) {
-		console.log('[service_GET]', error);
+		console.log('[SERVICE_GET]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
@@ -176,7 +179,7 @@ export async function DELETE(
 		}
 
 		if (!params.serviceId) {
-			return new NextResponse('service id is required', {
+			return new NextResponse('Service id is required', {
 				status: 400,
 			});
 		}
@@ -202,7 +205,7 @@ export async function DELETE(
 
 		return NextResponse.json(service);
 	} catch (error) {
-		console.log('[service_DELETE]', error);
+		console.log('[SERVICE_DELETE]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
@@ -220,8 +223,8 @@ export async function PATCH(
 			categoryId,
 			name,
 			name_ar,
-			servicedesc,
-			servicedescar,
+			serviceDesc,
+			serviceDescAr,
 		} = body;
 
 		if (!userId) {
@@ -231,7 +234,7 @@ export async function PATCH(
 		}
 
 		if (!params.serviceId) {
-			return new NextResponse('service Id is required', {
+			return new NextResponse('Service Id is required', {
 				status: 400,
 			});
 		}
@@ -266,7 +269,7 @@ export async function PATCH(
 			});
 		}
 
-		// Delete existing servicedesc and servicedescar records
+		// Delete existing serviceDesc and serviceDescAr records
 		await prismadb.serviceDesc.deleteMany({
 			where: {
 				serviceId: params.serviceId,
@@ -288,8 +291,8 @@ export async function PATCH(
 				categoryId,
 				name,
 				name_ar,
-				servicedesc: {
-					create: servicedesc.map((desc) => ({
+				serviceDesc: {
+					create: serviceDesc.map((desc) => ({
 						title: desc.title,
 						desc_1: desc.desc_1,
 						desc_2: desc.desc_2,
@@ -300,8 +303,8 @@ export async function PATCH(
 						},
 					})),
 				},
-				servicedescar: {
-					create: servicedescar.map((descAr) => ({
+				serviceDescAr: {
+					create: serviceDescAr.map((descAr) => ({
 						title_ar: descAr.title_ar,
 						desc_1_ar: descAr.desc_1_ar,
 						desc_2_ar: descAr.desc_2_ar,
@@ -314,14 +317,14 @@ export async function PATCH(
 				},
 			},
 			include: {
-				servicedesc: true,
-				servicedescar: true,
+				serviceDesc: true,
+				serviceDescAr: true,
 			},
 		});
 
 		return NextResponse.json(updatedService);
 	} catch (error) {
-		console.log('[service_PATCH]', error);
+		console.log('[SERVICE_PATCH]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }

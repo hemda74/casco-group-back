@@ -2,17 +2,16 @@ import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
 import prismadb from '@/lib/prismadb';
 
-// Define the expected request body type
 type ServiceRequestBody = {
 	name: string;
 	name_ar: string;
-	servicedesc: {
+	serviceDesc: {
 		title: string;
 		desc_1: string;
 		desc_2: string;
 		store: { connect: { id: string } };
 	}[];
-	servicedescar: {
+	serviceDescAr: {
 		title_ar: string;
 		desc_1_ar: string;
 		desc_2_ar: string;
@@ -34,8 +33,8 @@ export async function POST(
 		const {
 			name,
 			name_ar,
-			servicedesc,
-			servicedescar,
+			serviceDesc,
+			serviceDescAr,
 			categoryId,
 			expertIds,
 		} = body;
@@ -82,9 +81,8 @@ export async function POST(
 				name,
 				name_ar,
 				categoryId,
-				expertId: expertIds[0], // Assuming you have a single expertId for simplicity
-				servicedesc: {
-					create: servicedesc.map((desc) => ({
+				serviceDesc: {
+					create: serviceDesc.map((desc) => ({
 						title: desc.title,
 						desc_1: desc.desc_1,
 						desc_2: desc.desc_2,
@@ -95,8 +93,8 @@ export async function POST(
 						}, // Connect to the store
 					})),
 				},
-				servicedescar: {
-					create: servicedescar.map((descAr) => ({
+				serviceDescAr: {
+					create: serviceDescAr.map((descAr) => ({
 						title_ar: descAr.title_ar,
 						desc_1_ar: descAr.desc_1_ar,
 						desc_2_ar: descAr.desc_2_ar,
@@ -107,13 +105,18 @@ export async function POST(
 						}, // Connect to the store
 					})),
 				},
-				experts: {
-					connect: expertIds.map((id) => ({
-						id,
-					})),
-				},
 			},
 		});
+
+		// Create ExpertService instances for each expertId
+		for (const expertId of expertIds) {
+			await prismadb.expertService.create({
+				data: {
+					serviceId: service.id,
+					expertId,
+				},
+			});
+		}
 
 		return NextResponse.json(service);
 	} catch (error) {

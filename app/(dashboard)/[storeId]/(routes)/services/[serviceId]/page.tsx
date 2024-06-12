@@ -19,11 +19,11 @@ const ProductPage = async ({
 		},
 	});
 
-	// const sizes = await prismadb.size.findMany({
-	//   where: {
-	//     storeId: params.storeId,
-	//   },
-	// });
+	const experts = await prismadb.expert.findMany({
+		where: {
+			storeId: params.storeId,
+		},
+	});
 
 	// const colors = await prismadb.color.findMany({
 	//   where: {

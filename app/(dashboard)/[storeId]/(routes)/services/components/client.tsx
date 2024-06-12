@@ -8,14 +8,13 @@ import { DataTable } from '@/components/ui/data-table';
 import { Heading } from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
 import { ApiList } from '@/components/ui/api-list';
+import { ServiceColumn, columns } from './columns';
 
-import { ProductColumn, columns } from './columns';
-
-interface ProductsClientProps {
-	data: ProductColumn[];
+interface ServiceClientProps {
+	data: ServiceColumn[];
 }
 
-export const ProductsClient: React.FC<ProductsClientProps> = ({ data }) => {
+export const ServiceClient: React.FC<ServiceClientProps> = ({ data }) => {
 	const params = useParams();
 	const router = useRouter();
 

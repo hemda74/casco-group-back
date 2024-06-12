@@ -170,13 +170,12 @@ model Service {
    storeId                  String   //Foreign Key to Store
    store                    Store       @relation("StoreToService", fields: [storeId], references: [id])
    categoryId               String  // Foreign Key to Category
-   expertId                 String //expert
    category                 ServicesCategory    @relation("CategoryToService", fields: [categoryId], references: [id])
-  experts          Expert[]          @relation("ExpertToService")
+  expertServices            ExpertService[]
    name                     String 
    name_ar                  String 
-   servicedesc              ServiceDesc[] @relation("ServiceToServiceDesc")
-   servicedescar              ServiceDescAr[] @relation("ServiceToServiceDescAr")
+   serviceDesc              ServiceDesc[] @relation("ServiceToServiceDesc")
+   serviceDescAr            ServiceDescAr[] @relation("ServiceToServiceDescAr")
    @@index([storeId])
    @@index([categoryId])
 }
@@ -184,9 +183,8 @@ model Expert{
   id                     String    @id @default(uuid())
   storeId                String // Foreign Key to Store
   store                  Store     @relation("StoreToExpert", fields: [storeId], references: [id])
-  serviceId              String // Foreign Key to Service 
   industryId             String // Foreign Key to Industry 
-  services        Service[]  @relation("ExpertToService")
+  expertServices         ExpertService[]
   idustry                Industry    @relation("ExpertToIndustry", fields: [industryId], references: [id])
   name                   String
   name_ar                String
@@ -196,9 +194,17 @@ model Expert{
   phone                  String
   images                 Image2[]
   @@index([storeId])
-  @@index([serviceId])
   @@index([industryId])
  }
+model ExpertService {
+  serviceId String
+  expertId  String
+  service   Service @relation(fields: [serviceId], references: [id])
+  expert    Expert @relation(fields: [expertId], references: [id])
+
+  @@id([serviceId, expertId])
+  @@index([expertId])
+}
 
 model ServiceDesc{
    id                       String              @id @default(uuid())
