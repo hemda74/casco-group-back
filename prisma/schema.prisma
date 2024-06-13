@@ -171,11 +171,12 @@ model Service {
    store                    Store       @relation("StoreToService", fields: [storeId], references: [id])
    categoryId               String  // Foreign Key to Category
    category                 ServicesCategory    @relation("CategoryToService", fields: [categoryId], references: [id])
-  expertServices            ExpertService[]
+   expertServices            ExpertService[]
    name                     String 
    name_ar                  String 
    serviceDesc              ServiceDesc[] @relation("ServiceToServiceDesc")
    serviceDescAr            ServiceDescAr[] @relation("ServiceToServiceDescAr")
+   createdAt               DateTime                        @default(now())
    @@index([storeId])
    @@index([categoryId])
 }
