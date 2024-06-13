@@ -1,16 +1,24 @@
 import prismadb from '@/lib/prismadb';
-
 import { ServiceForm } from './components/service-form';
 
-const ProductPage = async ({
+const ServicePage = async ({
 	params,
 }: {
-	params: { ServiceId: string; storeId: string };
+	params: { serviceId: string; storeId: string };
 }) => {
-	const Service = await prismadb.service.findUnique({
+	const service = await prismadb.service.findUnique({
 		where: {
-			id: params.ServiceId,
+			id: params.serviceId,
 		},
+		include: {
+			serviceDesc: true,
+			serviceDescAr: true,
+			expertServices: {
+				include: {
+					expert: true,
+				},
+			},
+		}
 	});
 
 	const categories = await prismadb.servicesCategory.findMany({
@@ -25,22 +33,17 @@ const ProductPage = async ({
 		},
 	});
 
-	// const colors = await prismadb.color.findMany({
-	//   where: {
-	//     storeId: params.storeId,
-	//   },
-	// });
-
 	return (
 		<div className="flex-row">
 			<div className="flex-1 space-x-4 p-8 pt-6">
 				<ServiceForm
 					categories={categories}
-					initialData={Service}
+					initialData={service}
+					experts={experts}
 				/>
 			</div>
 		</div>
 	);
 };
 
-export default ProductPage;
+export default ServicePage;

@@ -1,6 +1,4 @@
-'use strict';
 import { ColumnDef } from '@tanstack/react-table';
-
 import { CellAction } from './cell-action';
 
 export type ServiceColumn = {
@@ -21,50 +19,54 @@ export type ServiceColumn = {
 export const columns: ColumnDef<ServiceColumn>[] = [
 	{
 		accessorKey: 'name',
-		header: 'Service_Name___________________________________',
+		header: 'Service Name',
 	},
 	{
 		accessorKey: 'name_ar',
-		header: 'Service_Arabic_Name___________________________________',
+		header: 'Service Arabic Name',
 	},
 	{
 		accessorKey: 'category',
-		header: 'Category___________________________________',
+		header: 'Category',
 	},
 	{
 		id: 'experts',
-		header: 'experts___________________________________',
-		cell: ({ row }) => row.original.experts.join('___________________________________'),
+		header: 'Experts',
+		cell: ({ row }) => row.original.experts.join(', '),
 	},
 	{
 		id: 'title',
-		header: 'Title_in_English___________________________________',
-		cell: ({ row }) => row.original.title.join('___________________________________'),
-	}, {
+		header: 'Title in English',
+		cell: ({ row }) => row.original.title.join(', '),
+	},
+	{
 		id: 'desc_1',
-		header: 'First_Description_in_English___________________________________',
-		cell: ({ row }) => row.original.desc_1.join('___________________________________'),
-	}, {
+		header: 'First Description in English',
+		cell: ({ row }) => row.original.desc_1.join(', '),
+	},
+	{
 		id: 'desc_2',
-		header: 'Second_Description_in_English___________________________________',
-		cell: ({ row }) => row.original.desc_2.join('___________________________________'),
+		header: 'Second Description in English',
+		cell: ({ row }) => row.original.desc_2.join(', '),
 	},
 	{
 		id: 'title_ar',
-		header: 'Title_in_Arabic___________________________________',
-		cell: ({ row }) => row.original.title_ar.join('___________________________________'),
-	}, {
+		header: 'Title in Arabic',
+		cell: ({ row }) => row.original.title_ar.join(', '),
+	},
+	{
 		id: 'desc_1_ar',
-		header: 'First_Description_in_Arabic___________________________________',
-		cell: ({ row }) => row.original.desc_1_ar.join('___________________________________'),
-	}, {
+		header: 'First Description in Arabic',
+		cell: ({ row }) => row.original.desc_1_ar.join(', '),
+	},
+	{
 		id: 'desc_2_ar',
-		header: 'Second_Description_in_Arabic___________________________________',
-		cell: ({ row }) => row.original.desc_2_ar.join('___________________________________'),
+		header: 'Second Description in Arabic',
+		cell: ({ row }) => row.original.desc_2_ar.join(', '),
 	},
 	{
 		accessorKey: 'createdAt',
-		header: 'Date',
+		header: 'Created At',
 	},
 	{
 		accessorKey: 'Actions',

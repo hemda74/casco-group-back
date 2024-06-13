@@ -1,21 +1,18 @@
 'use client';
-
 import * as z from 'zod';
 import axios from 'axios';
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
-import { Service, Image, ServicesCategory } from '@prisma/client';
+import { Service, ServicesCategory, ServiceDesc, ServiceDescAr, ExpertService, Expert } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
-
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -31,23 +28,22 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
-import ImageUpload from '@/components/ui/image-upload';
-import { Checkbox } from '@/components/ui/checkbox';
 
 const formSchema = z.object({
 	name: z.string().min(1),
 	name_ar: z.string().min(1),
-	title: z.string().min(1),
-	title_ar: z.string().min(1),
-	explanation: z.string().min(1),
-	explanation_2: z.string().min(1),
-	explanation_ar: z.string().min(1),
-	explanation_2_ar: z.string().min(1),
 	categoryId: z.string().min(1),
-	// colorId: z.string().min(1),
-	// sizeId: z.string().min(1),
-	// isFeatured: z.boolean().default(false).optional(),
-	// isArchived: z.boolean().default(false).optional(),
+	serviceDesc: z.array(z.object({
+		title: z.string().min(1),
+		desc_1: z.string().min(1),
+		desc_2: z.string().min(1),
+	})),
+	serviceDescAr: z.array(z.object({
+		title_ar: z.string().min(1),
+		desc_1_ar: z.string().min(1),
+		desc_2_ar: z.string().min(1),
+	})),
+	expertIds: z.array(z.string().min(1)),
 });
 
 type ServiceFormValues = z.infer<typeof formSchema>;
@@ -55,17 +51,19 @@ type ServiceFormValues = z.infer<typeof formSchema>;
 interface ServiceFormProps {
 	initialData:
 	| (Service & {
-		images: Image[];
+		serviceDesc: ServiceDesc[];
+		serviceDescAr: ServiceDescAr[];
+		expertServices: ExpertService[];
 	})
 	| null;
 	categories: ServicesCategory[];
-	// colors: Color[];
-	// sizes: Size[];
+	experts: Expert[];
 }
 
 export const ServiceForm: React.FC<ServiceFormProps> = ({
 	initialData,
 	categories,
+	experts,
 }) => {
 	const params = useParams();
 	const router = useRouter();
@@ -74,29 +72,23 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 	const [loading, setLoading] = useState(false);
 
 	const title = initialData ? 'Edit Service' : 'Create Service';
-	const description = initialData
-		? 'Edit a Service.'
-		: 'Add a new Service';
-	const toastMessage = initialData
-		? 'Service updated.'
-		: 'Service created.';
+	const description = initialData ? 'Edit a Service.' : 'Add a new Service';
+	const toastMessage = initialData ? 'Service updated.' : 'Service created.';
 	const action = initialData ? 'Save changes' : 'Create';
 
 	const defaultValues = initialData
 		? {
 			...initialData,
+			expertIds: initialData.expertServices.map((es) => es.expertId),
 		}
 		: {
 			id: '',
 			categoryId: '',
 			name: '',
 			name_ar: '',
-			title: '',
-			title_ar: '',
-			explanation: '',
-			explanation_2: '',
-			explanation_2_ar: '',
-			explanation_ar: '',
+			serviceDesc: [],
+			serviceDescAr: [],
+			expertIds: [],
 		};
 
 	const form = useForm<ServiceFormValues>({
@@ -104,22 +96,37 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 		defaultValues,
 	});
 
+	const { fields: serviceDescFields, append: appendServiceDesc, remove: removeServiceDesc } = useFieldArray({
+		control: form.control,
+		name: 'serviceDesc',
+	});
+
+	const { fields: serviceDescArFields, append: appendServiceDescAr, remove: removeServiceDescAr } = useFieldArray({
+		control: form.control,
+		name: 'serviceDescAr',
+	});
+
+	const { fields: expertFields, append: appendExpert, remove: removeExpert } = useFieldArray({
+		control: form.control,
+		name: 'expertIds',
+	});
+
 	const onSubmit = async (data: ServiceFormValues) => {
 		try {
 			setLoading(true);
 			if (initialData) {
 				await axios.patch(
-					`/api/${params.storeId}/Services/${params.ServiceId}`,
+					`/api/${params.storeId}/services/${params.serviceId}`,
 					data
 				);
 			} else {
 				await axios.post(
-					`/api/${params.storeId}/Services`,
+					`/api/${params.storeId}/services`,
 					data
 				);
 			}
 			router.refresh();
-			router.push(`/${params.storeId}/Services`);
+			router.push(`/${params.storeId}/services`);
 			toast.success(toastMessage);
 		} catch (error: any) {
 			toast.error('Something went wrong.');
@@ -155,9 +162,8 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 				loading={loading}
 			/>
 			<div className="flex items-center justify-between">
-				<Heading
+				<Heading description="d"
 					title={title}
-					description={description}
 				/>
 				{initialData && (
 					<Button
@@ -182,14 +188,10 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 							name="name"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>
-										Name
-									</FormLabel>
+									<FormLabel>Name</FormLabel>
 									<FormControl>
 										<Input
-											disabled={
-												loading
-											}
+											disabled={loading}
 											placeholder="Enter a Value"
 											{...field}
 										/>
@@ -198,21 +200,15 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 								</FormItem>
 							)}
 						/>
-
 						<FormField
 							control={form.control}
 							name="name_ar"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>
-										Arabic
-										Name
-									</FormLabel>
+									<FormLabel>Arabic Name</FormLabel>
 									<FormControl>
 										<Input
-											disabled={
-												loading
-											}
+											disabled={loading}
 											placeholder="Enter a Value"
 											{...field}
 										/>
@@ -221,205 +217,246 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 								</FormItem>
 							)}
 						/>
-						<FormField
-							control={form.control}
-							name="title"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Service
-										Title
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="title_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Service
-										in
-										Arabic
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="explanation"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Service
-										Explanation
-										1
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="explanation_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Service
-										Explanation
-										1
-										in
-										Arabic
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="explanation_2"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Service
-										Explanation
-										2
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="explanation_2_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Service
-										Explanation
-										2
-										in
-										Arabic
-									</FormLabel>
-									<FormControl>
-										<Input
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-
 						<FormField
 							control={form.control}
 							name="categoryId"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>
-										Category
-									</FormLabel>
+									<FormLabel>Category</FormLabel>
 									<Select
-										disabled={
-											loading
-										}
-										onValueChange={
-											field.onChange
-										}
-										value={
-											field.value
-										}
-										defaultValue={
-											field.value
-										}
+										disabled={loading}
+										onValueChange={field.onChange}
+										value={field.value}
+										defaultValue={field.value}
 									>
 										<FormControl>
 											<SelectTrigger>
 												<SelectValue
-													defaultValue={
-														field.value
-													}
+													defaultValue={field.value}
 													placeholder="Select a category"
 												/>
 											</SelectTrigger>
 										</FormControl>
 										<SelectContent>
-											{categories.map(
-												(
-													category
-												) => (
-													<SelectItem
-														key={
-															category.id
-														}
-														value={
-															category.id
-														}
-													>
-														{
-															category.name
-														}
-													</SelectItem>
-												)
-											)}
+											{categories.map((category) => (
+												<SelectItem
+													key={category.id}
+													value={category.id}
+												>
+													{category.name}
+												</SelectItem>
+											))}
 										</SelectContent>
 									</Select>
 									<FormMessage />
 								</FormItem>
 							)}
 						/>
+					</div>
+					<div>
+						<Heading description="d" title="Service Descriptions" />
+						{serviceDescFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-3 gap-8">
+								<FormField
+									control={form.control}
+									name={`serviceDesc.${index}.title`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Title</FormLabel>
+											<FormControl>
+												<Input
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name={`serviceDesc.${index}.desc_1`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>First Description</FormLabel>
+											<FormControl>
+												<Input
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name={`serviceDesc.${index}.desc_2`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Second Description</FormLabel>
+											<FormControl>
+												<Input
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									variant="destructive"
+									onClick={() => removeServiceDesc(index)}
+								>
+									Remove
+								</Button>
+							</div>
+						))}
+						<Button
+							type="button"
+							disabled={loading}
+							variant="secondary"
+							onClick={() => appendServiceDesc({ title: '', desc_1: '', desc_2: '' })}
+						>
+							Add Service Description
+						</Button>
+					</div>
+					<div>
+						<Heading description="d" title="Service Descriptions (Arabic)" />
+						{serviceDescArFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-3 gap-8">
+								<FormField
+									control={form.control}
+									name={`serviceDescAr.${index}.title_ar`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Title (Arabic)</FormLabel>
+											<FormControl>
+												<Input
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name={`serviceDescAr.${index}.desc_1_ar`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>First Description (Arabic)</FormLabel>
+											<FormControl>
+												<Input
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name={`serviceDescAr.${index}.desc_2_ar`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Second Description (Arabic)</FormLabel>
+											<FormControl>
+												<Input
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									variant="destructive"
+									onClick={() => removeServiceDescAr(index)}
+								>
+									Remove
+								</Button>
+							</div>
+						))}
+						<Button
+							type="button"
+							disabled={loading}
+							variant="secondary"
+							onClick={() => appendServiceDescAr({ title_ar: '', desc_1_ar: '', desc_2_ar: '' })}
+						>
+							Add Service Description (Arabic)
+						</Button>
+					</div>
+					<div>
+						<Heading description="d" title="Experts" />
+						{expertFields.map((field, index) => (
+							<div key={field.id} className="flex items-center space-x-4">
+								<FormField
+									control={form.control}
+									name={`expertIds.${index}`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Expert</FormLabel>
+											<Select
+												disabled={loading}
+												onValueChange={field.onChange}
+												value={field.value}
+												defaultValue={field.value}
+											>
+												<FormControl>
+													<SelectTrigger>
+														<SelectValue
+															defaultValue={field.value}
+															placeholder="Select an expert"
+														/>
+													</SelectTrigger>
+												</FormControl>
+												<SelectContent>
+													{experts.map(
+														(expert) => (
+															<SelectItem
+																key={expert.id}
+																value={expert.id}
+															>
+																{expert.name}
+															</SelectItem>
+														)
+													)}
+												</SelectContent>
+											</Select>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									variant="destructive"
+									onClick={() => removeExpert(index)}
+								>
+									Remove
+								</Button>
+							</div>
+						))}
+						<Button
+							type="button"
+							disabled={loading}
+							variant="secondary"
+							onClick={() => appendExpert('')}
+						>
+							Add Expert
+						</Button>
 					</div>
 					<Button
 						disabled={loading}
@@ -432,4 +469,4 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 			</Form>
 		</>
 	);
-};
+}
