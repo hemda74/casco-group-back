@@ -10,6 +10,8 @@ const ServicesPage = async ({ params }: { params: { storeId: string } }) => {
 		},
 		include: {
 			category: true,
+			serviceDesc: true,
+			serviceDescAr: true,
 			expertServices: {
 				include: {
 					expert: true,
@@ -26,7 +28,8 @@ const ServicesPage = async ({ params }: { params: { storeId: string } }) => {
 		name: item.name,
 		name_ar: item.name_ar,
 		category: item.category.name,
-		experts: item.expertServices.map(es => es.expert.name).join(',--------------- '), // assuming expert has a 'name' field
+		experts: item.expertServices.map(es => es.expert.name).join(',--------------- '), // expert 'name' field
+
 	}));
 
 	return (

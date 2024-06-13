@@ -9,6 +9,7 @@ export type ServiceColumn = {
 	name_ar: string;
 	category: string;
 	experts: string;
+
 };
 
 export const columns: ColumnDef<ServiceColumn>[] = [

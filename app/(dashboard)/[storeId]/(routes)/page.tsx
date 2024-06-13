@@ -11,26 +11,26 @@ import { Heading } from '@/components/ui/heading';
 import { formatter } from '@/lib/utils';
 
 interface DashboardPageProps {
-	params: {
-		storeId: string;
-	};
+  params: {
+    storeId: string;
+  };
 }
 
 const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
-	// const totalRevenue = await getTotalRevenue(params.storeId);
-	// const graphRevenue = await getGraphRevenue(params.storeId);
-	// const salesCount = await getSalesCount(params.storeId);
-	// const stockCount = await getStockCount(params.storeId);
+  // const totalRevenue = await getTotalRevenue(params.storeId);
+  // const graphRevenue = await getGraphRevenue(params.storeId);
+  // const salesCount = await getSalesCount(params.storeId);
+  // const stockCount = await getStockCount(params.storeId);
 
-	return (
-		<div className="flex-col">
-			<div className="flex-1 space-y-4 p-8 pt-6">
-				<Heading
-					title="Dashboard"
-					description="CASCO Group"
-				/>
-				<Separator />
-				{/* <div className="grid gap-4 grid-cols-3">
+  return (
+    <div className="flex-col">
+      <div className="flex-1 space-y-4 p-8 pt-6">
+        <Heading
+          title="Dashboard"
+          description="CASCO Group"
+        />
+
+        {/* <div className="grid gap-4 grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
@@ -61,7 +61,7 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
             </CardContent>
           </Card>
         </div> */}
-				{/* <Card className="col-span-4">
+        {/* <Card className="col-span-4">
 					<CardHeader>
 						<CardTitle>Overview</CardTitle>
 					</CardHeader>
@@ -69,9 +69,9 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
 						<Overview data={graphRevenue} />
 					</CardContent>
 				</Card> */}
-			</div>
-		</div>
-	);
+      </div>
+    </div>
+  );
 };
 
 export default DashboardPage;
