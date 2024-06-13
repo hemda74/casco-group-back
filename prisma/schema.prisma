@@ -21,7 +21,7 @@ model Store {
   news                    News[]                          @relation("StoreToNews")
   events                  Event[]                         @relation("StoreToEvent")
   casestudies             CaseStudy[]                     @relation("StoreToCaseStudy")
-  expert                  Expert[]                        @relation("StoreToExpert")
+  expertservice                  ExpertService[]                        @relation("StoreToExpertService")
   team                    Team[]                          @relation("StoreToTeam")
   teammember              TeamMember[]                    @relation("StoreToTeamMember")
   industrydetailes        IndustryDetailes[]              @relation("StoreToIndustryDetailes")
@@ -171,42 +171,31 @@ model Service {
    store                    Store       @relation("StoreToService", fields: [storeId], references: [id])
    categoryId               String  // Foreign Key to Category
    category                 ServicesCategory    @relation("CategoryToService", fields: [categoryId], references: [id])
-   expertServices            ExpertService[]
    name                     String 
    name_ar                  String 
    serviceDesc              ServiceDesc[] @relation("ServiceToServiceDesc")
    serviceDescAr            ServiceDescAr[] @relation("ServiceToServiceDescAr")
+   expertService                    ExpertService[] @relation("ExpertToService")
    createdAt               DateTime                        @default(now())
    @@index([storeId])
    @@index([categoryId])
 }
-model Expert{
+model ExpertService{
   id                     String    @id @default(uuid())
   storeId                String // Foreign Key to Store
-  store                  Store     @relation("StoreToExpert", fields: [storeId], references: [id])
-  industryId             String // Foreign Key to Industry 
-  expertServices         ExpertService[]
-  idustry                Industry    @relation("ExpertToIndustry", fields: [industryId], references: [id])
+  store                  Store     @relation("StoreToExpertService", fields: [storeId], references: [id])
+  serviceId             String // Foreign Key to service 
+  service                Service    @relation("ExpertToService", fields: [serviceId], references: [id])
   name                   String
   name_ar                String
-  bio                    String    
-  bio_ar                 String    
+  title                  String    
+  title_ar               String    
   mail                   String
   phone                  String
-  images                 Image2[]
-  @@index([storeId])
-  @@index([industryId])
+ imageUrl                String
+ @@index([storeId])
+  @@index([serviceId])
  }
-model ExpertService {
-  serviceId String
-  expertId  String
-  service   Service @relation(fields: [serviceId], references: [id])
-  expert    Expert @relation(fields: [expertId], references: [id])
-
-  @@id([serviceId, expertId])
-  @@index([expertId])
-}
-
 model ServiceDesc{
    id                       String              @id @default(uuid())
    storeId                  String   //Foreign Key to Store
@@ -238,7 +227,6 @@ model Industry {
    categoryId               String  // Foreign Key to Category
    category                 IndustryCategory    @relation("CategoryToIndustry", fields: [categoryId], references: [id])
    casestudy                CaseStudy[]         @relation("IndustryToCaseStudy")
-   expert                   Expert[]            @relation("ExpertToIndustry")
    idustrydetailes          IndustryDetailes[]     @relation("IndustryToIndustryDetailes")
    name                     String              
    name_ar                  String              
@@ -292,15 +280,7 @@ model Image {
   updatedAt       DateTime @updatedAt
   @@index([courseId])
 }
-model Image2 {
-  id                    String   @id @default(uuid())
-  expertId              String
-  expert                Expert  @relation(fields: [expertId], references: [id], onDelete: Cascade)
-  url                   String // URL of the image
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
-  @@index([expertId])
-}
+
 model Image3 {
   id                    String   @id @default(uuid())
   casestudyId           String

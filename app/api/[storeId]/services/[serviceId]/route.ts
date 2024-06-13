@@ -16,6 +16,16 @@ type ServicePatchRequestBody = {
 		desc_1_ar: string;
 		desc_2_ar: string;
 	}[];
+	expertService: {
+		name: string;
+		name_ar: string;
+		phone: string;
+		mail: string;
+		title: string;
+		title_ar: string;
+		imageUrl: string;
+		store: { connect: { id: string } };
+	}[];
 };
 
 type ServicePostRequestBody = {
@@ -31,6 +41,16 @@ type ServicePostRequestBody = {
 		title_ar: string;
 		desc_1_ar: string;
 		desc_2_ar: string;
+	}[];
+	expertService: {
+		name: string;
+		name_ar: string;
+		phone: string;
+		mail: string;
+		title: string;
+		title_ar: string;
+		imageUrl: string;
+		store: { connect: { id: string } };
 	}[];
 };
 
@@ -48,6 +68,7 @@ export async function POST(
 			name_ar,
 			serviceDesc,
 			serviceDescAr,
+			expertService,
 			categoryId,
 		} = body;
 
@@ -87,41 +108,68 @@ export async function POST(
 			});
 		}
 
-		const service = await prismadb.service.create({
-			data: {
-				storeId: params.storeId,
-				name,
-				name_ar,
-				categoryId,
-				serviceDesc: {
-					create: serviceDesc.map((desc) => ({
-						title: desc.title,
-						desc_1: desc.desc_1,
-						desc_2: desc.desc_2,
-						store: {
-							connect: {
-								id: params.storeId,
-							},
-						},
-					})),
+		const service = await prismadb.$transaction(async (prisma) => {
+			const createdService = await prisma.service.create({
+				data: {
+					storeId: params.storeId,
+					name,
+					name_ar,
+					categoryId,
+					serviceDesc: {
+						create: serviceDesc.map(
+							(desc) => ({
+								title: desc.title,
+								desc_1: desc.desc_1,
+								desc_2: desc.desc_2,
+								store: {
+									connect: {
+										id: params.storeId,
+									},
+								},
+							})
+						),
+					},
+					serviceDescAr: {
+						create: serviceDescAr.map(
+							(descAr) => ({
+								title_ar: descAr.title_ar,
+								desc_1_ar: descAr.desc_1_ar,
+								desc_2_ar: descAr.desc_2_ar,
+								store: {
+									connect: {
+										id: params.storeId,
+									},
+								},
+							})
+						),
+					},
+					expertService: {
+						create: expertService.map(
+							(expert) => ({
+								imageUrl: expert.imageUrl,
+								name: expert.name,
+								name_ar: expert.name_ar,
+								title: expert.title,
+								title_ar: expert.title_ar,
+								phone: expert.phone,
+								mail: expert.mail,
+								store: {
+									connect: {
+										id: params.storeId,
+									},
+								},
+							})
+						),
+					},
 				},
-				serviceDescAr: {
-					create: serviceDescAr.map((descAr) => ({
-						title_ar: descAr.title_ar,
-						desc_1_ar: descAr.desc_1_ar,
-						desc_2_ar: descAr.desc_2_ar,
-						store: {
-							connect: {
-								id: params.storeId,
-							},
-						},
-					})),
+				include: {
+					serviceDesc: true,
+					serviceDescAr: true,
+					expertService: true,
 				},
-			},
-			include: {
-				serviceDesc: true,
-				serviceDescAr: true,
-			},
+			});
+
+			return createdService;
 		});
 
 		return NextResponse.json(service);
@@ -150,11 +198,7 @@ export async function GET(
 				category: true,
 				serviceDesc: true,
 				serviceDescAr: true,
-				expertServices: {
-					include: {
-						expert: true,
-					},
-				},
+				expertService: true,
 			},
 		});
 
@@ -225,6 +269,7 @@ export async function PATCH(
 			name_ar,
 			serviceDesc,
 			serviceDescAr,
+			expertService,
 		} = body;
 
 		if (!userId) {
@@ -281,6 +326,11 @@ export async function PATCH(
 				serviceId: params.serviceId,
 			},
 		});
+		await prismadb.expertService.deleteMany({
+			where: {
+				serviceId: params.serviceId,
+			},
+		});
 
 		// Update the service
 		const updatedService = await prismadb.service.update({
@@ -315,10 +365,27 @@ export async function PATCH(
 						},
 					})),
 				},
+				expertService: {
+					create: expertService.map((expert) => ({
+						imageUrl: expert.imageUrl,
+						name: expert.name,
+						name_ar: expert.name_ar,
+						title: expert.title,
+						title_ar: expert.title_ar,
+						phone: expert.phone,
+						mail: expert.mail,
+						store: {
+							connect: {
+								id: params.storeId,
+							},
+						},
+					})),
+				},
 			},
 			include: {
 				serviceDesc: true,
 				serviceDescAr: true,
+				expertService: true,
 			},
 		});
 
