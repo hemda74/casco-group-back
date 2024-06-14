@@ -13,11 +13,7 @@ const ServicesPage = async ({ params }: { params: { storeId: string } }) => {
 				category: true,
 				serviceDesc: true,
 				serviceDescAr: true,
-				expertServices: {
-					include: {
-						expert: true,
-					},
-				},
+				expertService: true,
 			},
 			orderBy: {
 				createdAt: 'desc',
@@ -29,7 +25,12 @@ const ServicesPage = async ({ params }: { params: { storeId: string } }) => {
 			name: item.name,
 			name_ar: item.name_ar,
 			category: item.category?.name ?? '',
-			experts: item.expertServices.map((es) => es.expert.name),
+			expert_name: item.expertService.map((ex) => ex.name),
+			expert_name_ar: item.expertService.map((ex) => ex.name_ar),
+			expert_title: item.expertService.map((ex) => ex.title),
+			expert_title_ar: item.expertService.map((ex) => ex.title_ar),
+			expert_mail: item.expertService.map((ex) => ex.mail),
+			expert_phone: item.expertService.map((ex) => ex.phone),
 			title: item.serviceDesc.map((desc) => desc.title),
 			desc_1: item.serviceDesc.map((desc) => desc.desc_1),
 			desc_2: item.serviceDesc.map((desc) => desc.desc_2),

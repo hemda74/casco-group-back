@@ -13,11 +13,7 @@ const ServicePage = async ({
 		include: {
 			serviceDesc: true,
 			serviceDescAr: true,
-			expertServices: {
-				include: {
-					expert: true,
-				},
-			},
+			expertService: true,
 		}
 	});
 
@@ -27,11 +23,6 @@ const ServicePage = async ({
 		},
 	});
 
-	const experts = await prismadb.expert.findMany({
-		where: {
-			storeId: params.storeId,
-		},
-	});
 
 	return (
 		<div className="flex-row">
@@ -39,7 +30,6 @@ const ServicePage = async ({
 				<ServiceForm
 					categories={categories}
 					initialData={service}
-					experts={experts}
 				/>
 			</div>
 		</div>

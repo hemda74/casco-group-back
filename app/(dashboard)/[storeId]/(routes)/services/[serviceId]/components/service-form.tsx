@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
-import { Service, ServicesCategory, ServiceDesc, ServiceDescAr, ExpertService, Expert } from '@prisma/client';
+import { Service, ServicesCategory, ServiceDesc, ServiceDescAr, ExpertService } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -43,7 +43,15 @@ const formSchema = z.object({
 		desc_1_ar: z.string().min(1),
 		desc_2_ar: z.string().min(1),
 	})),
-	expertIds: z.array(z.string().min(1)),
+	expertService: z.array(z.object({
+		imageUrl: z.string().min(1),
+		expert_name: z.string().min(1),
+		expert_name_ar: z.string().min(1),
+		expert_title: z.string().min(1),
+		expert_title_ar: z.string().min(1),
+		expert_phone: z.string().min(1),
+		expert_mail: z.string().min(1),
+	}))
 });
 
 type ServiceFormValues = z.infer<typeof formSchema>;
@@ -53,17 +61,15 @@ interface ServiceFormProps {
 	| (Service & {
 		serviceDesc: ServiceDesc[];
 		serviceDescAr: ServiceDescAr[];
-		expertServices: ExpertService[];
+		expertService: ExpertService[];
 	})
 	| null;
 	categories: ServicesCategory[];
-	experts: Expert[];
 }
 
 export const ServiceForm: React.FC<ServiceFormProps> = ({
 	initialData,
-	categories,
-	experts,
+	categories
 }) => {
 	const params = useParams();
 	const router = useRouter();
@@ -79,7 +85,6 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 	const defaultValues = initialData
 		? {
 			...initialData,
-			expertIds: initialData.expertServices.map((es) => es.expertId),
 		}
 		: {
 			id: '',
@@ -88,7 +93,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 			name_ar: '',
 			serviceDesc: [],
 			serviceDescAr: [],
-			expertIds: [],
+			expertService: [],
 		};
 
 	const form = useForm<ServiceFormValues>({
@@ -105,12 +110,10 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 		control: form.control,
 		name: 'serviceDescAr',
 	});
-
-	const { fields: expertFields, append: appendExpert, remove: removeExpert } = useFieldArray({
+	const { fields: expertServiceFields, append: appendExpertService, remove: removeExpertService } = useFieldArray({
 		control: form.control,
-		name: 'expertIds',
+		name: 'expertService',
 	});
-
 	const onSubmit = async (data: ServiceFormValues) => {
 		try {
 			setLoading(true);
@@ -400,42 +403,56 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 						</Button>
 					</div>
 					<div>
-						<Heading description="d" title="Experts" />
-						{expertFields.map((field, index) => (
-							<div key={field.id} className="flex items-center space-x-4">
+						<Heading description="d" title="Service Descriptions (Arabic)" />
+						{serviceDescArFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-3 gap-8">
 								<FormField
 									control={form.control}
-									name={`expertIds.${index}`}
+									name={`serviceDescAr.${index}.title_ar`}
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Expert</FormLabel>
-											<Select
-												disabled={loading}
-												onValueChange={field.onChange}
-												value={field.value}
-												defaultValue={field.value}
-											>
-												<FormControl>
-													<SelectTrigger>
-														<SelectValue
-															defaultValue={field.value}
-															placeholder="Select an expert"
-														/>
-													</SelectTrigger>
-												</FormControl>
-												<SelectContent>
-													{experts.map(
-														(expert) => (
-															<SelectItem
-																key={expert.id}
-																value={expert.id}
-															>
-																{expert.name}
-															</SelectItem>
-														)
-													)}
-												</SelectContent>
-											</Select>
+											<FormLabel>Title (Arabic)</FormLabel>
+											<FormControl>
+												<Input
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name={`serviceDescAr.${index}.desc_1_ar`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>First Description (Arabic)</FormLabel>
+											<FormControl>
+												<Input
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name={`serviceDescAr.${index}.desc_2_ar`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Second Description (Arabic)</FormLabel>
+											<FormControl>
+												<Input
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
 											<FormMessage />
 										</FormItem>
 									)}
@@ -443,7 +460,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 								<Button
 									disabled={loading}
 									variant="destructive"
-									onClick={() => removeExpert(index)}
+									onClick={() => removeServiceDescAr(index)}
 								>
 									Remove
 								</Button>
@@ -453,9 +470,9 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 							type="button"
 							disabled={loading}
 							variant="secondary"
-							onClick={() => appendExpert('')}
+							onClick={() => appendServiceDescAr({ title_ar: '', desc_1_ar: '', desc_2_ar: '' })}
 						>
-							Add Expert
+							Add Service Description (Arabic)
 						</Button>
 					</div>
 					<Button
