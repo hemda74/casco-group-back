@@ -1,11 +1,9 @@
 'use client';
-
 import axios from 'axios';
 import { Copy, Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
-
 import { AlertModal } from '@/components/modals/alert-modal';
 import { Button } from '@/components/ui/button';
 import {
@@ -32,7 +30,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 		try {
 			setLoading(true);
 			await axios.delete(
-				`/api/${params.storeId}/service/${data.id}`
+				`/api/${params.storeId}/services/${data.id}`
 			);
 			toast.success('Service deleted.');
 			router.refresh();
@@ -82,7 +80,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 					<DropdownMenuItem
 						onClick={() =>
 							router.push(
-								`/${params.storeId}/service/${data.id}`
+								`/${params.storeId}/services/${data.id}`
 							)
 						}
 					>

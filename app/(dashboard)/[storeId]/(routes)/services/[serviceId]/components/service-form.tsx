@@ -8,15 +8,16 @@ import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
 import { Service, ServicesCategory, ServiceDesc, ServiceDescAr, ExpertService } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
 	Form,
 	FormControl,
+	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
+	Textarea
 } from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
 import { Heading } from '@/components/ui/heading';
@@ -28,6 +29,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
+import ImageUpload from '@/components/ui/image-upload';
 
 const formSchema = z.object({
 	name: z.string().min(1),
@@ -105,7 +107,6 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 		control: form.control,
 		name: 'serviceDesc',
 	});
-
 	const { fields: serviceDescArFields, append: appendServiceDescAr, remove: removeServiceDescAr } = useFieldArray({
 		control: form.control,
 		name: 'serviceDescAr',
@@ -132,7 +133,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 			router.push(`/${params.storeId}/services`);
 			toast.success(toastMessage);
 		} catch (error: any) {
-			toast.error('Something went wrong.');
+			toast.error('Something went wrong.', error);
 			console.log(error);
 		} finally {
 			setLoading(false);
@@ -155,7 +156,6 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 			setOpen(false);
 		}
 	};
-
 	return (
 		<>
 			<AlertModal
@@ -165,7 +165,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 				loading={loading}
 			/>
 			<div className="flex items-center justify-between">
-				<Heading description="d"
+				<Heading description="Adding Block Description in Arabic"
 					title={title}
 				/>
 				{initialData && (
@@ -185,7 +185,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 					onSubmit={form.handleSubmit(onSubmit)}
 					className="space-y-8 w-full"
 				>
-					<div className="md:grid md:grid-cols-3 gap-8">
+					<div className="md:grid md:grid-cols-2 gap-8">
 						<FormField
 							control={form.control}
 							name="name"
@@ -193,7 +193,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 								<FormItem>
 									<FormLabel>Name</FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={loading}
 											placeholder="Enter a Value"
 											{...field}
@@ -210,7 +210,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 								<FormItem>
 									<FormLabel>Arabic Name</FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={loading}
 											placeholder="Enter a Value"
 											{...field}
@@ -257,9 +257,9 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 						/>
 					</div>
 					<div>
-						<Heading description="d" title="Service Descriptions" />
+						<Heading description="Manage Service Fileds For Description Of Service" title="Service Descriptions" />
 						{serviceDescFields.map((field, index) => (
-							<div key={field.id} className="grid grid-cols-3 gap-8">
+							<div key={field.id} className="grid grid-cols-2 gap-8">
 								<FormField
 									control={form.control}
 									name={`serviceDesc.${index}.title`}
@@ -267,7 +267,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 										<FormItem>
 											<FormLabel>Title</FormLabel>
 											<FormControl>
-												<Input
+												<Textarea
 													disabled={loading}
 													placeholder="Enter a Value"
 													{...field}
@@ -284,7 +284,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 										<FormItem>
 											<FormLabel>First Description</FormLabel>
 											<FormControl>
-												<Input
+												<Textarea
 													disabled={loading}
 													placeholder="Enter a Value"
 													{...field}
@@ -301,7 +301,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 										<FormItem>
 											<FormLabel>Second Description</FormLabel>
 											<FormControl>
-												<Input
+												<Textarea
 													disabled={loading}
 													placeholder="Enter a Value"
 													{...field}
@@ -324,6 +324,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 							type="button"
 							disabled={loading}
 							variant="secondary"
+							className='mt-5'
 							onClick={() => appendServiceDesc({ title: '', desc_1: '', desc_2: '' })}
 						>
 							Add Service Description
@@ -332,7 +333,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 					<div>
 						<Heading description="d" title="Service Descriptions (Arabic)" />
 						{serviceDescArFields.map((field, index) => (
-							<div key={field.id} className="grid grid-cols-3 gap-8">
+							<div key={field.id} className="grid grid-cols-2 gap-8">
 								<FormField
 									control={form.control}
 									name={`serviceDescAr.${index}.title_ar`}
@@ -340,7 +341,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 										<FormItem>
 											<FormLabel>Title (Arabic)</FormLabel>
 											<FormControl>
-												<Input
+												<Textarea
 													disabled={loading}
 													placeholder="Enter a Value"
 													{...field}
@@ -357,7 +358,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 										<FormItem>
 											<FormLabel>First Description (Arabic)</FormLabel>
 											<FormControl>
-												<Input
+												<Textarea
 													disabled={loading}
 													placeholder="Enter a Value"
 													{...field}
@@ -374,7 +375,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 										<FormItem>
 											<FormLabel>Second Description (Arabic)</FormLabel>
 											<FormControl>
-												<Input
+												<Textarea
 													disabled={loading}
 													placeholder="Enter a Value"
 													{...field}
@@ -397,23 +398,43 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 							type="button"
 							disabled={loading}
 							variant="secondary"
+							className='mt-5'
 							onClick={() => appendServiceDescAr({ title_ar: '', desc_1_ar: '', desc_2_ar: '' })}
 						>
 							Add Service Description (Arabic)
 						</Button>
 					</div>
 					<div>
-						<Heading description="d" title="Service Descriptions (Arabic)" />
-						{serviceDescArFields.map((field, index) => (
-							<div key={field.id} className="grid grid-cols-3 gap-8">
+						<Heading description="Mange Experts in this Service" title="ُExperts" />
+						{expertServiceFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-2 gap-8">
 								<FormField
 									control={form.control}
-									name={`serviceDescAr.${index}.title_ar`}
+									name={`expertService.${index}.imageUrl`}
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Title (Arabic)</FormLabel>
+											<FormLabel>Expert Image</FormLabel>
+											<FormDescription>Please Add one Image Only</FormDescription>
 											<FormControl>
-												<Input
+												<ImageUpload
+													value={field.value ? [field.value] : []}
+													disabled={loading}
+													onChange={(url) => field.onChange(url)}
+													onRemove={() => field.onChange('')}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name={`expertService.${index}.expert_name`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Expert Name (English)</FormLabel>
+											<FormControl>
+												<Textarea
 													disabled={loading}
 													placeholder="Enter a Value"
 													{...field}
@@ -425,12 +446,12 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 								/>
 								<FormField
 									control={form.control}
-									name={`serviceDescAr.${index}.desc_1_ar`}
+									name={`expertService.${index}.expert_name_ar`}
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>First Description (Arabic)</FormLabel>
+											<FormLabel>Expert Name (Arabic)</FormLabel>
 											<FormControl>
-												<Input
+												<Textarea
 													disabled={loading}
 													placeholder="Enter a Value"
 													{...field}
@@ -442,12 +463,63 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 								/>
 								<FormField
 									control={form.control}
-									name={`serviceDescAr.${index}.desc_2_ar`}
+									name={`expertService.${index}.expert_title`}
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Second Description (Arabic)</FormLabel>
+											<FormLabel>Expert Title (English)</FormLabel>
 											<FormControl>
-												<Input
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name={`expertService.${index}.expert_title_ar`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Expert Title (Arabic)</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name={`expertService.${index}.expert_mail`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Expert Mail</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name={`expertService.${index}.expert_phone`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Expert Phone</FormLabel>
+											<FormControl>
+												<Textarea
 													disabled={loading}
 													placeholder="Enter a Value"
 													{...field}
@@ -460,7 +532,8 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 								<Button
 									disabled={loading}
 									variant="destructive"
-									onClick={() => removeServiceDescAr(index)}
+
+									onClick={() => removeExpertService(index)}
 								>
 									Remove
 								</Button>
@@ -470,11 +543,13 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 							type="button"
 							disabled={loading}
 							variant="secondary"
-							onClick={() => appendServiceDescAr({ title_ar: '', desc_1_ar: '', desc_2_ar: '' })}
+							className='mt-5'
+							onClick={() => appendExpertService({ expert_name: '', expert_name_ar: '', expert_title: '', expert_title_ar: '', expert_mail: '', expert_phone: '', imageUrl: '' })}
 						>
 							Add Service Description (Arabic)
 						</Button>
 					</div>
+
 					<Button
 						disabled={loading}
 						className="ml-auto"
