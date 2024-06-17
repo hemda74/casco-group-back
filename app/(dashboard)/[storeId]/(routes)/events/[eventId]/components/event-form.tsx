@@ -53,14 +53,12 @@ interface EventFormProps {
 	| null;
 	categories: NewsCategory[];
 }
-
 export const EventForm: React.FC<EventFormProps> = ({
 	initialData,
 	categories,
 }) => {
 	const params = useParams();
 	const router = useRouter();
-
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [paragraph_event, setParagraph_event] = useState<string[]>(
@@ -97,7 +95,6 @@ export const EventForm: React.FC<EventFormProps> = ({
 			paragraph_event_ar: [],
 		},
 	});
-
 	const handleAddParagraphevent = () => {
 		setParagraph_event([...paragraph_event, '']);
 	};

@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
-
 import prismadb from '@/lib/prismadb';
-
 export async function POST(
 	req: Request,
 	{ params }: { params: { storeId: string } }
@@ -12,7 +10,16 @@ export async function POST(
 
 		const body = await req.json();
 
-		const { name, name_ar, billboardId, images } = body;
+		const {
+			name,
+			name_ar,
+			linkedin,
+			address,
+			address_ar,
+			phone,
+			billboardId,
+			images,
+		} = body;
 
 		if (!userId) {
 			return new NextResponse('Unauthenticated', {
@@ -26,6 +33,26 @@ export async function POST(
 		}
 		if (!name_ar) {
 			return new NextResponse(' Arabic Name is required', {
+				status: 400,
+			});
+		}
+		if (!address) {
+			return new NextResponse('address is required', {
+				status: 400,
+			});
+		}
+		if (!address_ar) {
+			return new NextResponse('address_ar is required', {
+				status: 400,
+			});
+		}
+		if (!linkedin) {
+			return new NextResponse('linkedin is required', {
+				status: 400,
+			});
+		}
+		if (!phone) {
+			return new NextResponse('phone is required', {
 				status: 400,
 			});
 		}
@@ -64,7 +91,10 @@ export async function POST(
 				name,
 				name_ar,
 				billboardId,
-
+				phone,
+				address,
+				address_ar,
+				linkedin,
 				storeId: params.storeId,
 				images: {
 					createMany: {

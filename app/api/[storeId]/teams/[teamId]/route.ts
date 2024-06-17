@@ -85,7 +85,16 @@ export async function PATCH(
 
 		const body = await req.json();
 
-		const { name, name_ar, billboardId, images } = body;
+		const {
+			name,
+			name_ar,
+			address,
+			address_ar,
+			linkedin,
+			phone,
+			billboardId,
+			images,
+		} = body;
 
 		if (!userId) {
 			return new NextResponse('Unauthenticated', {
@@ -107,7 +116,26 @@ export async function PATCH(
 				status: 400,
 			});
 		}
-
+		if (!address) {
+			return new NextResponse('address is required', {
+				status: 400,
+			});
+		}
+		if (!address_ar) {
+			return new NextResponse('arabic address is required', {
+				status: 400,
+			});
+		}
+		if (!linkedin) {
+			return new NextResponse('linkedin is required', {
+				status: 400,
+			});
+		}
+		if (!phone) {
+			return new NextResponse('phone is required', {
+				status: 400,
+			});
+		}
 		if (!billboardId) {
 			return new NextResponse('billboard id is required', {
 				status: 400,
@@ -131,6 +159,10 @@ export async function PATCH(
 			data: {
 				name,
 				name_ar,
+				linkedin,
+				phone,
+				address,
+				address_ar,
 				billboardId,
 
 				images: {

@@ -33,13 +33,15 @@ import {
 
 const formSchema = z.object({
 	images: z.object({ url: z.string() }).array(),
-	name: z.string().min(2),
-	name_ar: z.string().min(2),
+	name: z.string().min(1),
+	address: z.string().min(1),
+	name_ar: z.string().min(1),
+	address_ar: z.string().min(1),
 	billboardId: z.string().min(1),
+	linkedin: z.string().min(1),
+	phone: z.string().min(1),
 });
-
 type CategoryFormValues = z.infer<typeof formSchema>;
-
 interface CategoryFormProps {
 	initialData: | (Team & {
 		images: Image4[];
@@ -72,6 +74,10 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 			name: '',
 			name_ar: '',
 			billboardId: '',
+			address: '',
+			linkedin: '',
+			phone: '',
+			address_ar: '',
 			images: [],
 		},
 	});
@@ -212,6 +218,88 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 												loading
 											}
 											placeholder="team name"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="phone"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Team Phone
+									</FormLabel>
+									<FormControl>
+										<Input
+											disabled={
+												loading
+											}
+											placeholder="team phone"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>	<FormField
+							control={form.control}
+							name="address"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Team Address
+									</FormLabel>
+									<FormControl>
+										<Input
+											disabled={
+												loading
+											}
+											placeholder="team address"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>	<FormField
+							control={form.control}
+							name="address_ar"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Address in
+										Arabic
+									</FormLabel>
+									<FormControl>
+										<Input
+											disabled={
+												loading
+											}
+											placeholder="Address in Arabic"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>	<FormField
+							control={form.control}
+							name="linkedin"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										LinkedIn Link
+									</FormLabel>
+									<FormControl>
+										<Input
+											disabled={
+												loading
+											}
+											placeholder="linkedin"
 											{...field}
 										/>
 									</FormControl>
