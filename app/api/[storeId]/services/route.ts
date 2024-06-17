@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
 import prismadb from '@/lib/prismadb';
-import { url } from 'inspector';
-import { title } from 'process';
 
 type ServiceRequestBody = {
 	name: string;
@@ -20,13 +18,13 @@ type ServiceRequestBody = {
 		store: { connect: { id: string } };
 	}[];
 	expertService: {
-		name: string;
-		name_ar: string;
-		phone: string;
-		mail: string;
-		title: string;
-		title_ar: string;
-		imageUrl: string;
+		expert_name: string;
+		expert_name_ar: string;
+		expert_phone: string;
+		expert_mail: string;
+		expert_title: string;
+		expert_title_ar: string;
+		// expert_imageUrl: string;
 		store: { connect: { id: string } };
 	}[];
 	categoryId: string;
@@ -124,13 +122,20 @@ export async function POST(
 					expertService: {
 						create: expertService.map(
 							(expert) => ({
-								imageUrl: expert.imageUrl,
-								name: expert.name,
-								name_ar: expert.name_ar,
-								title: expert.title,
-								title_ar: expert.title_ar,
-								phone: expert.phone,
-								mail: expert.mail,
+								// expert_imageUrl:
+								// 	expert.expert_imageUrl,
+								expert_name:
+									expert.expert_name,
+								expert_name_ar:
+									expert.expert_name_ar,
+								expert_title:
+									expert.expert_title,
+								expert_title_ar:
+									expert.expert_title_ar,
+								expert_phone:
+									expert.expert_phone,
+								expert_mail:
+									expert.expert_mail,
 								store: {
 									connect: {
 										id: params.storeId,

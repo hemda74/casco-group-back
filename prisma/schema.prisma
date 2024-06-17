@@ -166,60 +166,72 @@ model TeamMember{
     @@index([teamId])
 }
 model Service {
-   id                       String       @id @default(uuid())
-   storeId                  String   //Foreign Key to Store
-   store                    Store       @relation("StoreToService", fields: [storeId], references: [id])
-   categoryId               String  // Foreign Key to Category
-   category                 ServicesCategory    @relation("CategoryToService", fields: [categoryId], references: [id])
-   name                     String 
-   name_ar                  String 
-   serviceDesc              ServiceDesc[] @relation("ServiceToServiceDesc")
-   serviceDescAr            ServiceDescAr[] @relation("ServiceToServiceDescAr")
-   expertService                    ExpertService[] @relation("ExpertToService")
-   createdAt               DateTime                        @default(now())
-   @@index([storeId])
-   @@index([categoryId])
+  id            String         @id @default(uuid())
+  storeId       String         // Foreign Key to Store
+  store         Store          @relation("StoreToService", fields: [storeId], references: [id])
+  categoryId    String         // Foreign Key to Category
+  category      ServicesCategory @relation("CategoryToService", fields: [categoryId], references: [id])
+  name          String
+  name_ar       String
+  serviceDesc   ServiceDesc[]  @relation("ServiceToServiceDesc")
+  serviceDescAr ServiceDescAr[] @relation("ServiceToServiceDescAr")
+  expertService ExpertService[] @relation("ExpertToService")
+  createdAt     DateTime       @default(now())
+  @@index([storeId])
+  @@index([categoryId])
 }
-model ExpertService{
-  id                     String    @id @default(uuid())
-  storeId                String // Foreign Key to Store
-  store                  Store     @relation("StoreToExpertService", fields: [storeId], references: [id])
-  serviceId             String // Foreign Key to service 
-  service                Service    @relation("ExpertToService", fields: [serviceId], references: [id])
-  name                   String
-  name_ar                String
-  title                  String    
-  title_ar               String    
-  mail                   String
-  phone                  String
- imageUrl                String
- @@index([storeId])
+
+model ExpertService {
+  id           String  @id @default(uuid())
+  storeId      String  // Foreign Key to Store
+  store        Store   @relation("StoreToExpertService", fields: [storeId], references: [id])
+  serviceId    String  // Foreign Key to service 
+  service      Service @relation("ExpertToService", fields: [serviceId], references: [id])
+  expert_name         String
+  expert_name_ar      String
+  expert_title        String
+  expert_title_ar     String
+  expert_mail         String
+  expert_phone        String
+  images Image2[]
+  @@index([storeId])
   @@index([serviceId])
- }
-model ServiceDesc{
-   id                       String              @id @default(uuid())
-   storeId                  String   //Foreign Key to Store
-   store                    Store               @relation("ServiceDesc", fields: [storeId], references: [id])
-   serviceId               String  // Foreign Key to service
-   title                   String
-   desc_1  String
-   desc_2  String
-   service                 Service    @relation("ServiceToServiceDesc", fields: [serviceId], references: [id])   
-   @@index([storeId])
-   @@index([serviceId])
 }
-model ServiceDescAr{
-   id                      String              @id @default(uuid())
-   storeId                 String   //Foreign Key to Store
-   store                   Store               @relation("ServiceDescAr", fields: [storeId], references: [id])
-   serviceId               String  // Foreign Key to service
-   title_ar                   String
-   desc_1_ar                  String
-   desc_2_ar                  String
-   service                 Service    @relation("ServiceToServiceDescAr", fields: [serviceId], references: [id])   
-   @@index([storeId])
-   @@index([serviceId])
+model Image2 {
+  id              String   @id @default(uuid())
+  expertserviceId        String
+  expertService          ExpertService  @relation(fields: [expertserviceId], references: [id], onDelete: Cascade)
+  url             String // URL of the image
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  @@index([expertserviceId])
 }
+model ServiceDesc {
+  id         String  @id @default(uuid())
+  storeId    String  // Foreign Key to Store
+  store      Store   @relation("ServiceDesc", fields: [storeId], references: [id])
+  serviceId  String  // Foreign Key to service
+  title      String
+  desc_1     String
+  desc_2     String
+  service    Service @relation("ServiceToServiceDesc", fields: [serviceId], references: [id])
+  @@index([storeId])
+  @@index([serviceId])
+}
+
+model ServiceDescAr {
+  id        String  @id @default(uuid())
+  storeId   String  // Foreign Key to Store
+  store     Store   @relation("ServiceDescAr", fields: [storeId], references: [id])
+  serviceId String  // Foreign Key to service
+  title_ar  String
+  desc_1_ar String
+  desc_2_ar String
+  service   Service @relation("ServiceToServiceDescAr", fields: [serviceId], references: [id])
+  @@index([storeId])
+  @@index([serviceId])
+}
+
 model Industry {
    id                       String              @id @default(uuid())
    storeId                  String   //Foreign Key to Store
@@ -280,6 +292,7 @@ model Image {
   updatedAt       DateTime @updatedAt
   @@index([courseId])
 }
+
 
 model Image3 {
   id                    String   @id @default(uuid())

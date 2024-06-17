@@ -1,4 +1,4 @@
-'use client';
+"use client"
 import * as z from 'zod';
 import axios from 'axios';
 import { useState } from 'react';
@@ -46,14 +46,15 @@ const formSchema = z.object({
 		desc_2_ar: z.string().min(1),
 	})),
 	expertService: z.array(z.object({
-		imageUrl: z.string().min(1),
 		expert_name: z.string().min(1),
 		expert_name_ar: z.string().min(1),
 		expert_title: z.string().min(1),
 		expert_title_ar: z.string().min(1),
 		expert_phone: z.string().min(1),
 		expert_mail: z.string().min(1),
-	}))
+		images: z.object({ url: z.string() }).array(),
+
+	})),
 });
 
 type ServiceFormValues = z.infer<typeof formSchema>;
@@ -165,8 +166,9 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 				loading={loading}
 			/>
 			<div className="flex items-center justify-between">
-				<Heading description="Adding Block Description in Arabic"
+				<Heading
 					title={title}
+					description='dcdeddces'
 				/>
 				{initialData && (
 					<Button
@@ -257,7 +259,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 						/>
 					</div>
 					<div>
-						<Heading description="Manage Service Fileds For Description Of Service" title="Service Descriptions" />
+						<Heading description='cedcedc' title="Service Descriptions" />
 						{serviceDescFields.map((field, index) => (
 							<div key={field.id} className="grid grid-cols-2 gap-8">
 								<FormField
@@ -311,6 +313,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 										</FormItem>
 									)}
 								/>
+
 								<Button
 									disabled={loading}
 									variant="destructive"
@@ -324,14 +327,20 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 							type="button"
 							disabled={loading}
 							variant="secondary"
-							className='mt-5'
-							onClick={() => appendServiceDesc({ title: '', desc_1: '', desc_2: '' })}
+							className="mt-5"
+							onClick={() =>
+								appendServiceDesc({
+									title: '',
+									desc_1: '',
+									desc_2: '',
+								})
+							}
 						>
 							Add Service Description
 						</Button>
 					</div>
 					<div>
-						<Heading description="d" title="Service Descriptions (Arabic)" />
+						<Heading description='cedcfedc' title="Service Descriptions (Arabic)" />
 						{serviceDescArFields.map((field, index) => (
 							<div key={field.id} className="grid grid-cols-2 gap-8">
 								<FormField
@@ -398,35 +407,68 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 							type="button"
 							disabled={loading}
 							variant="secondary"
-							className='mt-5'
-							onClick={() => appendServiceDescAr({ title_ar: '', desc_1_ar: '', desc_2_ar: '' })}
+							className="mt-5"
+							onClick={() =>
+								appendServiceDescAr({
+									title_ar: '',
+									desc_1_ar: '',
+									desc_2_ar: '',
+								})
+							}
 						>
 							Add Service Description (Arabic)
 						</Button>
 					</div>
 					<div>
-						<Heading description="Mange Experts in this Service" title="ُExperts" />
+						<Heading description="fkvjvnkerjfb" title="Experts" />
 						{expertServiceFields.map((field, index) => (
 							<div key={field.id} className="grid grid-cols-2 gap-8">
+								{/* Image Upload */}
+								{/* <FormField
+										control={form.control}
+										name={`expertService.${index}.images`}
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Expert Image</FormLabel>
+												<FormDescription>Please add one image only.</FormDescription>
+												<FormControl>
+													<ImageUpload
+														value={field.value ? [field.value] : []}
+														disabled={loading}
+														onChange={(url) => field.onChange(url)}
+														onRemove={() => field.onChange('')}
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/> */}
 								<FormField
 									control={form.control}
-									name={`expertService.${index}.imageUrl`}
-									render={({ field }) => (
+									name={`expertService.${index}.images`} render={({ field }) => (
 										<FormItem>
-											<FormLabel>Expert Image</FormLabel>
-											<FormDescription>Please Add one Image Only</FormDescription>
+											<FormLabel>Images</FormLabel>
 											<FormControl>
 												<ImageUpload
-													value={field.value ? [field.value] : []}
+													value={field.value.map((image) => image.url)}
 													disabled={loading}
-													onChange={(url) => field.onChange(url)}
-													onRemove={() => field.onChange('')}
+													onChange={(url) =>
+														field.onChange([...field.value, { url }])
+													}
+													onRemove={(url) =>
+														field.onChange(
+															field.value.filter(
+																(current) => current.url !== url
+															)
+														)
+													}
 												/>
 											</FormControl>
 											<FormMessage />
 										</FormItem>
 									)}
 								/>
+
 								<FormField
 									control={form.control}
 									name={`expertService.${index}.expert_name`}
@@ -532,7 +574,6 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 								<Button
 									disabled={loading}
 									variant="destructive"
-
 									onClick={() => removeExpertService(index)}
 								>
 									Remove
@@ -543,13 +584,22 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 							type="button"
 							disabled={loading}
 							variant="secondary"
-							className='mt-5'
-							onClick={() => appendExpertService({ expert_name: '', expert_name_ar: '', expert_title: '', expert_title_ar: '', expert_mail: '', expert_phone: '', imageUrl: '' })}
+							className="mt-5"
+							onClick={() =>
+								appendExpertService({
+									expert_name: '',
+									expert_name_ar: '',
+									expert_title: '',
+									expert_title_ar: '',
+									expert_mail: '',
+									expert_phone: '',
+									images: [],
+								})
+							}
 						>
-							Add Service Description (Arabic)
+							Add Expert
 						</Button>
 					</div>
-
 					<Button
 						disabled={loading}
 						className="ml-auto"
@@ -561,4 +611,6 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 			</Form>
 		</>
 	);
-}
+};
+
+export default ServiceForm;
