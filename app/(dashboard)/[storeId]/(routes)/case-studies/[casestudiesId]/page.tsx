@@ -1,7 +1,5 @@
 import prismadb from '@/lib/prismadb';
-
 import { CaseForm } from './components/case-studies-form';
-
 const ProductPage = async ({
 	params,
 }: {
@@ -17,7 +15,6 @@ const ProductPage = async ({
 			caseStudyPointAr: true,
 		},
 	});
-
 	const industries = await prismadb.industry.findMany({
 		where: {
 			storeId: params.storeId,
@@ -34,5 +31,4 @@ const ProductPage = async ({
 		</div>
 	);
 };
-
 export default ProductPage;

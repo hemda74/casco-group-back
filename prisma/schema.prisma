@@ -21,11 +21,13 @@ model Store {
   news                    News[]                          @relation("StoreToNews")
   events                  Event[]                         @relation("StoreToEvent")
   casestudies             CaseStudy[]                     @relation("StoreToCaseStudy")
-  expertservice                  ExpertService[]                        @relation("StoreToExpertService")
+  expertservice           ExpertService[]                 @relation("StoreToExpertService")
+  expertIndustry        ExpertIndustry[]                 @relation("StoreToExpertIndustry")
   team                    Team[]                          @relation("StoreToTeam")
   teammember              TeamMember[]                    @relation("StoreToTeamMember")
   servicedesc             ServiceDesc[]                   @relation("ServiceDesc")
   servicedescar           ServiceDescAr[]                 @relation("ServiceDescAr")
+  idustryDetailes         IndustryDetailes[]              @relation("IndustryDetailes")
   createdAt               DateTime                        @default(now())
   updatedAt               DateTime                        @updatedAt
 }
@@ -198,15 +200,7 @@ model ExpertService {
   @@index([storeId])
   @@index([serviceId])
 }
-model Image2 {
-  id              String   @id @default(uuid())
-  expertserviceId        String
-  expertService          ExpertService  @relation(fields: [expertserviceId], references: [id], onDelete: Cascade)
-  url             String // URL of the image
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  @@index([expertserviceId])
-}
+
 model ServiceDesc {
   id         String  @id @default(uuid())
   storeId    String  // Foreign Key to Store
@@ -238,16 +232,56 @@ model Industry {
    categoryId               String  // Foreign Key to Category
    category                 IndustryCategory    @relation("CategoryToIndustry", fields: [categoryId], references: [id])
    casestudy                CaseStudy[]         @relation("IndustryToCaseStudy")
+   industryDetailes         IndustryDetailes[]  @relation("IndustryToIndustryDetailes")
+   expertIndustry           ExpertIndustry[]    @relation("ExpertToIndustry")
    name                     String              
-   name_ar                  String              
-   title_1                  String              
-   explanation_1            String              
-   title_2                  String              
-   explanation_2            String              
-   title_3                  String              
-   explanation_3            String              
+   name_ar                  String                           
    @@index([storeId])
    @@index([categoryId])
+}
+model ExpertIndustry {
+  id           String  @id @default(uuid())
+  storeId      String  // Foreign Key to Store
+  store        Store   @relation("StoreToExpertIndustry", fields: [storeId], references: [id])
+  industryId    String  // Foreign Key to Industry 
+  industry      Industry @relation("ExpertToIndustry", fields: [industryId], references: [id])
+  expert_name         String
+  expert_name_ar      String
+  expert_title        String
+  expert_title_ar     String
+  expert_mail         String
+  expert_phone        String
+  images Image8[]
+  @@index([storeId])
+  @@index([industryId])
+}
+
+model IndustryDetailes{
+  id                            String    @id @default(uuid())
+  storeId                       String    // Foreign Key to Store
+  industryId                    String   //  Foreign Key to Industry
+  industry                      Industry  @relation("IndustryToIndustryDetailes",fields: [industryId],references: [id]) 
+  store                         Store     @relation("IndustryDetailes", fields: [storeId], references: [id])
+  title                         String
+  title_ar                      String
+  industryDetailesPoint         IndustryDetailesPoint[] @relation("pointtoIndustryDetailes")
+  industryDetailesPointAr       IndustryDetailesPointAr[] @relation("pointtoIndustryDetailesAr")
+  @@index([storeId])
+  @@index([industryId])
+}
+model IndustryDetailesPoint{
+    id                            String    @id @default(uuid())
+    detaId                        String         
+    industryDetailes              IndustryDetailes @relation("pointtoIndustryDetailes",fields: [detaId],references: [id]) 
+    text                          String
+    @@index([detaId])
+}
+model IndustryDetailesPointAr{
+    id                            String    @id @default(uuid())
+    detaId                         String         
+    industryDetailes              IndustryDetailes @relation("pointtoIndustryDetailesAr",fields: [detaId],references: [id]) 
+    text                         String
+    @@index([detaId])
 }
 model CaseStudy {
   id                            String    @id @default(uuid())
@@ -258,9 +292,9 @@ model CaseStudy {
   sub_title                     String
   sub_title_ar                  String
   paragraph_1                   String
-  paragraph_1_ar                   String
+  paragraph_1_ar                String
   paragraph_2                   String
-  paragraph_2_ar                   String  
+  paragraph_2_ar                String  
   industryId                    String // Foreign Key to Industry
   industry                      Industry  @relation("IndustryToCaseStudy",fields: [industryId],references: [id]) 
   images                         Image3[]
@@ -291,6 +325,15 @@ model Image {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   @@index([courseId])
+}
+model Image2 {
+  id              String   @id @default(uuid())
+  expertserviceId        String
+  expertService          ExpertService  @relation(fields: [expertserviceId], references: [id], onDelete: Cascade)
+  url             String // URL of the image
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  @@index([expertserviceId])
 }
 model Image3 {
   id                    String   @id @default(uuid())
@@ -336,6 +379,15 @@ model Image7 {
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
   @@index([teammemberId])
+}
+model Image8 {
+  id              String   @id @default(uuid())
+  expertIndustryId        String
+  expertIndustry          ExpertIndustry  @relation(fields: [expertIndustryId], references: [id], onDelete: Cascade)
+  url             String // URL of the image
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  @@index([expertIndustryId])
 }
 model paragrph_news {
   id                    String   @id @default(uuid())
