@@ -28,6 +28,8 @@ model Store {
   servicedesc             ServiceDesc[]                   @relation("ServiceDesc")
   servicedescar           ServiceDescAr[]                 @relation("ServiceDescAr")
   idustryDetailes         IndustryDetailes[]              @relation("IndustryDetailes")
+    idustryDetailes2         IndustryDetailes2[]              @relation("IndustryDetailes2")
+
   createdAt               DateTime                        @default(now())
   updatedAt               DateTime                        @updatedAt
 }
@@ -200,7 +202,6 @@ model ExpertService {
   @@index([storeId])
   @@index([serviceId])
 }
-
 model ServiceDesc {
   id         String  @id @default(uuid())
   storeId    String  // Foreign Key to Store
@@ -233,6 +234,7 @@ model Industry {
    category                 IndustryCategory    @relation("CategoryToIndustry", fields: [categoryId], references: [id])
    casestudy                CaseStudy[]         @relation("IndustryToCaseStudy")
    industryDetailes         IndustryDetailes[]  @relation("IndustryToIndustryDetailes")
+  industryDetailes2         IndustryDetailes2[]  @relation("IndustryToIndustryDetailes2")
    expertIndustry           ExpertIndustry[]    @relation("ExpertToIndustry")
    name                     String              
    name_ar                  String                           
@@ -255,7 +257,6 @@ model ExpertIndustry {
   @@index([storeId])
   @@index([industryId])
 }
-
 model IndustryDetailes{
   id                            String    @id @default(uuid())
   storeId                       String    // Foreign Key to Store
@@ -280,6 +281,33 @@ model IndustryDetailesPointAr{
     id                            String    @id @default(uuid())
     detaId                         String         
     industryDetailes              IndustryDetailes @relation("pointtoIndustryDetailesAr",fields: [detaId],references: [id]) 
+    text                         String
+    @@index([detaId])
+}
+model IndustryDetailes2{
+  id                            String    @id @default(uuid())
+  storeId                       String    // Foreign Key to Store
+  industryId                    String   //  Foreign Key to Industry
+  industry                      Industry  @relation("IndustryToIndustryDetailes2",fields: [industryId],references: [id]) 
+  store                         Store     @relation("IndustryDetailes2", fields: [storeId], references: [id])
+  title                         String
+  title_ar                      String
+  industryDetailesPoint         IndustryDetailesPoint2[] @relation("pointtoIndustryDetailes2")
+  industryDetailesPointAr       IndustryDetailesPointAr2[] @relation("pointtoIndustryDetailesAr2")
+  @@index([storeId])
+  @@index([industryId])
+}
+model IndustryDetailesPoint2{
+    id                            String    @id @default(uuid())
+    detaId                        String         
+    industryDetailes              IndustryDetailes2 @relation("pointtoIndustryDetailes2",fields: [detaId],references: [id]) 
+    text                          String
+    @@index([detaId])
+}
+model IndustryDetailesPointAr2{
+    id                            String    @id @default(uuid())
+    detaId                         String         
+    industryDetailes              IndustryDetailes2 @relation("pointtoIndustryDetailesAr2",fields: [detaId],references: [id]) 
     text                         String
     @@index([detaId])
 }
