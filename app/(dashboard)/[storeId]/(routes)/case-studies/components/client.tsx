@@ -1,18 +1,14 @@
 'use client';
-
 import { Plus } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
-
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
 import { Heading } from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
 import { ApiList } from '@/components/ui/api-list';
-
-import { CategoryColumn, columns } from './columns';
-
+import { CaseColumn, columns } from './columns';
 interface ProductsClientProps {
-	data: CategoryColumn[];
+	data: CaseColumn[];
 }
 
 export const ProductsClient: React.FC<ProductsClientProps> = ({ data }) => {
@@ -23,13 +19,13 @@ export const ProductsClient: React.FC<ProductsClientProps> = ({ data }) => {
 		<>
 			<div className="flex items-center justify-between">
 				<Heading
-					title={`Team Members (${data.length})`}
-					description="Manage teammembers"
+					title={`Case Studies (${data.length})`}
+					description="Manage Case Studies for Industries"
 				/>
 				<Button
 					onClick={() =>
 						router.push(
-							`/${params.storeId}/team-members/new`
+							`/${params.storeId}/case-studies/new`
 						)
 					}
 				>
@@ -49,8 +45,8 @@ export const ProductsClient: React.FC<ProductsClientProps> = ({ data }) => {
 			/>
 			<Separator />
 			<ApiList
-				entityName="team-members"
-				entityIdName="teammemberId"
+				entityName="case-studies"
+				entityIdName="casestudiesId"
 			/>
 		</>
 	);

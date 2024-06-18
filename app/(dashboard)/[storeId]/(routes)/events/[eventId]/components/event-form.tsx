@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { Trash, PlusCircle } from 'lucide-react';
 import { Event, Image6, NewsCategory, paragrph_event, paragrph_event_ar } from '@prisma/client';
-import { useParams, useRouter } from 'next/navigation'; // Corrected from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
 	Form,

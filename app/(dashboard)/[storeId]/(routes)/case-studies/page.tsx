@@ -1,33 +1,35 @@
 import prismadb from '@/lib/prismadb';
 import { ProductsClient } from './components/client';
-import { CategoryColumn } from './components/columns';
+import { CaseColumn } from './components/columns';
 
 const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
-	const teamMember = await prismadb.teamMember.findMany({
+	const caseStudy = await prismadb.caseStudy.findMany({
 		where: {
 			storeId: params.storeId,
 		},
 		include: {
-			team: true,
+			industry: true,
+			caseStudyPoint: true,
+			caseStudyPointAr: true,
 		},
 		orderBy: {
-			name: 'desc',
+			title: 'desc',
 		},
 	});
 
-	const formattedProducts: CategoryColumn[] = teamMember.map((item) => ({
+	const formattedProducts: CaseColumn[] = caseStudy.map((item) => ({
 		id: item.id,
-		name: item.name,
-		name_ar: item.name_ar,
-		team: item.team.name,
+		industry: item.industry.name,
 		title: item.title,
 		title_ar: item.title_ar,
-		brief_1: item.brief_1,
-		brief_1_ar: item.brief_1_ar,
-		brief_2: item.brief_2,
-		brief_2_ar: item.brief_2_ar,
-		brief_3: item.brief_3,
-		brief_3_ar: item.brief_3_ar
+		sub_title: item.sub_title,
+		sub_title_ar: item.sub_title_ar,
+		paragraph_1: item.paragraph_1,
+		paragraph_1_ar: item.paragraph_1_ar,
+		paragraph_2: item.paragraph_2,
+		paragraph_2_ar: item.paragraph_2_ar,
+		caseStudyPoint: item.caseStudyPoint.map(p => p.p1),
+		caseStudyPointAr: item.caseStudyPointAr.map(p => p.p1),
 	}));
 
 	return (

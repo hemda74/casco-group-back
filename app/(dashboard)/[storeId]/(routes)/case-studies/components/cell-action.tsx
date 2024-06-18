@@ -16,10 +16,10 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import { CategoryColumn } from './columns';
+import { CaseColumn } from './columns';
 
 interface CellActionProps {
-	data: CategoryColumn;
+	data: CaseColumn;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -32,7 +32,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 		try {
 			setLoading(true);
 			await axios.delete(
-				`/api/${params.storeId}/team-members/${data.id}`
+				`/api/${params.storeId}/case-studies/${data.id}`
 			);
 			toast.success('Course deleted.');
 			router.refresh();
@@ -82,7 +82,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 					<DropdownMenuItem
 						onClick={() =>
 							router.push(
-								`/${params.storeId}/team-members/${data.id}`
+								`/${params.storeId}/case-studies/${data.id}`
 							)
 						}
 					>
