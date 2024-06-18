@@ -109,7 +109,7 @@ model Team {
  name             String
  name_ar          String
  address           String
-address_ar           String
+ address_ar           String
  linkedin        String
  phone            String
  images            Image4[]
@@ -182,7 +182,6 @@ model Service {
   @@index([storeId])
   @@index([categoryId])
 }
-
 model ExpertService {
   id           String  @id @default(uuid())
   storeId      String  // Foreign Key to Store
@@ -251,36 +250,38 @@ model Industry {
    @@index([categoryId])
 }
 model CaseStudy {
-  id                           String    @id @default(uuid())
-  storeId                      String // Foreign Key to Store
-  store                        Store     @relation("StoreToCaseStudy", fields: [storeId], references: [id])
-  name                         String
-  name_ar                      String
-  industryId                   String // Foreign Key to Industry
-  industry                     Industry  @relation("IndustryToCaseStudy",fields: [industryId],references: [id])
-  sub_title                    String
-  sub_title_ar                 String
-  onerole_1                    String   
-  onerole_2                    String  
-  onerole_3                    String  
-  onerole_1_ar                 String  
-  onerole_2_ar                 String  
-  onerole_3_ar                 String  
-  result_1                     String  
-  result_2                     String  
-  result_3                     String   
-  result_4                     String  
-  result_1_ar                  String  
-  result_2_ar                  String  
-  result_3_ar                  String   
-  result_4_ar                  String  
-  brief_1                      String  
-  brief_2                      String  
-  brief_1_ar                   String  
-  brief_2_ar                   String  
-  image                        Image3[]
+  id                            String    @id @default(uuid())
+  storeId                       String // Foreign Key to Store
+  store                         Store     @relation("StoreToCaseStudy", fields: [storeId], references: [id])
+  title                         String
+  title_ar                      String
+  sub_title                     String
+  sub_title_ar                  String
+  paragraph_1                   String
+  paragraph_1_ar                   String
+  paragraph_2                   String
+  paragraph_2_ar                   String  
+  industryId                    String // Foreign Key to Industry
+  industry                      Industry  @relation("IndustryToCaseStudy",fields: [industryId],references: [id]) 
+  images                         Image3[]
+  caseStudyPoint                    CaseStudyPoint[] @relation("PointToCaseStudy")
+  caseStudyPointAr                 CaseStudyPointAr[] @relation("PointToCaseStudyAr")
   @@index([storeId])
   @@index([industryId])
+}
+model CaseStudyPoint{
+ id                           String    @id @default(uuid())
+ p1                    String    
+ caseId              String
+ case             CaseStudy  @relation("PointToCaseStudy",fields: [caseId],references: [id])
+  @@index([caseId])
+}
+model CaseStudyPointAr{
+ id                           String    @id @default(uuid())
+ p1                 String    
+ caseId            String
+  case             CaseStudy  @relation("PointToCaseStudyAr",fields: [caseId],references: [id])
+  @@index([caseId])
 }
 model Image {
   id              String   @id @default(uuid())

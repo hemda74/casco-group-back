@@ -57,7 +57,11 @@ export function MainNav({
 			label: 'Services',
 			active: pathname === `/${params.storeId}/services`,
 		},
-
+		{
+			href: `/${params.storeId}/industries`,
+			label: 'Industries',
+			active: pathname === `/${params.storeId}/industries`,
+		},
 		{
 			href: `/${params.storeId}/news`,
 			label: 'News',
@@ -73,6 +77,12 @@ export function MainNav({
 			label: 'Team Members',
 			active: pathname === `/${params.storeId}/team-members`,
 		},
+		{
+			href: `/${params.storeId}/case-studies`,
+			label: 'Case Studies',
+			active: pathname === `/${params.storeId}/case-studies`,
+		},
+
 		{
 			href: `/${params.storeId}/settings`,
 			label: 'Settings',
