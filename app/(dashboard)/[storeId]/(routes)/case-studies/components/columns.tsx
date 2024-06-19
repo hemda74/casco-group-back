@@ -57,12 +57,16 @@ export const columns: ColumnDef<CaseColumn>[] = [
 	{
 		id: 'caseStudyPoint',
 		header: 'Case_Study_Point',
-		cell: ({ row }) => row.original.caseStudyPoint.join('___________________________________'),
+		cell: ({ row }) => (
+			<div dangerouslySetInnerHTML={{ __html: row.original.caseStudyPoint.join('<br><hr style="margin-top: 20px;margin-bottom: 20px;">') }} />
+		),
 	},
 	{
 		id: 'caseStudyPointAr',
 		header: 'Case_Study_Point',
-		cell: ({ row }) => row.original.caseStudyPointAr.join('___________________________________'),
+		cell: ({ row }) => (
+			<div dangerouslySetInnerHTML={{ __html: row.original.caseStudyPointAr.join('<br><hr style="margin-top: 20px;margin-bottom: 20px;">') }} />
+		),
 	},
 	{
 		id: 'actions',

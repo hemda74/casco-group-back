@@ -23,49 +23,49 @@ export interface CategoryColumn {
 export const columns: ColumnDef<CategoryColumn>[] = [
 	{
 		accessorKey: 'name',
-		header: 'Member_Name___________________________________',
+		header: 'Member_Name',
 	},
 	{
 		accessorKey: 'name_ar',
-		header: 'Member_Arabic_Name___________________________________',
+		header: 'Member_Arabic_Name',
 	},
 	{
 		accessorKey: 'title',
-		header: 'Title_in_English___________________________________',
+		header: 'Title_in_English',
 	},
 	{
 		accessorKey: 'title_ar',
-		header: 'Title_Arabic_Name___________________________________',
+		header: 'Title_Arabic_Name',
 	},
 	{
 		accessorKey: 'brief_1',
-		header: 'First_Brief___________________________________',
+		header: 'First_Brief',
 	},
 	{
 		accessorKey: 'brief_1_ar',
-		header: 'First_Brief_in_Arabic___________________________________',
+		header: 'First_Brief_in_Arabic',
 	},
 	{
 		accessorKey: 'brief_2',
-		header: 'Second_Brief___________________________________',
+		header: 'Second_Brief',
 	},
 	{
 		accessorKey: 'brief_2_ar',
-		header: 'Second_Brief_in_Arabic___________________________________',
+		header: 'Second_Brief_in_Arabic',
 	}, {
 		accessorKey: 'brief_3',
-		header: 'Third_Brief___________________________________',
+		header: 'Third_Brief',
 	},
 	{
 		accessorKey: 'brief_3_ar',
-		header: 'Third_Brief_in_Arabic___________________________________',
+		header: 'Third_Brief_in_Arabic',
 	},
 	{
 		accessorKey: 'team',
-		header: 'Team___________________________________',
+		header: 'Team',
 	},
 	{
-		id: 'actions___________________________________',
+		id: 'actions',
 		cell: ({ row }) => <CellAction data={row.original} />,
 	},
 ];

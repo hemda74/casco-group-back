@@ -50,7 +50,7 @@ const ServicesPage = async ({ params }: { params: { storeId: string } }) => {
 	} catch (error) {
 		console.error('[ServicesPage]', error);
 		// Handle error here
-		return <h1 className='m-auto'>Error loading services</h1>;
+		return <div>Error loading services</div>;
 	}
 };
 

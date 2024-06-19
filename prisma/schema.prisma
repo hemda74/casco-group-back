@@ -234,7 +234,7 @@ model Industry {
    category                 IndustryCategory    @relation("CategoryToIndustry", fields: [categoryId], references: [id])
    casestudy                CaseStudy[]         @relation("IndustryToCaseStudy")
    industryDetailes         IndustryDetailes[]  @relation("IndustryToIndustryDetailes")
-  industryDetailes2         IndustryDetailes2[]  @relation("IndustryToIndustryDetailes2")
+   industryDetailes2         IndustryDetailes2[]  @relation("IndustryToIndustryDetailes2")
    expertIndustry           ExpertIndustry[]    @relation("ExpertToIndustry")
    name                     String              
    name_ar                  String                           

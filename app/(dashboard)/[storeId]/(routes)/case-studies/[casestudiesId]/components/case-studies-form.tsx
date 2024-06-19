@@ -163,7 +163,7 @@ export const CaseForm: React.FC<CaseFormProps> = ({
 			<div className="flex items-center justify-between">
 				<Heading
 					title={title}
-					description='dcdeddces'
+					description='Mange Case Studies'
 				/>
 				{initialData && (
 					<Button
@@ -237,6 +237,41 @@ export const CaseForm: React.FC<CaseFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
+							name="industryId"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Select Industry</FormLabel>
+									<Select
+										disabled={loading}
+										onValueChange={field.onChange}
+										value={field.value}
+										defaultValue={field.value}
+									>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue
+													defaultValue={field.value}
+													placeholder="Select an industry"
+												/>
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											{industries.map((category) => (
+												<SelectItem
+													key={category.id}
+													value={category.id}
+												>
+													{category.name}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
 							name="title"
 							render={({ field }) => (
 								<FormItem>
@@ -271,39 +306,106 @@ export const CaseForm: React.FC<CaseFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="industryId"
+							name="sub_title"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Select Industry</FormLabel>
-									<Select
-										disabled={loading}
-										onValueChange={field.onChange}
-										value={field.value}
-										defaultValue={field.value}
-									>
-										<FormControl>
-											<SelectTrigger>
-												<SelectValue
-													defaultValue={field.value}
-													placeholder="Select an industry"
-												/>
-											</SelectTrigger>
-										</FormControl>
-										<SelectContent>
-											{industries.map((category) => (
-												<SelectItem
-													key={category.id}
-													value={category.id}
-												>
-													{category.name}
-												</SelectItem>
-											))}
-										</SelectContent>
-									</Select>
+									<FormLabel>sub_Title</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={loading}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
 									<FormMessage />
 								</FormItem>
 							)}
 						/>
+						<FormField
+							control={form.control}
+							name="sub_title_ar"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Arabic sub_title</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={loading}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="paragraph_1"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>First Paragraph</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={loading}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="paragraph_1_ar"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Arabic First Paragraph</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={loading}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/><FormField
+							control={form.control}
+							name="paragraph_2"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Second Paragraph</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={loading}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="paragraph_2_ar"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Arabic Second Paragraph</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={loading}
+											placeholder="Enter a Value"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
 					</div>
 					<div>
 						<Heading description='Case Study Points' title="Points (English)" />

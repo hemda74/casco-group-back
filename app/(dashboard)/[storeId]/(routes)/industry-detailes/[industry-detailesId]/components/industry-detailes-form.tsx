@@ -423,6 +423,26 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 						<Heading description="fkvjvnkerjfb" title="Experts" />
 						{expertServiceFields.map((field, index) => (
 							<div key={field.id} className="grid grid-cols-2 gap-8">
+								{/* Image Upload */}
+								{/* <FormField
+										control={form.control}
+										name={`expertService.${index}.images`}
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Expert Image</FormLabel>
+												<FormDescription>Please add one image only.</FormDescription>
+												<FormControl>
+													<ImageUpload
+														value={field.value ? [field.value] : []}
+														disabled={loading}
+														onChange={(url) => field.onChange(url)}
+														onRemove={() => field.onChange('')}
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/> */}
 								<FormField
 									control={form.control}
 									name={`expertService.${index}.images`} render={({ field }) => (
