@@ -22,14 +22,13 @@ model Store {
   events                  Event[]                         @relation("StoreToEvent")
   casestudies             CaseStudy[]                     @relation("StoreToCaseStudy")
   expertservice           ExpertService[]                 @relation("StoreToExpertService")
-  expertIndustry        ExpertIndustry[]                 @relation("StoreToExpertIndustry")
+  expertIndustry          ExpertIndustry[]                @relation("StoreToExpertIndustry")
   team                    Team[]                          @relation("StoreToTeam")
   teammember              TeamMember[]                    @relation("StoreToTeamMember")
   servicedesc             ServiceDesc[]                   @relation("ServiceDesc")
   servicedescar           ServiceDescAr[]                 @relation("ServiceDescAr")
   idustryDetailes         IndustryDetailes[]              @relation("IndustryDetailes")
-    idustryDetailes2         IndustryDetailes2[]              @relation("IndustryDetailes2")
-
+  idustryDetailes2        IndustryDetailes2[]             @relation("IndustryDetailes2")
   createdAt               DateTime                        @default(now())
   updatedAt               DateTime                        @updatedAt
 }
@@ -272,17 +271,17 @@ model IndustryDetailes{
 }
 model IndustryDetailesPoint{
     id                            String    @id @default(uuid())
-    detaId                        String         
-    industryDetailes              IndustryDetailes @relation("pointtoIndustryDetailes",fields: [detaId],references: [id]) 
+    industrydetailesId                       String         
+    industryDetailes              IndustryDetailes @relation("pointtoIndustryDetailes",fields: [industrydetailesId],references: [id]) 
     text                          String
-    @@index([detaId])
+    @@index([industrydetailesId])
 }
 model IndustryDetailesPointAr{
     id                            String    @id @default(uuid())
-    detaId                         String         
-    industryDetailes              IndustryDetailes @relation("pointtoIndustryDetailesAr",fields: [detaId],references: [id]) 
+    industrydetailesId                        String         
+    industryDetailes              IndustryDetailes @relation("pointtoIndustryDetailesAr",fields: [industrydetailesId],references: [id]) 
     text                         String
-    @@index([detaId])
+    @@index([industrydetailesId])
 }
 model IndustryDetailes2{
   id                            String    @id @default(uuid())
