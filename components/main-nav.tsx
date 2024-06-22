@@ -24,11 +24,21 @@ export function MainNav({
 				`/${params.storeId}/courses-categories`,
 		},
 		{
+			href: `/${params.storeId}/courses`,
+			label: 'Courses',
+			active: pathname === `/${params.storeId}/courses`,
+		},
+		{
 			href: `/${params.storeId}/services-categories`,
 			label: 'Services Categories',
 			active:
 				pathname ===
 				`/${params.storeId}/services-categories`,
+		},
+		{
+			href: `/${params.storeId}/services`,
+			label: 'Services',
+			active: pathname === `/${params.storeId}/services`,
 		},
 		{
 			href: `/${params.storeId}/industries-categories`,
@@ -38,29 +48,29 @@ export function MainNav({
 				`/${params.storeId}/industries-categories`,
 		},
 		{
-			href: `/${params.storeId}/news-categories`,
-			label: 'News & Events categories',
-			active: pathname === `/${params.storeId}/news-categories`,
-		},
-		{
-			href: `/${params.storeId}/teams`,
-			label: 'Teams',
-			active: pathname === `/${params.storeId}/teams`,
-		},
-		{
-			href: `/${params.storeId}/courses`,
-			label: 'Courses',
-			active: pathname === `/${params.storeId}/courses`,
-		},
-		{
-			href: `/${params.storeId}/services`,
-			label: 'Services',
-			active: pathname === `/${params.storeId}/services`,
-		},
-		{
 			href: `/${params.storeId}/industries`,
 			label: 'Industries',
 			active: pathname === `/${params.storeId}/industries`,
+		},
+		{
+			href: `/${params.storeId}/case-studies`,
+			label: 'Case Studies',
+			active: pathname === `/${params.storeId}/case-studies`,
+		},
+		{
+			href: `/${params.storeId}/how-can-help`,
+			label: 'How Can Help',
+			active: pathname === `/${params.storeId}/how-can-help`,
+		},
+		{
+			href: `/${params.storeId}/industry-detailes`,
+			label: 'Industry Detailes',
+			active: pathname === `/${params.storeId}/industry-detailes`,
+		},
+		{
+			href: `/${params.storeId}/news-categories`,
+			label: 'News & Events categories',
+			active: pathname === `/${params.storeId}/news-categories`,
 		},
 		{
 			href: `/${params.storeId}/news`,
@@ -73,16 +83,15 @@ export function MainNav({
 			active: pathname === `/${params.storeId}/events`,
 		},
 		{
+			href: `/${params.storeId}/teams`,
+			label: 'Teams',
+			active: pathname === `/${params.storeId}/teams`,
+		},
+		{
 			href: `/${params.storeId}/team-members`,
 			label: 'Team Members',
 			active: pathname === `/${params.storeId}/team-members`,
 		},
-		{
-			href: `/${params.storeId}/case-studies`,
-			label: 'Case Studies',
-			active: pathname === `/${params.storeId}/case-studies`,
-		},
-
 		{
 			href: `/${params.storeId}/settings`,
 			label: 'Settings',

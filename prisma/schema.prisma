@@ -291,8 +291,8 @@ model IndustryDetailes2{
   store                         Store     @relation("IndustryDetailes2", fields: [storeId], references: [id])
   title                         String
   title_ar                      String
-  industryDetailesPoint         IndustryDetailesPoint2[] @relation("pointtoIndustryDetailes2")
-  industryDetailesPointAr       IndustryDetailesPointAr2[] @relation("pointtoIndustryDetailesAr2")
+  industryDetailesPoint2         IndustryDetailesPoint2[] @relation("pointtoIndustryDetailes2")
+  industryDetailesPointAr2       IndustryDetailesPointAr2[] @relation("pointtoIndustryDetailesAr2")
   @@index([storeId])
   @@index([industryId])
 }

@@ -6,10 +6,10 @@ type industryRequestBody = {
 	industryId: string;
 	title: string;
 	title_ar: string;
-	industryDetailesPoint: {
+	industryDetailesPoint2: {
 		text: string;
 	}[];
-	industryDetailesPointAr: {
+	industryDetailesPointAr2: {
 		text: string;
 	}[];
 };
@@ -38,8 +38,8 @@ export async function POST(
 		const {
 			title,
 			title_ar,
-			industryDetailesPoint,
-			industryDetailesPointAr,
+			industryDetailesPoint2,
+			industryDetailesPointAr2,
 			industryId,
 		} = body;
 
@@ -81,7 +81,7 @@ export async function POST(
 
 		const industry = await prismadb.$transaction(async (prisma) => {
 			const createdindustry =
-				await prisma.industryDetailes.create({
+				await prisma.industryDetailes2.create({
 					data: {
 						title,
 						title_ar,
@@ -95,34 +95,24 @@ export async function POST(
 								id: industryId,
 							},
 						},
-						industryDetailesPoint: {
-							create: industryDetailesPoint.map(
+						industryDetailesPoint2: {
+							create: industryDetailesPoint2.map(
 								(desc) => ({
 									text: desc.text,
-									store: {
-										connect: {
-											id: params.storeId,
-										},
-									},
 								})
 							),
 						},
-						industryDetailesPointAr: {
-							create: industryDetailesPointAr.map(
+						industryDetailesPointAr2: {
+							create: industryDetailesPointAr2.map(
 								(descAr) => ({
 									text: descAr.text,
-									store: {
-										connect: {
-											id: params.storeId,
-										},
-									},
 								})
 							),
 						},
 					},
 					include: {
-						industryDetailesPoint: true,
-						industryDetailesPointAr: true,
+						industryDetailesPoint2: true,
+						industryDetailesPointAr2: true,
 					},
 				});
 
@@ -143,20 +133,20 @@ export async function POST(
 
 export async function GET(
 	req: Request,
-	{ params }: { params: { industrydetailesId: string } }
+	{ params }: { params: { howcanhelpId: string } }
 ) {
 	try {
-		if (!params.industrydetailesId)
+		if (!params.howcanhelpId)
 			return new NextResponse('industry id is required', {
 				status: 400,
 			});
 
-		const industry = await prismadb.industryDetailes.findUnique({
-			where: { id: params.industrydetailesId },
+		const industry = await prismadb.industryDetailes2.findUnique({
+			where: { id: params.howcanhelpId },
 			include: {
 				industry: true,
-				industryDetailesPoint: true,
-				industryDetailesPointAr: true,
+				industryDetailesPoint2: true,
+				industryDetailesPointAr2: true,
 			},
 		});
 
@@ -170,7 +160,7 @@ export async function GET(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { industrydetailesId: string; storeId: string } }
+	{ params }: { params: { howcanhelpId: string; storeId: string } }
 ) {
 	try {
 		const { userId } = auth();
@@ -179,7 +169,7 @@ export async function DELETE(
 				status: 403,
 			});
 
-		if (!params.industrydetailesId)
+		if (!params.howcanhelpId)
 			return new NextResponse('industry id is required', {
 				status: 400,
 			});
@@ -196,8 +186,8 @@ export async function DELETE(
 				status: 405,
 			});
 
-		const industry = await prismadb.industryDetailes.delete({
-			where: { id: params.industrydetailesId },
+		const industry = await prismadb.industryDetailes2.delete({
+			where: { id: params.howcanhelpId },
 		});
 
 		return new NextResponse(JSON.stringify(industry), {
@@ -210,7 +200,7 @@ export async function DELETE(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { industrydetailesId: string; storeId: string } }
+	{ params }: { params: { howcanhelpId: string; storeId: string } }
 ) {
 	try {
 		const { userId } = auth();
@@ -222,7 +212,7 @@ export async function PATCH(
 		const body: industryRequestBody = await req.json();
 		validateRequestBody(body);
 
-		if (!params.industrydetailesId)
+		if (!params.howcanhelpId)
 			return new NextResponse('industry Id is required', {
 				status: 400,
 			});
@@ -241,65 +231,54 @@ export async function PATCH(
 
 		const updatedindustry = await prismadb.$transaction(
 			async (prisma) => {
-				await prisma.industryDetailesPoint.deleteMany({
+				await prisma.industryDetailesPoint2.deleteMany({
 					where: {
-						industrydetailesId:
-							params.industrydetailesId,
+						id: params.howcanhelpId,
 					},
 				});
 
-				await prisma.industryDetailesPointAr.deleteMany(
+				await prisma.industryDetailesPointAr2.deleteMany(
 					{
 						where: {
-							industrydetailesId:
-								params.industrydetailesId,
+							id: params.howcanhelpId,
 						},
 					}
 				);
 
 				const updatedindustry =
-					await prisma.industryDetailes.update({
+					await prisma.industryDetailes2.update({
 						where: {
-							id: params.industrydetailesId,
+							id: params.howcanhelpId,
 						},
 						data: {
 							industryId: body.industryId,
 							title: body.title,
 							title_ar: body.title_ar,
-							industryDetailesPoint: {
-								create: body.industryDetailesPoint.map(
-									(
-										desc
-									) => ({
-										...desc,
-										store: {
-											connect: {
-												id: params.storeId,
-											},
-										},
-									})
-								),
-							},
-							industryDetailesPointAr:
+							industryDetailesPoint2:
 								{
-									create: body.industryDetailesPointAr.map(
+									create: body.industryDetailesPoint2.map(
+										(
+											desc
+										) => ({
+											...desc,
+										})
+									),
+								},
+							industryDetailesPointAr2:
+								{
+									create: body.industryDetailesPointAr2.map(
 										(
 											descAr
 										) => ({
 											...descAr,
-											store: {
-												connect: {
-													id: params.storeId,
-												},
-											},
 										})
 									),
 								},
 						},
 						include: {
-							industryDetailesPoint:
+							industryDetailesPoint2:
 								true,
-							industryDetailesPointAr:
+							industryDetailesPointAr2:
 								true,
 						},
 					});

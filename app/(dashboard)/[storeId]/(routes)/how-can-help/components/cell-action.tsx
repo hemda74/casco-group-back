@@ -30,9 +30,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 		try {
 			setLoading(true);
 			await axios.delete(
-				`/api/${params.storeId}/services/${data.id}`
+				`/api/${params.storeId}/how-can-help/${data.id}`
 			);
-			toast.success('Service deleted.');
+			toast.success('Block deleted.');
 			router.refresh();
 		} catch (error) {
 			toast.error('Something went wrong');
@@ -44,7 +44,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
 	const onCopy = (id: string) => {
 		navigator.clipboard.writeText(id);
-		toast.success('Service ID copied to clipboard.');
+		toast.success('Block ID copied to clipboard.');
 	};
 
 	return (
@@ -74,23 +74,23 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 					<DropdownMenuItem
 						onClick={() => onCopy(data.id)}
 					>
-						<Copy className="mr-2 h-4 w-4" />{' '}
+						<Copy className="mr-2 h-4 w-4" />
 						Copy Id
 					</DropdownMenuItem>
 					<DropdownMenuItem
 						onClick={() =>
 							router.push(
-								`/${params.storeId}/services/${data.id}`
+								`/${params.storeId}/how-can-help/${data.id}`
 							)
 						}
 					>
-						<Edit className="mr-2 h-4 w-4" />{' '}
+						<Edit className="mr-2 h-4 w-4" />
 						Update
 					</DropdownMenuItem>
 					<DropdownMenuItem
 						onClick={() => setOpen(true)}
 					>
-						<Trash className="mr-2 h-4 w-4" />{' '}
+						<Trash className="mr-2 h-4 w-4" />
 						Delete
 					</DropdownMenuItem>
 				</DropdownMenuContent>

@@ -17,13 +17,13 @@ export const ServiceClient: React.FC<ServiceClientProps> = ({ data }) => {
 		<>
 			<div className="flex items-center justify-between">
 				<Heading
-					title={`Services (${data.length})`}
-					description="Manage Services "
+					title={`Total Blocks (${data.length})`}
+					description="Manage industry-detailes "
 				/>
 				<Button
 					onClick={() =>
 						router.push(
-							`/${params.storeId}/services/new`
+							`/${params.storeId}/industry-detailes/new`
 						)
 					}
 				>
@@ -43,8 +43,8 @@ export const ServiceClient: React.FC<ServiceClientProps> = ({ data }) => {
 			/>
 			<Separator />
 			<ApiList
-				entityName="service"
-				entityIdName="serviceId"
+				entityName="industry-detailes"
+				entityIdName="industrydetailesId"
 			/>
 		</>
 	);

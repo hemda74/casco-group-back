@@ -99,11 +99,6 @@ export async function POST(
 							create: industryDetailesPoint.map(
 								(desc) => ({
 									text: desc.text,
-									store: {
-										connect: {
-											id: params.storeId,
-										},
-									},
 								})
 							),
 						},
@@ -111,11 +106,6 @@ export async function POST(
 							create: industryDetailesPointAr.map(
 								(descAr) => ({
 									text: descAr.text,
-									store: {
-										connect: {
-											id: params.storeId,
-										},
-									},
 								})
 							),
 						},
@@ -272,11 +262,6 @@ export async function PATCH(
 										desc
 									) => ({
 										...desc,
-										store: {
-											connect: {
-												id: params.storeId,
-											},
-										},
 									})
 								),
 							},
@@ -287,11 +272,6 @@ export async function PATCH(
 											descAr
 										) => ({
 											...descAr,
-											store: {
-												connect: {
-													id: params.storeId,
-												},
-											},
 										})
 									),
 								},

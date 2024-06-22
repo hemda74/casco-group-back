@@ -1,34 +1,30 @@
 import prismadb from '@/lib/prismadb';
-import { ServiceForm } from './components/service-form';
-
+import { ServiceForm } from './components/industry-detailes-form';
 const ServicePage = async ({
 	params,
 }: {
-	params: { serviceId: string; storeId: string };
+	params: { industrydetailesId: string; storeId: string };
 }) => {
-	const service = await prismadb.service.findUnique({
+	const service = await prismadb.industryDetailes.findUnique({
 		where: {
-			id: params.serviceId,
+			id: params.industrydetailesId,
 		},
 		include: {
-			serviceDesc: true,
-			serviceDescAr: true,
-			expertService: true,
+			industryDetailesPoint: true,
+			industryDetailesPointAr: true
 		}
 	});
 
-	const categories = await prismadb.servicesCategory.findMany({
+	const industries = await prismadb.industry.findMany({
 		where: {
 			storeId: params.storeId,
 		},
 	});
-
-
 	return (
 		<div className="flex-row">
 			<div className="flex-1 space-x-4 p-8 pt-6">
 				<ServiceForm
-					categories={categories}
+					industries={industries}
 					initialData={service}
 				/>
 			</div>

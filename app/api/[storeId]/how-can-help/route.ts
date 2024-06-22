@@ -5,10 +5,10 @@ import prismadb from '@/lib/prismadb';
 type ServiceRequestBody = {
 	title: string;
 	title_ar: string;
-	industryDetailesPoint: {
+	industryDetailesPoint2: {
 		text: string;
 	}[];
-	industryDetailesPointAr: {
+	industryDetailesPointAr2: {
 		text: string;
 	}[];
 	industryId: string;
@@ -26,8 +26,8 @@ export async function POST(
 		const {
 			title,
 			title_ar,
-			industryDetailesPoint,
-			industryDetailesPointAr,
+			industryDetailesPoint2,
+			industryDetailesPointAr2,
 			industryId,
 		} = body;
 
@@ -69,29 +69,23 @@ export async function POST(
 
 		const service = await prismadb.$transaction(async (prisma) => {
 			const createdService =
-				await prisma.industryDetailes.create({
+				await prisma.industryDetailes2.create({
 					data: {
 						storeId: params.storeId,
 						title,
 						title_ar,
 						industryId,
-						industryDetailesPoint: {
-							create: industryDetailesPoint.map(
+						industryDetailesPoint2: {
+							create: industryDetailesPoint2.map(
 								(desc) => ({
 									text: desc.text,
 								})
 							),
 						},
-						industryDetailesPointAr: {
-							create: industryDetailesPointAr.map(
+						industryDetailesPointAr2: {
+							create: industryDetailesPointAr2.map(
 								(descAr) => ({
 									text: descAr.text,
-
-									store: {
-										connect: {
-											id: params.storeId,
-										},
-									},
 								})
 							),
 						},

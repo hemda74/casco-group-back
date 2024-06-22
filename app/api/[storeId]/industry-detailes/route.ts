@@ -86,12 +86,6 @@ export async function POST(
 							create: industryDetailesPointAr.map(
 								(descAr) => ({
 									text: descAr.text,
-
-									store: {
-										connect: {
-											id: params.storeId,
-										},
-									},
 								})
 							),
 						},
