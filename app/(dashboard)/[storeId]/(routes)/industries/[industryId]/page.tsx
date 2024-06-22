@@ -1,5 +1,4 @@
 import prismadb from '@/lib/prismadb';
-
 import { IndustryForm } from './components/industry-form';
 
 const CategoryPage = async ({
@@ -11,7 +10,11 @@ const CategoryPage = async ({
 		where: {
 			id: params.industryId,
 		},
+		include: {
+			expertIndustry: true,
+		},
 	});
+
 	const categories = await prismadb.industryCategory.findMany({
 		where: {
 			storeId: params.storeId,
