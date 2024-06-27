@@ -18,6 +18,26 @@ type industryRequestBody = {
 			url: string;
 		}[];
 	}[];
+	industryDetailes: {
+		title: string;
+		title_ar: string;
+		industryDetailesPoint: {
+			text: string;
+		}[];
+		industryDetailesPointAr: {
+			text: string;
+		}[];
+	}[];
+	industryDetailes2: {
+		title: string;
+		title_ar: string;
+		industryDetailesPoint2: {
+			text: string;
+		}[];
+		industryDetailesPointAr2: {
+			text: string;
+		}[];
+	}[];
 };
 
 const validateRequestBody = (body: industryRequestBody) => {
@@ -41,7 +61,14 @@ export async function POST(
 		const { userId } = auth();
 		const body: industryRequestBody = await req.json();
 
-		const { name, name_ar, expertIndustry, categoryId } = body;
+		const {
+			name,
+			name_ar,
+			expertIndustry,
+			categoryId,
+			industryDetailes,
+			industryDetailes2,
+		} = body;
 
 		if (!userId) {
 			return new NextResponse('Unauthenticated', {
@@ -123,11 +150,93 @@ export async function POST(
 							})
 						),
 					},
+					industryDetailes: {
+						create: industryDetailes.map(
+							(i) => ({
+								title: i.title,
+								title_ar: i.title_ar,
+								store: {
+									connect: {
+										id: params.storeId,
+									},
+								},
+								industryDetailesPoint:
+									{
+										create: i.industryDetailesPoint.map(
+											(
+												point
+											) => ({
+												text: point.text,
+											})
+										),
+									},
+								industryDetailesPointAr:
+									{
+										create: i.industryDetailesPointAr.map(
+											(
+												point
+											) => ({
+												text: point.text,
+											})
+										),
+									},
+							})
+						),
+					},
+					industryDetailes2: {
+						create: industryDetailes2.map(
+							(i) => ({
+								title: i.title,
+								title_ar: i.title_ar,
+								store: {
+									connect: {
+										id: params.storeId,
+									},
+								},
+								industryDetailesPoint2:
+									{
+										create: i.industryDetailesPoint2.map(
+											(
+												point
+											) => ({
+												text: point.text,
+											})
+										),
+									},
+								industryDetailesPointAr2:
+									{
+										create: i.industryDetailesPointAr2.map(
+											(
+												point
+											) => ({
+												text: point.text,
+											})
+										),
+									},
+							})
+						),
+					},
 				},
 				include: {
 					expertIndustry: {
 						include: {
 							images: true,
+						},
+					},
+					industryDetailes: {
+						include: {
+							industryDetailesPoint:
+								true,
+							industryDetailesPointAr:
+								true,
+						},
+					},
+					industryDetailes2: {
+						include: {
+							industryDetailesPoint2:
+								true,
+							industryDetailesPointAr2:
+								true,
 						},
 					},
 				},
@@ -165,6 +274,18 @@ export async function GET(
 				expertIndustry: {
 					include: {
 						images: true,
+					},
+				},
+				industryDetailes: {
+					include: {
+						industryDetailesPoint: true,
+						industryDetailesPointAr: true,
+					},
+				},
+				industryDetailes2: {
+					include: {
+						industryDetailesPoint2: true,
+						industryDetailesPointAr2: true,
 					},
 				},
 			},
@@ -217,7 +338,6 @@ export async function DELETE(
 		return handleErrorResponse(error);
 	}
 }
-
 export async function PATCH(
 	req: Request,
 	{ params }: { params: { industryId: string; storeId: string } }
@@ -256,7 +376,16 @@ export async function PATCH(
 						industryId: params.industryId,
 					},
 				});
-
+				await prisma.industryDetailes.deleteMany({
+					where: {
+						industryId: params.industryId,
+					},
+				});
+				await prisma.industryDetailes2.deleteMany({
+					where: {
+						industryId: params.industryId,
+					},
+				});
 				const updatedindustry =
 					await prisma.industry.update({
 						where: {
@@ -289,11 +418,97 @@ export async function PATCH(
 									})
 								),
 							},
+							industryDetailes: {
+								create: body.industryDetailes.map(
+									(
+										i
+									) => ({
+										title: i.title,
+										title_ar: i.title_ar,
+										store: {
+											connect: {
+												id: params.storeId,
+											},
+										},
+										industryDetailesPoint:
+											{
+												create: i.industryDetailesPoint.map(
+													(
+														point
+													) => ({
+														text: point.text,
+													})
+												),
+											},
+										industryDetailesPointAr:
+											{
+												create: i.industryDetailesPointAr.map(
+													(
+														point
+													) => ({
+														text: point.text,
+													})
+												),
+											},
+									})
+								),
+							},
+							industryDetailes2: {
+								create: body.industryDetailes2.map(
+									(
+										i
+									) => ({
+										title: i.title,
+										title_ar: i.title_ar,
+										store: {
+											connect: {
+												id: params.storeId,
+											},
+										},
+										industryDetailesPoint2:
+											{
+												create: i.industryDetailesPoint2.map(
+													(
+														point
+													) => ({
+														text: point.text,
+													})
+												),
+											},
+										industryDetailesPointAr2:
+											{
+												create: i.industryDetailesPointAr2.map(
+													(
+														point
+													) => ({
+														text: point.text,
+													})
+												),
+											},
+									})
+								),
+							},
 						},
 						include: {
 							expertIndustry: {
 								include: {
 									images: true,
+								},
+							},
+							industryDetailes: {
+								include: {
+									industryDetailesPoint:
+										true,
+									industryDetailesPointAr:
+										true,
+								},
+							},
+							industryDetailes2: {
+								include: {
+									industryDetailesPoint2:
+										true,
+									industryDetailesPointAr2:
+										true,
 								},
 							},
 						},
