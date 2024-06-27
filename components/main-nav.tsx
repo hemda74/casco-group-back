@@ -58,16 +58,6 @@ export function MainNav({
 			active: pathname === `/${params.storeId}/case-studies`,
 		},
 		{
-			href: `/${params.storeId}/how-can-help`,
-			label: 'How Can Help',
-			active: pathname === `/${params.storeId}/how-can-help`,
-		},
-		{
-			href: `/${params.storeId}/industry-detailes`,
-			label: 'Industry Detailes',
-			active: pathname === `/${params.storeId}/industry-detailes`,
-		},
-		{
 			href: `/${params.storeId}/news-categories`,
 			label: 'News & Events categories',
 			active: pathname === `/${params.storeId}/news-categories`,
