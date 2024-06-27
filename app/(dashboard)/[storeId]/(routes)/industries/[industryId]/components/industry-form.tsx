@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
-import { Industry, IndustryCategory, ExpertIndustry } from '@prisma/client';
+import { Industry, IndustryCategory, ExpertIndustry, IndustryDetailes, IndustryDetailes2, IndustryDetailesPoint, IndustryDetailesPointAr } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -43,7 +43,26 @@ const formSchema = z.object({
 		expert_phone: z.string().min(1),
 		expert_mail: z.string().min(1),
 		images: z.object({ url: z.string() }).array(),
-
+	})),
+	industryDetailes: z.array(z.object({
+		title: z.string().min(1),
+		title_ar: z.string().min(1),
+		industryDetailesPoint: z.array(z.object({
+			text: z.string().min(1),
+		})),
+		industryDetailesPointAr: z.array(z.object({
+			text: z.string().min(1),
+		})),
+	})),
+	industryDetailes2: z.array(z.object({
+		title: z.string().min(1),
+		title_ar: z.string().min(1),
+		industryDetailesPoint2: z.array(z.object({
+			text: z.string().min(1),
+		})),
+		industryDetailesPointAr2: z.array(z.object({
+			text: z.string().min(1),
+		})),
 	})),
 });
 
@@ -53,10 +72,12 @@ interface IndustryFormProps {
 	initialData:
 	| (Industry & {
 		expertIndustry: ExpertIndustry[];
+		industryDetailes: IndustryDetailes[];
+		industryDetailes2: IndustryDetailes2[];
+
 	})
 	| null;
 	categories: IndustryCategory[];
-
 }
 
 export const IndustryForm: React.FC<IndustryFormProps> = ({
@@ -69,13 +90,13 @@ export const IndustryForm: React.FC<IndustryFormProps> = ({
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 
-	const title = initialData ? 'Edit category' : 'Create category';
+	const title = initialData ? 'Edit Industry' : 'Create Industry';
 	const description = initialData
-		? 'Edit a category.'
-		: 'Add a new category';
+		? 'Edit a Industry.'
+		: 'Add a new Industry';
 	const toastMessage = initialData
-		? 'Category updated.'
-		: 'Category created.';
+		? 'Industry updated.'
+		: 'Industry created.';
 	const action = initialData ? 'Save changes' : 'Create';
 
 	const form = useForm<IndustryFormValues>({
@@ -85,12 +106,24 @@ export const IndustryForm: React.FC<IndustryFormProps> = ({
 			name_ar: '',
 			categoryId: '',
 			expertIndustry: [],
+			industryDetailes: [],
+			industryDetailes2: [],
 		},
 	});
+
 	const { fields: expertIndustryFields, append: appendexpertIndustry, remove: removeexpertIndustry } = useFieldArray({
 		control: form.control,
 		name: 'expertIndustry',
 	});
+	const { fields: industryDetailesFields, append: appendindustryDetailes, remove: removeindustryDetailes } = useFieldArray({
+		control: form.control,
+		name: 'industryDetailes',
+	});
+	const { fields: industryDetailesFields2, append: appendIndustryDetailes2, remove: removeIndustryDetailes2 } = useFieldArray({
+		control: form.control,
+		name: 'industryDetailes2',
+	});
+
 	const onSubmit = async (data: IndustryFormValues) => {
 		try {
 			setLoading(true);
@@ -174,7 +207,7 @@ export const IndustryForm: React.FC<IndustryFormProps> = ({
 										Name
 									</FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={
 												loading
 											}
@@ -196,7 +229,7 @@ export const IndustryForm: React.FC<IndustryFormProps> = ({
 										Name
 									</FormLabel>
 									<FormControl>
-										<Input
+										<Textarea
 											disabled={
 												loading
 											}
@@ -267,24 +300,25 @@ export const IndustryForm: React.FC<IndustryFormProps> = ({
 						/>
 					</div>
 					<div>
-						<Heading description="Adding Experts to Industry" title="Adding Experts to Industry" />
+						<Heading description="Managing Experts to Industry" title="Managing Experts to Industry" />
 						{expertIndustryFields.map((field, index) => (
 							<div key={field.id} className="grid grid-cols-2 gap-8">
 								<FormField
 									control={form.control}
-									name={`expertIndustry.${index}.images`} render={({ field }) => (
+									name={`expertIndustry.${index}.images`}
+									render={({ field }) => (
 										<FormItem>
 											<FormLabel>Images</FormLabel>
 											<FormControl>
 												<ImageUpload
-													value={field.value.map((image) => image.url)}
+													value={field.value?.map((image) => image.url) || []}
 													disabled={loading}
 													onChange={(url) =>
-														field.onChange([...field.value, { url }])
+														field.onChange([...(field.value || []), { url }])
 													}
 													onRemove={(url) =>
 														field.onChange(
-															field.value.filter(
+															(field.value || []).filter(
 																(current) => current.url !== url
 															)
 														)
@@ -365,23 +399,6 @@ export const IndustryForm: React.FC<IndustryFormProps> = ({
 								/>
 								<FormField
 									control={form.control}
-									name={`expertIndustry.${index}.expert_mail`}
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Expert Mail</FormLabel>
-											<FormControl>
-												<Textarea
-													disabled={loading}
-													placeholder="Enter a Value"
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<FormField
-									control={form.control}
 									name={`expertIndustry.${index}.expert_phone`}
 									render={({ field }) => (
 										<FormItem>
@@ -397,35 +414,400 @@ export const IndustryForm: React.FC<IndustryFormProps> = ({
 										</FormItem>
 									)}
 								/>
+								<FormField
+									control={form.control}
+									name={`expertIndustry.${index}.expert_mail`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Expert Mail</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
 								<Button
 									disabled={loading}
-									variant="destructive"
+									type="button"
 									onClick={() => removeexpertIndustry(index)}
+									variant="destructive"
+									size="sm"
+									className="mt-1"
 								>
 									Remove
 								</Button>
+								<Separator />
 							</div>
 						))}
 						<Button
-							type="button"
 							disabled={loading}
-							variant="secondary"
-							className="mt-5"
+							type="button"
 							onClick={() =>
 								appendexpertIndustry({
 									expert_name: '',
 									expert_name_ar: '',
 									expert_title: '',
 									expert_title_ar: '',
-									expert_mail: '',
 									expert_phone: '',
+									expert_mail: '',
 									images: [],
 								})
 							}
+							variant="secondary"
+							className="mt-2"
 						>
-							Add Expert
+							Add new Expert to Industry
 						</Button>
 					</div>
+					<Separator />
+					<div>
+						<Heading description="Managing Detailes to Industry" title="Managing Detailes to Industry" />
+						{industryDetailesFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-2 gap-8">
+								<FormField
+									control={form.control}
+									name={`industryDetailes.${index}.title`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{`Title ${index + 1} English`}</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a title"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name={`industryDetailes.${index}.title_ar`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{`Title ${index + 1} Arabic`}</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a title in Arabic"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name={`industryDetailes.${index}.industryDetailesPoint`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{`Industry Detailes ${index} Points English`}</FormLabel>
+											<FormControl>
+												<div>
+													{field.value.map((point, pointIndex) => (
+														<div key={pointIndex} className="flex items-center space-x-2">
+															<FormLabel>{`Point ${pointIndex + 1} English`}</FormLabel>
+
+															<Textarea
+																disabled={loading}
+																className='mt-5'
+																placeholder="Enter a detail point"
+																value={point.text}
+																onChange={(e) => {
+																	const newPoints = [...field.value];
+																	newPoints[pointIndex].text = e.target.value;
+																	field.onChange(newPoints);
+																}}
+															/>
+															<Button
+																disabled={loading}
+																type="button"
+																onClick={() => {
+																	const newPoints = field.value.filter((_, i) => i !== pointIndex);
+																	field.onChange(newPoints);
+																}}
+																variant="destructive"
+																size="sm"
+															>
+																Remove
+															</Button>
+														</div>
+													))}
+													<Button
+														disabled={loading}
+														type="button"
+														onClick={() => field.onChange([...field.value, { text: '' }])}
+														variant="secondary"
+														className="mt-2"
+													>
+														Add Point
+													</Button>
+												</div>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name={`industryDetailes.${index}.industryDetailesPointAr`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{`Industry Detailes ${index} Points Arabic`}</FormLabel>
+											<FormControl>
+												<div>
+													{field.value.map((point, pointIndex) => (
+														<div key={pointIndex} className="flex items-center space-x-2">
+															<FormLabel>{`Point ${pointIndex + 1} Arabic`}</FormLabel>
+
+															<Textarea
+																disabled={loading}
+																className='mt-5'
+																placeholder="Enter a detail point in Arabic"
+																value={point.text}
+																onChange={(e) => {
+																	const newPoints = [...field.value];
+																	newPoints[pointIndex].text = e.target.value;
+																	field.onChange(newPoints);
+																}}
+															/>
+															<Button
+																disabled={loading}
+																type="button"
+																onClick={() => {
+																	const newPoints = field.value.filter((_, i) => i !== pointIndex);
+																	field.onChange(newPoints);
+																}}
+																variant="destructive"
+																size="sm"
+															>
+																Remove
+															</Button>
+														</div>
+													))}
+													<Button
+														disabled={loading}
+														type="button"
+														onClick={() => field.onChange([...field.value, { text: '' }])}
+														variant="secondary"
+														className="mt-2"
+													>
+														Add Point
+													</Button>
+												</div>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									type="button"
+									onClick={() => removeindustryDetailes(index)}
+									variant="destructive"
+									size="sm"
+									className="mt-1"
+								>
+									Remove
+								</Button>
+								<Separator />
+							</div>
+						))}
+						<Button
+							disabled={loading}
+							type="button"
+							onClick={() =>
+								appendindustryDetailes({
+									title: '',
+									title_ar: '',
+									industryDetailesPoint: [],
+									industryDetailesPointAr: [],
+								})
+							}
+							variant="secondary"
+							className="mt-2"
+						>
+							Add new Detailes to Industry
+						</Button>
+					</div>
+					<div>
+						<Heading description="’Maniging How Can Help Section to Industry" title="’Maniging How Can Help Section to Industry" />
+						{industryDetailesFields2.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-2 gap-8">
+								<FormField
+									control={form.control}
+									name={`industryDetailes2.${index}.title`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{`Title ${index + 1} English`}</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a title"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name={`industryDetailes2.${index}.title_ar`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{`Title ${index + 1} Arabic`}</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a title in Arabic"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name={`industryDetailes2.${index}.industryDetailesPoint2`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{`How Can Help ${index} Points English`}</FormLabel>
+											<FormControl>
+												<div>
+													{field.value.map((point, pointIndex) => (
+														<div key={pointIndex} className="flex items-center space-x-2">
+															<FormLabel>{`Title ${pointIndex + 1} English`}</FormLabel>
+															<Textarea
+																disabled={loading}
+																className='mt-5'
+																placeholder="Enter a point"
+																value={point.text}
+																onChange={(e) => {
+																	const newPoints = [...field.value];
+																	newPoints[pointIndex].text = e.target.value;
+																	field.onChange(newPoints);
+																}}
+															/>
+															<Button
+																disabled={loading}
+																type="button"
+																onClick={() => {
+																	const newPoints = field.value.filter((_, i) => i !== pointIndex);
+																	field.onChange(newPoints);
+																}}
+																variant="destructive"
+																size="sm"
+															>
+																Remove
+															</Button>
+														</div>
+													))}
+													<Button
+														disabled={loading}
+														type="button"
+														onClick={() => field.onChange([...field.value, { text: '' }])}
+														variant="secondary"
+														className="mt-2"
+													>
+														Add Point
+													</Button>
+												</div>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name={`industryDetailes2.${index}.industryDetailesPointAr2`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{`How Can Help ${index} Points Arabic`}</FormLabel>
+											<FormControl>
+												<div>
+													{field.value.map((point, pointIndex) => (
+														<div key={pointIndex} className="flex items-center space-x-2">
+															<FormLabel>{`Point ${pointIndex + 1} Arabic`}</FormLabel>
+															<Textarea
+																disabled={loading}
+																className='mt-5'
+																placeholder="Enter a detail point in Arabic"
+																value={point.text}
+																onChange={(e) => {
+																	const newPoints = [...field.value];
+																	newPoints[pointIndex].text = e.target.value;
+																	field.onChange(newPoints);
+																}}
+															/>
+															<Button
+																disabled={loading}
+																type="button"
+																onClick={() => {
+																	const newPoints = field.value.filter((_, i) => i !== pointIndex);
+																	field.onChange(newPoints);
+																}}
+																variant="destructive"
+																size="sm"
+															>
+																Remove
+															</Button>
+														</div>
+													))}
+													<Button
+														disabled={loading}
+														type="button"
+														onClick={() => field.onChange([...field.value, { text: '' }])}
+														variant="secondary"
+														className="mt-2"
+													>
+														Add Point
+													</Button>
+												</div>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									type="button"
+									onClick={() => removeIndustryDetailes2(index)}
+									variant="destructive"
+									size="sm"
+									className="mt-1"
+								>
+									Remove
+								</Button>
+								<Separator />
+							</div>
+						))}
+						<Button
+							disabled={loading}
+							type="button"
+							onClick={() =>
+								appendIndustryDetailes2({
+									title: '',
+									title_ar: '',
+									industryDetailesPoint2: [],
+									industryDetailesPointAr2: [],
+								})
+							}
+							variant="secondary"
+							className="mt-2"
+						>
+							Add new Detailes to Industry
+						</Button>
+					</div>
+					<Separator />
 					<Button
 						disabled={loading}
 						className="ml-auto"

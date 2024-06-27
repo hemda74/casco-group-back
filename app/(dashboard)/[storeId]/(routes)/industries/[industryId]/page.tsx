@@ -12,6 +12,18 @@ const CategoryPage = async ({
 		},
 		include: {
 			expertIndustry: true,
+			industryDetailes: {
+				include: {
+					industryDetailesPoint: true,
+					industryDetailesPointAr: true,
+				}
+			},
+			industryDetailes2: {
+				include: {
+					industryDetailesPoint2: true,
+					industryDetailesPointAr2: true,
+				}
+			}
 		},
 	});
 
@@ -20,7 +32,6 @@ const CategoryPage = async ({
 			storeId: params.storeId,
 		},
 	});
-
 	return (
 		<div className="flex-col">
 			<div className="flex-1 space-y-4 p-8 pt-6">
@@ -32,5 +43,4 @@ const CategoryPage = async ({
 		</div>
 	);
 };
-
 export default CategoryPage;

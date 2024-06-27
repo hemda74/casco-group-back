@@ -43,7 +43,7 @@ export const IndustryClient: React.FC<IndustryClientProps> = ({ data }) => {
 			/>
 			<Separator />
 			<ApiList
-				entityName="industry"
+				entityName="industries"
 				entityIdName="industryId"
 			/>
 		</>
