@@ -67,42 +67,136 @@ model Course {
     store                    Store       @relation("StoreToCourse", fields: [storeId], references: [id])
     categoryId               String // Foreign Key to Courses Category
     category                 CoursesCategory    @relation("CategoryToCourse", fields: [categoryId], references: [id])
-    name                     String 
-    name_ar                  String 
+    title                    String 
+    title_ar                 String 
     price_egp                Decimal
     price_uae                Decimal
     price_ksa                Decimal
     price_usd                Decimal
     images                   Image[] // Relation to Image model
-    intro                    String 
-    intro_ar                 String 
+    intro                    Intro_en[]
+    intro_ar                 Intro_ar[]
     short_intro              String
     short_intro_ar           String
     duaration                String 
     duration_ar              String 
-    who_sh_att               String 
-    who_sh_att_ar            String 
-    c_obje                   String 
-    c_obje_ar                String 
-    c_obje_list              String 
-    c_obje_list_ar           String 
-    c_content                String 
-    c_content_ar             String 
-    wh_we_bnfi               String 
-    wh_we_bnfi_ar            String 
+    who_sh_att               Who_should_en[] 
+    who_sh_att_ar            Who_should_ar[] 
+    c_obje                   C_objective_en[] 
+    c_obje_ar                C_objective_ar[] 
+    c_content                C_content_en[]
+    c_content_ar             C_content_ar[]
+    wh_we_bnfi               C_benefit_en[]
+    wh_we_bnfi_ar            C_benefit_ar[]
     c_in_house               String 
     c_in_house_ar            String 
     delv_and_leaders         String 
     delv_and_leaders_ar      String 
-    certification            String 
-    certification_ar         String 
-    course_type              String
-    course_type_ar           String
-    course_date              String   
-    course_date_ar           String   
+    certification            C_certification_en[] 
+    certification_ar         C_certification_ar[] 
+    course_date              C_date_en[]   
+    course_date_ar           C_date_ar[]  
  
     @@index([storeId])
     @@index([categoryId])
+}
+model Intro_en{
+id       Int @id @default(autoincrement())
+text     String
+courseId   String
+course     Course @relation(fields: [courseId],references: [id])
+@@index([courseId])
+}
+model Intro_ar{
+id       Int @id @default(autoincrement())
+text     String
+courseId   String
+course     Course @relation(fields: [courseId],references: [id])
+@@index([courseId])
+}
+model C_certification_en{
+id       Int @id @default(autoincrement())
+text     String
+courseId   String
+course     Course @relation(fields: [courseId],references: [id])
+@@index([courseId])
+}
+model C_certification_ar{
+id       Int @id @default(autoincrement())
+text     String
+courseId   String
+course     Course @relation(fields: [courseId],references: [id])
+@@index([courseId])
+}
+model Who_should_en{
+id       Int @id @default(autoincrement())
+text     String
+courseId   String
+course     Course @relation(fields: [courseId],references: [id])
+@@index([courseId])
+}
+model Who_should_ar{
+id       Int @id @default(autoincrement())
+text     String
+courseId   String
+course     Course @relation(fields: [courseId],references: [id])
+@@index([courseId])
+}
+model C_objective_en{
+id       Int @id @default(autoincrement())
+text     String
+courseId   String
+course     Course @relation(fields: [courseId],references: [id])
+@@index([courseId])
+}
+model C_objective_ar{
+id       Int @id @default(autoincrement())
+text     String
+courseId   String
+course     Course @relation(fields: [courseId],references: [id])
+@@index([courseId])
+}
+model C_content_en{
+id       Int @id @default(autoincrement())
+text     String
+courseId   String
+course     Course @relation(fields: [courseId],references: [id])
+@@index([courseId])
+}
+model C_content_ar{
+id       Int @id @default(autoincrement())
+text     String
+courseId   String
+course     Course @relation(fields: [courseId],references: [id])
+@@index([courseId])
+}
+model C_benefit_en{
+id       Int @id @default(autoincrement())
+text     String
+courseId   String
+course     Course @relation(fields: [courseId],references: [id])
+@@index([courseId])
+}
+model C_benefit_ar{
+id       Int @id @default(autoincrement())
+text     String
+courseId   String
+course     Course @relation(fields: [courseId],references: [id])
+@@index([courseId])
+}
+model C_date_en{
+id       Int @id @default(autoincrement())
+text     String
+courseId   String
+course     Course @relation(fields: [courseId],references: [id])
+@@index([courseId])
+}
+model C_date_ar{
+id       Int @id @default(autoincrement())
+text     String
+courseId   String
+course     Course @relation(fields: [courseId],references: [id])
+@@index([courseId])
 }
 model Team {
  id               String @id @default(uuid())
