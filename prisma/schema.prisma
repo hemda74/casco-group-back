@@ -73,13 +73,17 @@ model Course {
     price_uae                  Decimal
     price_ksa                  Decimal
     price_usd                  Decimal
+    c_short_intro_en           String
+    c_short_intro_ar           String
+    c_duration_en              String 
+    c_duration_ar              String
+    c_in_house_en              String 
+    c_in_house_ar              String 
+    c_delv_and_leaders_en      String 
+    c_delv_and_leaders_ar      String  
     images                     Image[] // Relation to Image model
     c_intro_en                 C_intro_en[]
     c_intro_ar                 C_intro_ar[]
-    c_short_intro              String
-    c_short_intro_ar           String
-    c_duaration                String 
-    c_duration_ar              String 
     c_who_should_en            C_who_should_en[] 
     c_who_should_ar            C_who_should_ar[] 
     c_objective_en             C_objective_en[] 
@@ -88,10 +92,6 @@ model Course {
     c_content_ar               C_content_ar[]
     c_benefit_en               C_benefit_en[]
     c_benefit_ar               C_benefit_ar[]
-    c_in_house                 String 
-    c_in_house_ar              String 
-    delv_and_leaders           String 
-    delv_and_leaders_ar        String 
     c_certification_en         C_certification_en[] 
     c_certification_ar         C_certification_ar[] 
     c_date_en                  C_date_en[]   
@@ -100,102 +100,102 @@ model Course {
     @@index([categoryId])
 }
 model C_intro_en{
-id         Int @id @default(autoincrement())
-text       String
-courseId   String
-course     Course @relation(fields: [courseId],references: [id])
-@@index([courseId])
+    id         Int @id @default(autoincrement())
+    text       String
+    courseId   String
+    course     Course @relation(fields: [courseId],references: [id])
+    @@index([courseId])
 }
 model C_intro_ar{
-id         Int @id @default(autoincrement())
-text       String
-courseId   String
-course     Course @relation(fields: [courseId],references: [id])
-@@index([courseId])
+    id         Int @id @default(autoincrement())
+    text       String
+    courseId   String
+    course     Course @relation(fields: [courseId],references: [id])
+    @@index([courseId])
 }
 model C_certification_en{
-id         Int @id @default(autoincrement())
-text       String
-courseId   String
-course     Course @relation(fields: [courseId],references: [id])
-@@index([courseId])
+    id         Int @id @default(autoincrement())
+    text       String
+    courseId   String
+    course     Course @relation(fields: [courseId],references: [id])
+    @@index([courseId])
 }
 model C_certification_ar{
-id         Int @id @default(autoincrement())
-text       String
-courseId   String
-course     Course @relation(fields: [courseId],references: [id])
-@@index([courseId])
+    id         Int @id @default(autoincrement())
+    text       String
+    courseId   String
+    course     Course @relation(fields: [courseId],references: [id])
+    @@index([courseId])
 }
 model C_who_should_en{
-id         Int @id @default(autoincrement())
-text       String
-courseId   String
-course     Course @relation(fields: [courseId],references: [id])
-@@index([courseId])
+    id         Int @id @default(autoincrement())
+    text       String
+    courseId   String
+    course     Course @relation(fields: [courseId],references: [id])
+    @@index([courseId])
 }
 model C_who_should_ar{
-id         Int @id @default(autoincrement())
-text       String
-courseId   String
-course     Course @relation(fields: [courseId],references: [id])
-@@index([courseId])
+    id         Int @id @default(autoincrement())
+    text       String
+    courseId   String
+    course     Course @relation(fields: [courseId],references: [id])
+    @@index([courseId])
 }
 model C_objective_en{
-id         Int @id @default(autoincrement())
-text       String
-courseId   String
-course     Course @relation(fields: [courseId],references: [id])
-@@index([courseId])
+    id         Int @id @default(autoincrement())
+    text       String
+    courseId   String
+    course     Course @relation(fields: [courseId],references: [id])
+    @@index([courseId])
 }
 model C_objective_ar{
-id         Int @id @default(autoincrement())
-text       String
-courseId   String
-course     Course @relation(fields: [courseId],references: [id])
-@@index([courseId])
+    id         Int @id @default(autoincrement())
+    text       String
+    courseId   String
+    course     Course @relation(fields: [courseId],references: [id])
+    @@index([courseId])
 }
 model C_content_en{
-id         Int @id @default(autoincrement())
-text       String
-courseId   String
-course     Course @relation(fields: [courseId],references: [id])
-@@index([courseId])
+    id         Int @id @default(autoincrement())
+    text       String
+    courseId   String
+    course     Course @relation(fields: [courseId],references: [id])
+    @@index([courseId])
 }
-model C_content_ar{
-id         Int @id @default(autoincrement())
-text       String
-courseId   String
-course     Course @relation(fields: [courseId],references: [id])
-@@index([courseId])
+ model C_content_ar{
+    id         Int @id @default(autoincrement())
+    text       String
+    courseId   String
+    course     Course @relation(fields: [courseId],references: [id])
+    @@index([courseId])
 }
 model C_benefit_en{
-id         Int @id @default(autoincrement())
-text       String
-courseId   String
-course     Course @relation(fields: [courseId],references: [id])
-@@index([courseId])
+    id         Int @id @default(autoincrement())
+    text       String
+    courseId   String
+    course     Course @relation(fields: [courseId],references: [id])
+    @@index([courseId])
 }
 model C_benefit_ar{
-id         Int @id @default(autoincrement())
-text       String
-courseId   String
-course     Course @relation(fields: [courseId],references: [id])
-@@index([courseId])
+    id         Int @id @default(autoincrement())
+    text       String
+    courseId   String
+    course     Course @relation(fields: [courseId],references: [id])
+    @@index([courseId])
 }
 model C_date_en{
-id         Int @id @default(autoincrement())
-text       String
-courseId   String
-course     Course @relation(fields: [courseId],references: [id])
-@@index([courseId])
+    id         Int @id @default(autoincrement())
+    text       String
+    courseId   String
+    course     Course @relation(fields: [courseId],references: [id])
+    @@index([courseId])
 }
 model C_date_ar{
-id         Int @id @default(autoincrement())
-text       String
-courseId   String
-course     Course @relation(fields: [courseId],references: [id])
-@@index([courseId])
+    id         Int @id @default(autoincrement())
+    text       String
+    courseId   String
+    course     Course @relation(fields: [courseId],references: [id])
+    @@index([courseId])
 }
 model Team {
  id               String @id @default(uuid())
