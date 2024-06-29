@@ -20,6 +20,7 @@ model Store {
   Industries              Industry[]                      @relation("StoreToIndustry")
   news                    News[]                          @relation("StoreToNews")
   events                  Event[]                         @relation("StoreToEvent")
+  insidersView                  InsidersView[]                         @relation("StoreToInsidersView")
   casestudies             CaseStudy[]                     @relation("StoreToCaseStudy")
   expertservice           ExpertService[]                 @relation("StoreToExpertService")
   expertIndustry          ExpertIndustry[]                @relation("StoreToExpertIndustry")
@@ -442,8 +443,7 @@ model Image {
   courseId        String
   course          Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
   url             String // URL of the image
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  
   @@index([courseId])
 }
 model Image2 {
@@ -451,8 +451,6 @@ model Image2 {
   expertserviceId        String
   expertService          ExpertService  @relation(fields: [expertserviceId], references: [id], onDelete: Cascade)
   url             String // URL of the image
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
   @@index([expertserviceId])
 }
 model Image3 {
@@ -460,8 +458,6 @@ model Image3 {
   casestudyId           String
   casestudy             CaseStudy  @relation(fields: [casestudyId], references: [id], onDelete: Cascade)
   url                   String // URL of the image
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
   @@index([casestudyId])
 }
 model Image4 {
@@ -469,8 +465,6 @@ model Image4 {
   teamId                String
   team                  Team  @relation(fields: [teamId], references: [id], onDelete: Cascade)
   url                   String // URL of the image
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
   @@index([teamId])
 }
 model Image5 {
@@ -478,8 +472,6 @@ model Image5 {
   newsId                String
   news                  News  @relation(fields: [newsId], references: [id], onDelete: Cascade)
   url                   String // URL of the image
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
   @@index([newsId])
 }
 model Image6 {
@@ -487,8 +479,6 @@ model Image6 {
   eventId                String
   event                 Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
   url                   String // URL of the image
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
   @@index([eventId])
 }
 model Image7 {
@@ -496,8 +486,6 @@ model Image7 {
   teammemberId                String
   teammember              TeamMember  @relation(fields: [teammemberId], references: [id], onDelete: Cascade)
   url                   String // URL of the image
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
   @@index([teammemberId])
 }
 model Image8 {
@@ -505,8 +493,7 @@ model Image8 {
   expertIndustryId        String
   expertIndustry          ExpertIndustry  @relation(fields: [expertIndustryId], references: [id], onDelete: Cascade)
   url             String // URL of the image
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  
   @@index([expertIndustryId])
 }
 model paragrph_news {
@@ -585,4 +572,17 @@ model Event {
     date_of_event_ar              String
     @@index([storeId])
     @@index([categoryId])
+}
+model InsidersView{
+    id                            String @id @default(uuid())
+    storeId                       String // Foreign Key to Store
+    store                         Store       @relation("StoreToInsidersView", fields: [storeId], references: [id])
+    imageUrl                      String
+    text                          String
+    name                          String
+    title                         String
+    text_ar                       String
+    name_ar                       String
+    title_ar                      String
+    @@index([storeId])
 }

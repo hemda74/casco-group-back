@@ -83,6 +83,12 @@ export function MainNav({
 			active: pathname === `/${params.storeId}/team-members`,
 		},
 		{
+			href: `/${params.storeId}/insidersviews`,
+			label: 'Insiders Views',
+			active: pathname === `/${params.storeId}/insidersviews`,
+		},
+
+		{
 			href: `/${params.storeId}/settings`,
 			label: 'Settings',
 			active: pathname === `/${params.storeId}/settings`,
