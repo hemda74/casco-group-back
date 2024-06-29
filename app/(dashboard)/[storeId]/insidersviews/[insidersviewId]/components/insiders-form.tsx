@@ -72,7 +72,7 @@ export const InsidersViewForm: React.FC<InsidersViewFormProps> = ({
     try {
       setLoading(true);
       if (initialData) {
-        await axios.patch(`/api/${params.storeId}/insidersviews/${params.insidersViewId}`, data);
+        await axios.patch(`/api/${params.storeId}/insidersviews/${params.insidersviewId}`, data);
       } else {
         await axios.post(`/api/${params.storeId}/insidersviews`, data);
       }
@@ -89,7 +89,7 @@ export const InsidersViewForm: React.FC<InsidersViewFormProps> = ({
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/insidersviews/${params.insidersViewId}`);
+      await axios.delete(`/api/${params.storeId}/insidersviews/${params.insidersviewId}`);
       router.refresh();
       router.push(`/${params.storeId}/insidersviews`);
       toast.success('InsidersView deleted.');
@@ -151,7 +151,7 @@ export const InsidersViewForm: React.FC<InsidersViewFormProps> = ({
                 <FormItem>
                   <FormLabel>Author Name (English)</FormLabel>
                   <FormControl>
-                    <Input disabled={loading} placeholder="InsidersView label" {...field} />
+                    <Textarea disabled={loading} placeholder="" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -164,7 +164,7 @@ export const InsidersViewForm: React.FC<InsidersViewFormProps> = ({
                 <FormItem>
                   <FormLabel>Author Name (Arabic)</FormLabel>
                   <FormControl>
-                    <Input disabled={loading} placeholder="InsidersView label" {...field} />
+                    <Textarea disabled={loading} placeholder="" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -177,7 +177,7 @@ export const InsidersViewForm: React.FC<InsidersViewFormProps> = ({
                 <FormItem>
                   <FormLabel>Author title (English)</FormLabel>
                   <FormControl>
-                    <Input disabled={loading} placeholder="InsidersView label" {...field} />
+                    <Textarea disabled={loading} placeholder="" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -190,7 +190,7 @@ export const InsidersViewForm: React.FC<InsidersViewFormProps> = ({
                 <FormItem>
                   <FormLabel>Author Title (Arabic)</FormLabel>
                   <FormControl>
-                    <Input disabled={loading} placeholder="InsidersView label" {...field} />
+                    <Textarea disabled={loading} placeholder="" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -203,7 +203,7 @@ export const InsidersViewForm: React.FC<InsidersViewFormProps> = ({
                 <FormItem>
                   <FormLabel>Text (English)</FormLabel>
                   <FormControl>
-                    <Input disabled={loading} placeholder="InsidersView label" {...field} />
+                    <Textarea disabled={loading} placeholder="" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -216,7 +216,7 @@ export const InsidersViewForm: React.FC<InsidersViewFormProps> = ({
                 <FormItem>
                   <FormLabel>Text (Arabic)</FormLabel>
                   <FormControl>
-                    <Input disabled={loading} placeholder="InsidersView label" {...field} />
+                    <Textarea disabled={loading} placeholder="" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

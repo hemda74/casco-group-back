@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import prismadb from "@/lib/prismadb";
 
 import { InsidersViewColumn } from "./components/columns"
-import { InsidersViewClient } from "./components/client";
+import { InsidersviewClient } from "./components/client";
 
 const insidersViewsPage = async ({
   params
@@ -32,7 +32,7 @@ const insidersViewsPage = async ({
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <InsidersViewClient data={formattedinsidersViews} />
+        <InsidersviewClient data={formattedinsidersViews} />
       </div>
     </div>
   );

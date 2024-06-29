@@ -11,11 +11,11 @@ import { ApiList } from "@/components/ui/api-list";
 
 import { columns, InsidersViewColumn } from "./columns";
 
-interface insidersviewClientProps {
+interface InsidersviewClientProps {
   data: InsidersViewColumn[];
 }
 
-export const insidersviewClient: React.FC<insidersviewClientProps> = ({
+export const InsidersviewClient: React.FC<InsidersviewClientProps> = ({
   data
 }) => {
   const params = useParams();
