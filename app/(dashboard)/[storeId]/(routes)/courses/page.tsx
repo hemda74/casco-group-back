@@ -1,68 +1,73 @@
-import { format } from 'date-fns';
-
 import prismadb from '@/lib/prismadb';
-import { formatter } from '@/lib/utils';
+import { CourseColumn } from './components/columns';
+import { CourseClient } from './components/client';
 
-import { ProductsClient } from './components/client';
-import { ProductColumn } from './components/columns';
-
-const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
-	const courses = await prismadb.course.findMany({
+const CategoriesPage = async ({ params }: { params: { storeId: string } }) => {
+	const categories = await prismadb.course.findMany({
 		where: {
 			storeId: params.storeId,
 		},
 		include: {
 			category: true,
+			c_benefit_ar: true,
+			c_benefit_en: true,
+			c_certification_ar: true,
+			c_certification_en: true,
+			c_content_ar: true,
+			c_content_en: true,
+			c_date_ar: true,
+			c_date_en: true,
+			c_intro_ar: true,
+			c_intro_en: true,
+			c_objective_ar: true,
+			c_objective_en: true,
+			c_who_should_ar: true,
+			c_who_should_en: true,
 		},
 		orderBy: {
-			name: 'desc',
+			c_title: 'desc',
 		},
 	});
 
-	const formattedProducts: ProductColumn[] = courses.map((item) => ({
+	const formattedCategories: CourseColumn[] = categories.map((item) => ({
 		id: item.id,
-		name: item.name,
-		name_ar: item.name_ar,
-		intro: item.intro,
-		intro_ar: item.intro_ar,
-		duaration: item.duaration,
-		duration_ar: item.duration_ar,
-		who_sh_att: item.who_sh_att,
-		who_sh_att_ar: item.who_sh_att_ar,
-		c_obje: item.c_obje,
-		c_obje_ar: item.c_obje_ar,
-		c_obje_list: item.c_obje_list,
-		c_obje_list_ar: item.c_obje_list_ar,
-		c_content: item.c_content,
-		c_content_ar: item.c_content_ar,
-		wh_we_bnfi: item.wh_we_bnfi,
-		wh_we_bnfi_ar: item.wh_we_bnfi_ar,
-		c_in_house: item.c_in_house,
-		c_in_house_ar: item.c_in_house_ar,
-		delv_and_leaders: item.delv_and_leaders,
-		delv_and_leaders_ar: item.delv_and_leaders_ar,
+		c_title: item.c_title,
+		c_title_ar: item.c_title_ar,
+		category: item.category.name,
 		price_egp: item.price_egp,
 		price_ksa: item.price_ksa,
 		price_uae: item.price_uae,
 		price_usd: item.price_usd,
-		category: item.category.name,
-		short_intro: item.short_intro,
-		short_intro_ar: item.short_intro_ar,
-		certification: item.certification,
-		certification_ar: item.certification_ar,
-		course_type: item.course_type,
-		course_type_ar: item.course_date_ar,
-		course_date: item.course_date,
-		course_date_ar: item.course_date_ar,
+		c_short_intro_en: item.c_short_intro_en,
+		c_short_intro_ar: item.c_short_intro_ar,
+		c_duration_en: item.c_duration_en,
+		c_duration_ar: item.c_duration_ar,
+		c_in_house_en: item.c_in_house_en,
+		c_in_house_ar: item.c_in_house_ar,
+		c_delv_and_leaders_en: item.c_delv_and_leaders_en,
+		c_delv_and_leaders_ar: item.c_delv_and_leaders_ar,
+		c_intro_en: item.c_intro_en.map((ex) => ex.text),
+		c_intro_ar: item.c_intro_ar.map((ex) => ex.text),
+		c_date_en: item.c_date_en.map((ex) => ex.text),
+		c_date_ar: item.c_date_ar.map((ex) => ex.text),
+		c_content_en: item.c_content_en.map((ex) => ex.text),
+		c_content_ar: item.c_content_ar.map((ex) => ex.text),
+		c_who_should_en: item.c_who_should_en.map((ex) => ex.text),
+		c_who_should_ar: item.c_who_should_ar.map((ex) => ex.text),
+		c_objective_en: item.c_objective_en.map((ex) => ex.text),
+		c_objective_ar: item.c_objective_ar.map((ex) => ex.text),
+		c_benefit_en: item.c_benefit_en.map((ex) => ex.text),
+		c_benefit_ar: item.c_benefit_ar.map((ex) => ex.text),
+		c_certification_en: item.c_certification_en.map((ex) => ex.text),
+		c_certification_ar: item.c_certification_ar.map((ex) => ex.text),
 	}));
-
 	return (
 		<div className="flex-col">
 			<div className="flex-1 space-y-4 p-8 pt-6">
-				<ProductsClient data={formattedProducts} />
+				<CourseClient data={formattedCategories} />
 			</div>
 		</div>
 	);
 };
 
-export default ProductsPage;
+export default CategoriesPage;

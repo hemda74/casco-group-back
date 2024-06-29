@@ -1,7 +1,65 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
-
 import prismadb from '@/lib/prismadb';
+type courseRequestBody = {
+	categoryId: string;
+	c_title: string;
+	c_title_ar: string;
+	price_egp: number;
+	price_ksa: number;
+	price_uae: number;
+	price_usd: number;
+	c_short_intro_en: string;
+	c_short_intro_ar: string;
+	c_duration_en: string;
+	c_duration_ar: string;
+	c_in_house_en: string;
+	c_in_house_ar: string;
+	c_delv_and_leaders_en: string;
+	c_delv_and_leaders_ar: string;
+	c_intro_en: {
+		text: string;
+	}[];
+	c_intro_ar: {
+		text: string;
+	}[];
+	c_who_should_en: {
+		text: string;
+	}[];
+	c_who_should_ar: {
+		text: string;
+	}[];
+	c_objective_en: {
+		text: string;
+	}[];
+	c_objective_ar: {
+		text: string;
+	}[];
+	c_content_en: {
+		text: string;
+	}[];
+	c_content_ar: {
+		text: string;
+	}[];
+	c_benefit_en: {
+		text: string;
+	}[];
+	c_benefit_ar: {
+		text: string;
+	}[];
+	c_certification_en: {
+		text: string;
+	}[];
+	c_certification_ar: {
+		text: string;
+	}[];
+	c_date_en: {
+		text: string;
+	}[];
+	c_date_ar: {
+		text: string;
+	}[];
+};
 
 export async function POST(
 	req: Request,
@@ -9,345 +67,172 @@ export async function POST(
 ) {
 	try {
 		const { userId } = auth();
-
-		const body = await req.json();
-
+		const body: courseRequestBody = await req.json();
 		const {
-			name,
-			name_ar,
+			c_title,
+			c_title_ar,
 			categoryId,
-			images,
-			price_usd,
 			price_egp,
-			price_uae,
 			price_ksa,
-			intro,
-			intro_ar,
-			short_intro,
-			short_intro_ar,
-			duaration,
-			duration_ar,
-			who_sh_att,
-			who_sh_att_ar,
-			c_obje_list,
-			c_obje_list_ar,
-			c_obje,
-			course_type,
-			course_type_ar,
-			c_obje_ar,
-			c_content,
-			c_content_ar,
-			wh_we_bnfi,
-			wh_we_bnfi_ar,
-			c_in_house,
+			price_uae,
+			price_usd,
+			c_short_intro_en,
+			c_short_intro_ar,
+			c_duration_en,
+			c_duration_ar,
+			c_in_house_en,
 			c_in_house_ar,
-			delv_and_leaders,
-			delv_and_leaders_ar,
-			course_date,
-			course_date_ar,
-			certification,
-			certification_ar,
+			c_delv_and_leaders_en,
+			c_delv_and_leaders_ar,
+			c_intro_en,
+			c_intro_ar,
+			c_benefit_ar,
+			c_benefit_en,
+			c_certification_ar,
+			c_certification_en,
+			c_content_ar,
+			c_content_en,
+			c_date_ar,
+			c_date_en,
+			c_objective_ar,
+			c_objective_en,
+			c_who_should_ar,
+			c_who_should_en,
 		} = body;
-
 		if (!userId) {
 			return new NextResponse('Unauthenticated', {
 				status: 403,
 			});
 		}
-		if (!name) {
-			return new NextResponse('Name is required', {
+		if (!c_title) {
+			return new NextResponse('c_title is required', {
 				status: 400,
 			});
 		}
-		if (!name_ar) {
-			return new NextResponse(' Arabic Name is required', {
-				status: 400,
-			});
-		}
-		if (!images || !images.length) {
-			return new NextResponse('Images are required', {
-				status: 400,
-			});
-		}
-		if (!price_egp) {
-			return new NextResponse('Price is required', {
-				status: 400,
-			});
-		}
-		if (!price_uae) {
-			return new NextResponse('Price is required', {
-				status: 400,
-			});
-		}
-		if (!price_ksa) {
-			return new NextResponse('Price is required', {
-				status: 400,
-			});
-		}
-		if (!price_usd) {
-			return new NextResponse('Price is required', {
+		if (!c_title_ar) {
+			return new NextResponse('Arabic c_title is required', {
 				status: 400,
 			});
 		}
 		if (!categoryId) {
-			return new NextResponse('Category id is required', {
+			return new NextResponse('Billboard ID is required', {
 				status: 400,
 			});
 		}
-		if (!intro) {
-			return new NextResponse('intro is required', {
-				status: 400,
-			});
-		}
-		if (!intro_ar) {
-			return new NextResponse(
-				'introduction in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!short_intro) {
-			return new NextResponse('intro is required', {
-				status: 400,
-			});
-		}
-		if (!short_intro_ar) {
-			return new NextResponse(
-				'introduction in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!duaration) {
-			return new NextResponse('duaration is required', {
-				status: 400,
-			});
-		}
-		if (!duration_ar) {
-			return new NextResponse(
-				'duaration in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!who_sh_att) {
-			return new NextResponse(
-				'who should attend is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!who_sh_att_ar) {
-			return new NextResponse(
-				'who should attend in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!c_obje) {
-			return new NextResponse(
-				'course objective is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!c_obje_ar) {
-			return new NextResponse(
-				'course objective is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!c_obje_list) {
-			return new NextResponse(
-				'course objective in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!c_obje_list_ar) {
-			return new NextResponse(
-				'course objective in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!c_content) {
-			return new NextResponse('course conetent is required', {
-				status: 400,
-			});
-		}
-		if (!c_content_ar) {
-			return new NextResponse(
-				'course conetent in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!wh_we_bnfi) {
-			return new NextResponse('what we benefit is required', {
-				status: 400,
-			});
-		}
-		if (!wh_we_bnfi_ar) {
-			return new NextResponse(
-				'what we benefit in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!c_in_house) {
-			return new NextResponse('course in house is required', {
-				status: 400,
-			});
-		}
-		if (!c_in_house_ar) {
-			return new NextResponse('course in house is required', {
-				status: 400,
-			});
-		}
-		if (!course_type) {
-			return new NextResponse('date and vanue is required', {
-				status: 400,
-			});
-		}
-		if (!course_type_ar) {
-			return new NextResponse('date and vanue is required', {
-				status: 400,
-			});
-		}
-		if (!delv_and_leaders) {
-			return new NextResponse(
-				'delviary and course leaders is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!delv_and_leaders_ar) {
-			return new NextResponse(
-				'delviary and course leaders in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!certification) {
-			return new NextResponse(
-				'delviary and course leaders in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!certification_ar) {
-			return new NextResponse(
-				'delviary and course leaders in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!course_date) {
-			return new NextResponse(
-				'delviary and course leaders in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!course_date_ar) {
-			return new NextResponse(
-				'delviary and course leaders in arabic is required',
-				{
-					status: 400,
-				}
-			);
-		}
-
 		if (!params.storeId) {
 			return new NextResponse('Store id is required', {
 				status: 400,
 			});
 		}
-
 		const storeByUserId = await prismadb.store.findFirst({
 			where: {
 				id: params.storeId,
 				userId,
 			},
 		});
-
 		if (!storeByUserId) {
 			return new NextResponse('Unauthorized', {
 				status: 405,
 			});
 		}
-
-		const product = await prismadb.course.create({
+		const category = await prismadb.course.create({
 			data: {
-				name,
-				name_ar,
-				price_usd,
+				c_title,
+				c_title_ar,
 				price_egp,
-				price_uae,
 				price_ksa,
-				categoryId,
-				intro,
-				intro_ar,
-				short_intro,
-				short_intro_ar,
-				duaration,
-				duration_ar,
-				who_sh_att,
-				who_sh_att_ar,
-				c_obje_list,
-				c_obje_list_ar,
-				c_obje,
-				course_type,
-				course_type_ar,
-				c_obje_ar,
-				c_content,
-				c_content_ar,
-				wh_we_bnfi,
-				wh_we_bnfi_ar,
-				c_in_house,
+				price_uae,
+				price_usd,
+				c_short_intro_en,
+				c_short_intro_ar,
+				c_duration_en,
+				c_duration_ar,
+				c_in_house_en,
 				c_in_house_ar,
-				delv_and_leaders,
-				delv_and_leaders_ar,
-				course_date,
-				course_date_ar,
-				certification,
-				certification_ar,
-				storeId: params.storeId,
-				images: {
-					createMany: {
-						data: [
-							...images.map(
-								(image: {
-									url: string;
-								}) => image
-							),
-						],
-					},
+				c_delv_and_leaders_en,
+				c_delv_and_leaders_ar,
+				c_intro_en: {
+					create: c_intro_en.map((i) => ({
+						text: i.text,
+					})),
+				},
+				c_intro_ar: {
+					create: c_intro_ar.map((i) => ({
+						text: i.text,
+					})),
+				},
+				c_date_en: {
+					create: c_date_en.map((i) => ({
+						text: i.text,
+					})),
+				},
+				c_date_ar: {
+					create: c_date_ar.map((i) => ({
+						text: i.text,
+					})),
+				},
+				c_content_en: {
+					create: c_content_en.map((i) => ({
+						text: i.text,
+					})),
+				},
+				c_content_ar: {
+					create: c_content_ar.map((i) => ({
+						text: i.text,
+					})),
+				},
+				c_benefit_en: {
+					create: c_benefit_en.map((i) => ({
+						text: i.text,
+					})),
+				},
+				c_benefit_ar: {
+					create: c_benefit_ar.map((i) => ({
+						text: i.text,
+					})),
+				},
+				c_certification_en: {
+					create: c_certification_en.map((i) => ({
+						text: i.text,
+					})),
+				},
+				c_certification_ar: {
+					create: c_certification_ar.map((i) => ({
+						text: i.text,
+					})),
+				},
+				c_objective_en: {
+					create: c_objective_en.map((i) => ({
+						text: i.text,
+					})),
+				},
+				c_objective_ar: {
+					create: c_objective_ar.map((i) => ({
+						text: i.text,
+					})),
+				},
+				c_who_should_en: {
+					create: c_who_should_en.map((i) => ({
+						text: i.text,
+					})),
+				},
+				c_who_should_ar: {
+					create: c_who_should_ar.map((i) => ({
+						text: i.text,
+					})),
+				},
+				store: {
+					connect: { id: params.storeId },
+				},
+				category: {
+					connect: { id: categoryId },
 				},
 			},
 		});
 
-		return NextResponse.json(product);
+		return NextResponse.json(category);
 	} catch (error) {
-		console.log('[PRODUCTS_POST]', error);
+		console.log('[CATEGORIES_POST]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
@@ -357,32 +242,21 @@ export async function GET(
 	{ params }: { params: { storeId: string } }
 ) {
 	try {
-		const { searchParams } = new URL(req.url);
-		const categoryId = searchParams.get('categoryId') || undefined;
-
 		if (!params.storeId) {
 			return new NextResponse('Store id is required', {
 				status: 400,
 			});
 		}
 
-		const courses = await prismadb.course.findMany({
+		const categories = await prismadb.coursesCategory.findMany({
 			where: {
 				storeId: params.storeId,
-				categoryId,
-			},
-			include: {
-				images: true,
-				category: true,
-			},
-			orderBy: {
-				name: 'desc',
 			},
 		});
 
-		return NextResponse.json(courses);
+		return NextResponse.json(categories);
 	} catch (error) {
-		console.log('[COURSES_GET]', error);
+		console.log('[CATEGORIES_GET]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }

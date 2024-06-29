@@ -1,11 +1,9 @@
 'use client';
-
 import axios from 'axios';
 import { Copy, Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
-
 import { AlertModal } from '@/components/modals/alert-modal';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,12 +14,10 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import { ProductColumn } from './columns';
-
+import { CourseColumn } from './columns';
 interface CellActionProps {
-	data: ProductColumn;
+	data: CourseColumn;
 }
-
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 	const [loading, setLoading] = useState(false);
 	const [open, setOpen] = useState(false);
@@ -34,7 +30,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 			await axios.delete(
 				`/api/${params.storeId}/courses/${data.id}`
 			);
-			toast.success('Course deleted.');
+			toast.success('Course Deleted.');
 			router.refresh();
 		} catch (error) {
 			toast.error('Something went wrong');

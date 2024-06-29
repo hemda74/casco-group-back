@@ -1,21 +1,20 @@
 'use client';
-
 import * as z from 'zod';
 import axios from 'axios';
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
-import { CoursesCategory, Image, Course } from '@prisma/client';
-import { useParams, useRouter } from 'next/navigation';
-
 import { Input } from '@/components/ui/input';
+import {
+	Course, CoursesCategory, Image, C_benefit_ar, C_benefit_en, C_certification_ar, C_certification_en, C_content_ar, C_content_en, C_date_ar, C_date_en, C_intro_ar, C_intro_en, C_objective_ar, C_who_should_en, C_who_should_ar, C_objective_en
+} from '@prisma/client';
+import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -33,43 +32,66 @@ import {
 	SelectValue,
 } from '@/components/ui/select';
 import ImageUpload from '@/components/ui/image-upload';
-import { Checkbox } from '@/components/ui/checkbox';
 
 const formSchema = z.object({
-	name: z.string().min(1),
-	name_ar: z.string().min(1),
-	price_usd: z.coerce.number().min(1),
+	c_title: z.string().min(2),
+	c_title_ar: z.string().min(2),
 	images: z.object({ url: z.string() }).array(),
 	price_egp: z.coerce.number().min(1),
 	price_uae: z.coerce.number().min(1),
 	price_ksa: z.coerce.number().min(1),
+	price_usd: z.coerce.number().min(1),
 	categoryId: z.string().min(1),
-	intro: z.string().min(1),
-	intro_ar: z.string().min(1),
-	short_intro: z.string().min(1),
-	short_intro_ar: z.string().min(1),
-	duaration: z.string().min(1),
-	duration_ar: z.string().min(1),
-	who_sh_att: z.string().min(1),
-	who_sh_att_ar: z.string().min(1),
-	c_obje_list: z.string().min(1),
-	c_obje_list_ar: z.string().min(1),
-	c_obje: z.string().min(1),
-	course_type: z.string().min(1),
-	course_type_ar: z.string().min(1),
-	c_obje_ar: z.string().min(1),
-	c_content: z.string().min(1),
-	c_content_ar: z.string().min(1),
-	wh_we_bnfi: z.string().min(1),
-	wh_we_bnfi_ar: z.string().min(1),
-	c_in_house: z.string().min(1),
+	c_short_intro_en: z.string().min(1),
+	c_short_intro_ar: z.string().min(1),
+	c_delv_and_leaders_en: z.string().min(1),
+	c_delv_and_leaders_ar: z.string().min(1),
+	c_in_house_en: z.string().min(1),
 	c_in_house_ar: z.string().min(1),
-	delv_and_leaders: z.string().min(1),
-	delv_and_leaders_ar: z.string().min(1),
-	course_date: z.string().min(1),
-	course_date_ar: z.string().min(1),
-	certification: z.string().min(1),
-	certification_ar: z.string().min(1),
+	c_duration_en: z.string().min(1),
+	c_duration_ar: z.string().min(1),
+	c_intro_en: z.array(z.object({
+		text: z.string().min(1),
+	})),
+	c_intro_ar: z.array(z.object({
+		text: z.string().min(1),
+	})),
+	c_who_should_en: z.array(z.object({
+		text: z.string().min(1),
+	})),
+	c_who_should_ar: z.array(z.object({
+		text: z.string().min(1),
+	})),
+	c_objective_en: z.array(z.object({
+		text: z.string().min(1),
+	})),
+	c_objective_ar: z.array(z.object({
+		text: z.string().min(1),
+	})),
+	c_content_en: z.array(z.object({
+		text: z.string().min(1),
+	})),
+	c_content_ar: z.array(z.object({
+		text: z.string().min(1),
+	})),
+	c_benefit_en: z.array(z.object({
+		text: z.string().min(1),
+	})),
+	c_benefit_ar: z.array(z.object({
+		text: z.string().min(1),
+	})),
+	c_certification_en: z.array(z.object({
+		text: z.string().min(1),
+	})),
+	c_certification_ar: z.array(z.object({
+		text: z.string().min(1),
+	})),
+	c_date_en: z.array(z.object({
+		text: z.string().min(1),
+	})),
+	c_date_ar: z.array(z.object({
+		text: z.string().min(1),
+	})),
 });
 
 type CourseFormValues = z.infer<typeof formSchema>;
@@ -78,6 +100,20 @@ interface CourseFormProps {
 	initialData:
 	| (Course & {
 		images: Image[];
+		c_intro_ar: C_intro_ar[];
+		c_intro_en: C_intro_en[];
+		c_date_ar: C_date_ar[];
+		c_date_en: C_date_en[];
+		c_content_ar: C_content_ar[];
+		c_content_en: C_content_en[];
+		c_benefit_ar: C_benefit_ar[];
+		c_benefit_en: C_benefit_en[];
+		c_certification_ar: C_certification_ar[];
+		c_certification_en: C_certification_en[];
+		c_objective_ar: C_objective_ar[];
+		c_objective_en: C_objective_en[];
+		c_who_should_ar: C_who_should_ar[];
+		c_who_should_en: C_who_should_en[];
 	})
 	| null;
 	categories: CoursesCategory[];
@@ -93,13 +129,14 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 
-	const title = initialData ? 'Edit course' : 'Create course';
-	const description = initialData ? 'Edit a course.' : 'Add a new Course';
+	const title = initialData ? 'Edit Course' : 'Create Course';
+	const description = initialData
+		? 'Edit a Course.'
+		: 'Add a new Course';
 	const toastMessage = initialData
 		? 'Course updated.'
 		: 'Course created.';
 	const action = initialData ? 'Save changes' : 'Create';
-
 	const defaultValues = initialData
 		? {
 			...initialData,
@@ -119,47 +156,98 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 			),
 		}
 		: {
-			name: '',
-			name_ar: '',
-			duaration: '',
-			duration_ar: '',
+			c_title: '',
+			c_title_ar: '',
+			categoryId: '',
+			c_delv_and_leaders_ar: '',
+			c_delv_and_leaders_en: '',
+			c_duration_ar: '',
+			c_duration_en: '',
+			c_in_house_ar: '',
+			c_in_house_en: '',
+			c_short_intro_ar: '',
+			c_short_intro_en: '',
+			c_intro_ar: [],
+			c_intro_en: [],
+			c_certification_ar: [],
+			c_certification_en: [],
+			c_date_ar: [],
+			c_date_en: [],
+			c_benefit_ar: [],
+			c_benefit_en: [],
+			c_content_ar: [],
+			c_content_en: [],
+			c_objective_ar: [],
+			c_objective_en: [],
+			c_who_should_ar: [],
+			c_who_should_en: [],
+			images: [],
 			price_usd: 0,
 			price_egp: 0,
 			price_uae: 0,
 			price_ksa: 0,
-			categoryId: '',
-			intro: '',
-			intro_ar: '',
-			short_intro: '',
-			short_intro_ar: '',
-			who_sh_att: '',
-			who_sh_att_ar: '',
-			c_obje_list: '',
-			c_obje_list_ar: '',
-			c_obje: '',
-			course_type: '',
-			course_type_ar: '',
-			c_obje_ar: '',
-			c_content: '',
-			c_content_ar: '',
-			wh_we_bnfi: '',
-			wh_we_bnfi_ar: '',
-			c_in_house: '',
-			c_in_house_ar: '',
-			delv_and_leaders: '',
-			delv_and_leaders_ar: '',
-			course_date: '',
-			course_date_ar: '',
-			certification: '',
-			certification_ar: '',
-			images: [],
 		};
-
 	const form = useForm<CourseFormValues>({
 		resolver: zodResolver(formSchema),
 		defaultValues,
 	});
 
+	const { fields: c_intro_enFields, append: appendc_intro_en, remove: removec_intro_en } = useFieldArray({
+		control: form.control,
+		name: 'c_intro_en',
+	});
+	const { fields: c_intro_arFields, append: appendc_intro_ar, remove: removec_intro_ar } = useFieldArray({
+		control: form.control,
+		name: 'c_intro_ar',
+	});
+	const { fields: c_date_enFields, append: appendc_date_en, remove: removec_date_en } = useFieldArray({
+		control: form.control,
+		name: 'c_date_en',
+	});
+	const { fields: c_date_arFields, append: appendc_date_ar, remove: removec_date_ar } = useFieldArray({
+		control: form.control,
+		name: 'c_date_ar',
+	});
+	const { fields: c_content_enFields, append: appendc_content_en, remove: removec_content_en } = useFieldArray({
+		control: form.control,
+		name: 'c_content_en',
+	});
+	const { fields: c_content_arFields, append: appendc_content_ar, remove: removec_content_ar } = useFieldArray({
+		control: form.control,
+		name: 'c_content_ar',
+	});
+	const { fields: c_benefit_enFields, append: appendc_benefit_en, remove: removec_benefit_en } = useFieldArray({
+		control: form.control,
+		name: 'c_benefit_en',
+	});
+	const { fields: c_benefit_arFields, append: appendc_benefit_ar, remove: removec_benefit_ar } = useFieldArray({
+		control: form.control,
+		name: 'c_benefit_ar',
+	});
+	const { fields: c_certification_enFields, append: appendc_certification_en, remove: removec_certification_en } = useFieldArray({
+		control: form.control,
+		name: 'c_certification_en',
+	});
+	const { fields: c_certification_arFields, append: appendc_certification_ar, remove: removec_certification_ar } = useFieldArray({
+		control: form.control,
+		name: 'c_certification_ar',
+	});
+	const { fields: c_objective_enFields, append: appendc_objective_en, remove: removec_objective_en } = useFieldArray({
+		control: form.control,
+		name: 'c_objective_en',
+	});
+	const { fields: c_objective_arFields, append: appendc_objective_ar, remove: removec_objective_ar } = useFieldArray({
+		control: form.control,
+		name: 'c_objective_ar',
+	});
+	const { fields: c_who_should_enFields, append: appendc_who_should_en, remove: removec_who_should_en } = useFieldArray({
+		control: form.control,
+		name: 'c_who_should_en',
+	});
+	const { fields: c_who_should_arFields, append: appendc_who_should_ar, remove: removec_who_should_ar } = useFieldArray({
+		control: form.control,
+		name: 'c_who_should_ar',
+	});
 	const onSubmit = async (data: CourseFormValues) => {
 		try {
 			setLoading(true);
@@ -178,7 +266,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 			router.push(`/${params.storeId}/courses`);
 			toast.success(toastMessage);
 		} catch (error: any) {
-			toast.error('Something went wrong.', error);
+			toast.error('Something went wrong.');
 		} finally {
 			setLoading(false);
 		}
@@ -194,7 +282,9 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 			router.push(`/${params.storeId}/courses`);
 			toast.success('Course deleted.');
 		} catch (error: any) {
-			toast.error('Something went wrong.');
+			toast.error(
+				'Make sure you removed all products using this category first.'
+			);
 		} finally {
 			setLoading(false);
 			setOpen(false);
@@ -231,67 +321,66 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 					onSubmit={form.handleSubmit(onSubmit)}
 					className="space-y-8 w-full"
 				>
-					<FormField
-						control={form.control}
-						name="images"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>
-									Images
-								</FormLabel>
-								<FormControl>
-									<ImageUpload
-										value={field.value.map(
-											(
-												image
+					<div className="md:grid md:grid-cols-2 gap-8">
+						<FormField
+							control={form.control}
+							name="images"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Images
+									</FormLabel>
+									<FormControl>
+										<ImageUpload
+											value={field.value.map(
+												(
+													image
+												) =>
+													image.url
+											)}
+											disabled={
+												loading
+											}
+											onChange={(
+												url
 											) =>
-												image.url
-										)}
-										disabled={
-											loading
-										}
-										onChange={(
-											url
-										) =>
-											field.onChange(
-												[
-													...field.value,
-													{
-														url,
-													},
-												]
-											)
-										}
-										onRemove={(
-											url
-										) =>
-											field.onChange(
-												[
-													...field.value.filter(
-														(
-															current
-														) =>
-															current.url !==
-															url
-													),
-												]
-											)
-										}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<div className="md:grid md:grid-cols-1 gap-8">
+												field.onChange(
+													[
+														...field.value,
+														{
+															url,
+														},
+													]
+												)
+											}
+											onRemove={(
+												url
+											) =>
+												field.onChange(
+													[
+														...field.value.filter(
+															(
+																current
+															) =>
+																current.url !==
+																url
+														),
+													]
+												)
+											}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 						<FormField
 							control={form.control}
 							name="categoryId"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Course
-										Category
+										Billboard
 									</FormLabel>
 									<Select
 										disabled={
@@ -313,25 +402,25 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 													defaultValue={
 														field.value
 													}
-													placeholder="Select a category"
+													placeholder="Select a billboard"
 												/>
 											</SelectTrigger>
 										</FormControl>
 										<SelectContent>
 											{categories.map(
 												(
-													category
+													billboard
 												) => (
 													<SelectItem
 														key={
-															category.id
+															billboard.id
 														}
 														value={
-															category.id
+															billboard.id
 														}
 													>
 														{
-															category.name
+															billboard.name
 														}
 													</SelectItem>
 												)
@@ -344,18 +433,18 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="name"
+							name="c_title"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Name
+										Course Title in English
 									</FormLabel>
 									<FormControl>
 										<Textarea
 											disabled={
 												loading
 											}
-											placeholder="Enter a Value"
+											placeholder="Category name"
 											{...field}
 										/>
 									</FormControl>
@@ -365,631 +454,20 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="name_ar"
+							name="c_title_ar"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
+										Course
 										Arabic
-										Name
+										Title
 									</FormLabel>
 									<FormControl>
 										<Textarea
 											disabled={
 												loading
 											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="duaration"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Duration
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="duration_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Duration
-										in
-										Arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="intro"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Introduction
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="intro_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Introduction
-										in
-										Arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="short_intro"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Short
-										Introduction
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="short_intro_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Short
-										Introduction
-										in
-										Arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="who_sh_att"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										How
-										Should
-										Attend
-										this
-										Course
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="who_sh_att_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										How
-										Should
-										Attend
-										this
-										Course
-										in
-										Arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_obje"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Objective
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_obje_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Objective
-										in
-										Arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_obje_list"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Objective
-										List
-										in
-										Arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_obje_list_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Objective
-										List
-										in
-										Arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="course_date"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Date
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="course_date_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Date
-										in
-										Arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_content"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Content
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder=" Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_content_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Content
-										in
-										Arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="course_type"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Type
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="course_type_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Type
-										in
-										Arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="wh_we_bnfi"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										What
-										we
-										benfite
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="wh_we_bnfi_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										what
-										we
-										benfite
-										in
-										arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_in_house"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										in
-										house
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_in_house_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										in
-										house
-										in
-										arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="delv_and_leaders"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										delvairy
-										and
-										leaders
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="delv_and_leaders_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										delvairy
-										and
-										leaders
-										in
-										arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="certification"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Certification
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="certification_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course
-										Certification
-										In
-										Arabic
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Enter a Value"
+											placeholder="c_title_ar"
 											{...field}
 										/>
 									</FormControl>
@@ -1089,8 +567,861 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 								</FormItem>
 							)}
 						/>
-
+						<FormField
+							control={form.control}
+							name="c_short_intro_en"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Course Short Introduction (English)
+									</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={
+												loading
+											}
+											placeholder="Course Short Introduction (English)"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="c_short_intro_ar"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Course Short Introduction (Arabic)
+									</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={
+												loading
+											}
+											placeholder="Course Short Introduction (Arabic)"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="c_delv_and_leaders_en"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Course Style of Delivery and Course Leaders (English)
+									</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={
+												loading
+											}
+											placeholder="Course Style of Delivery and Course Leaders (English)"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="c_delv_and_leaders_ar"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Course Style of Delivery and Course Leaders (Arabic)
+									</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={
+												loading
+											}
+											placeholder="Course Style of Delivery and Course Leaders (Arabic)"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="c_in_house_en"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										In-House Courses (English)
+									</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={
+												loading
+											}
+											placeholder="In-House Courses (English)"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="c_in_house_ar"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										In-House Courses (Arabic)
+									</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={
+												loading
+											}
+											placeholder="In-House Courses (Arabic)"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="c_duration_en"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Course Duration (English)
+									</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={
+												loading
+											}
+											placeholder="Course Duration (English)"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="c_duration_ar"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Course Duration (Arabic)
+									</FormLabel>
+									<FormControl>
+										<Textarea
+											disabled={
+												loading
+											}
+											placeholder="Course Duration (Arabic)"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 					</div>
+					<div>
+						<Heading description="Managing Course Introduction (English)" title="Managing Course Introduction (English)" />
+						{c_intro_enFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-2 gap-8">
+								<FormField
+									control={form.control}
+									name={`c_intro_en.${index}.text`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{`Course Introduction English Pargraph ${index + 1} `}</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									type="button"
+									onClick={() => removec_intro_en(index)}
+									variant="destructive"
+									size="sm"
+									className="mt-10"
+								>
+									Remove
+								</Button>
+								<Separator />
+							</div>
+						))}
+						<Button
+							disabled={loading}
+							type="button"
+							onClick={() =>
+								appendc_intro_en({
+									text: '',
+								})
+							}
+							variant="secondary"
+							className="mt-2"
+						>
+							Add new Paragraph
+						</Button>
+					</div>
+					<Separator />
+					<div>
+						<Heading description="Managing Course Introduction (Arabic)" title="Managing Course Introduction (Arabic)" />
+						{c_intro_arFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-2 gap-8">
+								<FormField
+									control={form.control}
+									name={`c_intro_ar.${index}.text`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{`Course Introduction Arabic ${index + 1} `}</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									type="button"
+									onClick={() => removec_intro_ar(index)}
+									variant="destructive"
+									size="sm"
+									className="mt-10"
+								>
+									Remove
+								</Button>
+								<Separator />
+							</div>
+						))}
+						<Button
+							disabled={loading}
+							type="button"
+							onClick={() =>
+								appendc_intro_ar({
+									text: '',
+								})
+							}
+							variant="secondary"
+							className="mt-2"
+						>
+							Add new Paragraph
+						</Button>
+					</div>
+					<Separator />
+					<div>
+						<Heading description="Managing Course Dates (English)" title="Managing Course Dates (English)" />
+						{c_date_enFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-2 gap-8">
+								<FormField
+									control={form.control}
+									name={`c_date_en.${index}.text`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{`Course Dates (English) ${index + 1} `}</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									type="button"
+									onClick={() => removec_date_en(index)}
+									variant="destructive"
+									size="sm"
+									className="mt-10"
+								>
+									Remove
+								</Button>
+								<Separator />
+							</div>
+						))}
+						<Button
+							disabled={loading}
+							type="button"
+							onClick={() =>
+								appendc_date_en({
+									text: '',
+								})
+							}
+							variant="secondary"
+							className="mt-2"
+						>
+							Add new Paragraph
+						</Button>
+					</div>
+					<Separator />
+					<div>
+						<Heading description="Managing Course Dates (Arabic)" title="Managing Course Dates (Arabic)" />
+						{c_date_arFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-2 gap-8">
+								<FormField
+									control={form.control}
+									name={`c_date_ar.${index}.text`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{`Managing Course Dates Arabic Pargraph ${index + 1} `}</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									type="button"
+									onClick={() => removec_date_ar(index)}
+									variant="destructive"
+									size="sm"
+									className="mt-10"
+								>
+									Remove
+								</Button>
+								<Separator />
+							</div>
+						))}
+						<Button
+							disabled={loading}
+							type="button"
+							onClick={() =>
+								appendc_date_ar({
+									text: '',
+								})
+							}
+							variant="secondary"
+							className="mt-2"
+						>
+							Add new Paragraph
+						</Button>
+					</div>
+					<Separator />
+					<div>
+						<Heading description="Managing Course Content (English)" title="Managing Course Content (English)" />
+						{c_content_enFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-2 gap-8">
+								<FormField
+									control={form.control}
+									name={`c_content_en.${index}.text`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{`c_content_en Pargraph ${index + 1} `}</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									type="button"
+									onClick={() => removec_content_en(index)}
+									variant="destructive"
+									size="sm"
+									className="mt-10"
+								>
+									Remove
+								</Button>
+								<Separator />
+							</div>
+						))}
+						<Button
+							disabled={loading}
+							type="button"
+							onClick={() =>
+								appendc_content_en({
+									text: '',
+								})
+							}
+							variant="secondary"
+							className="mt-2"
+						>
+							Add new Paragraph
+						</Button>
+					</div>
+					<Separator />
+					<div>
+						<Heading description="Managing Course Content (Arabic)" title="Managing Course Content (Arabic)" />
+						{c_content_arFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-2 gap-8">
+								<FormField
+									control={form.control}
+									name={`c_content_ar.${index}.text`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{`Content Pargraph (Arabic) ${index + 1} `}</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									type="button"
+									onClick={() => removec_content_ar(index)}
+									variant="destructive"
+									size="sm"
+									className="mt-10"
+								>
+									Remove
+								</Button>
+								<Separator />
+							</div>
+						))}
+						<Button
+							disabled={loading}
+							type="button"
+							onClick={() =>
+								appendc_content_ar({
+									text: '',
+								})
+							}
+							variant="secondary"
+							className="mt-2"
+						>
+							Add new Paragraph
+						</Button>
+					</div>
+					<Separator />
+					<div>
+						<Heading description="Managing Course Benefits (English)" title="Managing Course Benefits (English)" />
+						{c_benefit_enFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-2 gap-8">
+								<FormField
+									control={form.control}
+									name={`c_benefit_en.${index}.text`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{`Benefits Pargraph (English) ${index + 1} `}</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									type="button"
+									onClick={() => removec_benefit_en(index)}
+									variant="destructive"
+									size="sm"
+									className="mt-10"
+								>
+									Remove
+								</Button>
+								<Separator />
+							</div>
+						))}
+						<Button
+							disabled={loading}
+							type="button"
+							onClick={() =>
+								appendc_benefit_en({
+									text: '',
+								})
+							}
+							variant="secondary"
+							className="mt-2"
+						>
+							Add new Paragraph
+						</Button>
+					</div>
+					<Separator />
+					<div>
+						<Heading description="Managing Course Benefits (Arabic)" title="Managing Course Benefits (Arabic)" />
+						{c_benefit_arFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-2 gap-8">
+								<FormField
+									control={form.control}
+									name={`c_benefit_ar.${index}.text`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{`Benefits Pargraph (Arabic) ${index + 1} `}</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									type="button"
+									onClick={() => removec_benefit_ar(index)}
+									variant="destructive"
+									size="sm"
+									className="mt-10"
+								>
+									Remove
+								</Button>
+								<Separator />
+							</div>
+						))}
+						<Button
+							disabled={loading}
+							type="button"
+							onClick={() =>
+								appendc_benefit_ar({
+									text: '',
+								})
+							}
+							variant="secondary"
+							className="mt-2"
+						>
+							Add new Paragraph
+						</Button>
+					</div>
+					<Separator />
+					<div>
+						<Heading description="Managing Course Objectives (English)" title="Managing Course Objectives (English)" />
+						{c_objective_enFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-2 gap-8">
+								<FormField
+									control={form.control}
+									name={`c_objective_en.${index}.text`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{`Objectives Pargraph (English) ${index + 1} `}</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									type="button"
+									onClick={() => removec_objective_en(index)}
+									variant="destructive"
+									size="sm"
+									className="mt-10"
+								>
+									Remove
+								</Button>
+								<Separator />
+							</div>
+						))}
+						<Button
+							disabled={loading}
+							type="button"
+							onClick={() =>
+								appendc_objective_en({
+									text: '',
+								})
+							}
+							variant="secondary"
+							className="mt-2"
+						>
+							Add new Paragraph
+						</Button>
+					</div>
+					<Separator />
+					<div>
+						<Heading description="Managing Course Objectives (Arabic)" title="Managing Course Objectives (Arabic)" />
+						{c_objective_arFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-2 gap-8">
+								<FormField
+									control={form.control}
+									name={`c_objective_ar.${index}.text`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{`c_objective_ar Pargraph (Arabic) ${index + 1} `}</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									type="button"
+									onClick={() => removec_objective_ar(index)}
+									variant="destructive"
+									size="sm"
+									className="mt-10"
+								>
+									Remove
+								</Button>
+								<Separator />
+							</div>
+						))}
+						<Button
+							disabled={loading}
+							type="button"
+							onClick={() =>
+								appendc_objective_ar({
+									text: '',
+								})
+							}
+							variant="secondary"
+							className="mt-2"
+						>
+							Add new Paragraph
+						</Button>
+					</div>
+					<Separator />
+					<div>
+						<Heading description="Managing Course Who Should Attend (English)" title="Managing Course Who Should Attend (English)" />
+						{c_who_should_enFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-2 gap-8">
+								<FormField
+									control={form.control}
+									name={`c_who_should_en.${index}.text`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{`Who Should Attend Pargraph (English) ${index + 1} `}</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									type="button"
+									onClick={() => removec_who_should_en(index)}
+									variant="destructive"
+									size="sm"
+									className="mt-10"
+								>
+									Remove
+								</Button>
+								<Separator />
+							</div>
+						))}
+						<Button
+							disabled={loading}
+							type="button"
+							onClick={() =>
+								appendc_who_should_en({
+									text: '',
+								})
+							}
+							variant="secondary"
+							className="mt-2"
+						>
+							Add new Paragraph
+						</Button>
+					</div>
+					<Separator />
+					<div>
+						<Heading description="Managing Course Who Should Attend (Arabic)" title="Managing Course Who Should Attend (Arabic)" />
+						{c_who_should_arFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-2 gap-8">
+								<FormField
+									control={form.control}
+									name={`c_who_should_ar.${index}.text`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{`Who Should Attend Pargraph (Arabic)  ${index + 1} `}</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									type="button"
+									onClick={() => removec_who_should_ar(index)}
+									variant="destructive"
+									size="sm"
+									className="mt-10"
+								>
+									Remove
+								</Button>
+								<Separator />
+							</div>
+						))}
+						<Button
+							disabled={loading}
+							type="button"
+							onClick={() =>
+								appendc_who_should_ar({
+									text: '',
+								})
+							}
+							variant="secondary"
+							className="mt-2"
+						>
+							Add new Paragraph
+						</Button>
+					</div>
+					<Separator />
+					<div>
+						<Heading description="Managing Course Certifications (English)" title="Managing Course Certifications (English)" />
+						{c_certification_enFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-2 gap-8">
+								<FormField
+									control={form.control}
+									name={`c_certification_en.${index}.text`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{`Certifications Pargraph (English) ${index + 1} `}</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									type="button"
+									onClick={() => removec_certification_en(index)}
+									variant="destructive"
+									size="sm"
+									className="mt-10"
+								>
+									Remove
+								</Button>
+								<Separator />
+							</div>
+						))}
+						<Button
+							disabled={loading}
+							type="button"
+							onClick={() =>
+								appendc_certification_en({
+									text: '',
+								})
+							}
+							variant="secondary"
+							className="mt-2"
+						>
+							Add new Paragraph
+						</Button>
+					</div>
+					<Separator />
+					<div>
+						<Heading description="Managing Course Certifications (Arabic)" title="Managing Course Certifications (Arabic)" />
+						{c_certification_arFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-2 gap-8">
+								<FormField
+									control={form.control}
+									name={`c_certification_ar.${index}.text`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>{`Certification Pargraph ${index + 1} `}</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									type="button"
+									onClick={() => removec_certification_ar(index)}
+									variant="destructive"
+									size="sm"
+									className="mt-10"
+								>
+									Remove
+								</Button>
+								<Separator />
+							</div>
+						))}
+						<Button
+							disabled={loading}
+							type="button"
+							onClick={() =>
+								appendc_certification_ar({
+									text: '',
+								})
+							}
+							variant="secondary"
+							className="mt-2"
+						>
+							Add new Paragraph
+						</Button>
+					</div>
+					<Separator />
 					<Button
 						disabled={loading}
 						className="ml-auto"
