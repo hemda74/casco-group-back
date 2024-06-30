@@ -87,7 +87,11 @@ export function MainNav({
 			label: 'Insiders Views',
 			active: pathname === `/${params.storeId}/insidersviews`,
 		},
-
+		{
+			href: `/${params.storeId}/recognitions`,
+			label: 'Recognitions',
+			active: pathname === `/${params.storeId}/recognitions`,
+		},
 		{
 			href: `/${params.storeId}/settings`,
 			label: 'Settings',
