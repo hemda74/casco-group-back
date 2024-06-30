@@ -20,7 +20,8 @@ model Store {
   Industries              Industry[]                      @relation("StoreToIndustry")
   news                    News[]                          @relation("StoreToNews")
   events                  Event[]                         @relation("StoreToEvent")
-  insidersView                  InsidersView[]                         @relation("StoreToInsidersView")
+  insidersView            InsidersView[]                  @relation("StoreToInsidersView")
+  recognition            Recognition[]                  @relation("StoreToRecognition")
   casestudies             CaseStudy[]                     @relation("StoreToCaseStudy")
   expertservice           ExpertService[]                 @relation("StoreToExpertService")
   expertIndustry          ExpertIndustry[]                @relation("StoreToExpertIndustry")
@@ -33,6 +34,8 @@ model Store {
   createdAt               DateTime                        @default(now())
   updatedAt               DateTime                        @updatedAt
 }
+
+
 model Billboard {
   id                        String                @id @default(uuid())
   storeId                   String
@@ -583,6 +586,15 @@ model InsidersView{
     title                         String
     text_ar                       String
     name_ar                       String
+    title_ar                      String
+    @@index([storeId])
+}
+model Recognition{
+    id                            String @id @default(uuid())
+    storeId                       String // Foreign Key to Store
+    store                         Store       @relation("StoreToRecognition", fields: [storeId], references: [id])
+    imageUrl                      String
+    title                         String
     title_ar                      String
     @@index([storeId])
 }
