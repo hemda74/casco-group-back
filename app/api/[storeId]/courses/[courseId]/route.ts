@@ -10,6 +10,7 @@ type courseRequestBody = {
 	price_ksa: number;
 	price_uae: number;
 	price_usd: number;
+	imageUrl: string;
 	c_short_intro_en: string;
 	c_short_intro_ar: string;
 	c_duration_en: string;
@@ -63,10 +64,11 @@ type courseRequestBody = {
 };
 
 const validateRequestBody = (body: courseRequestBody) => {
-	const { c_title, c_title_ar, categoryId } = body;
+	const { c_title, c_title_ar, categoryId, imageUrl } = body;
 
 	if (!c_title) throw new Error('c_title is required');
 	if (!c_title_ar) throw new Error('Arabic c_title is required');
+	if (!imageUrl) throw new Error('Image is required');
 	if (!categoryId) throw new Error('Category id is required');
 };
 
@@ -85,6 +87,7 @@ export async function POST(
 
 		const {
 			c_title,
+			imageUrl,
 			c_title_ar,
 			categoryId,
 			price_egp,
@@ -131,7 +134,11 @@ export async function POST(
 				status: 400,
 			});
 		}
-
+		if (!imageUrl) {
+			return new NextResponse('Arabic c_title is required', {
+				status: 400,
+			});
+		}
 		if (!categoryId) {
 			return new NextResponse('Category id is required', {
 				status: 400,
@@ -154,6 +161,7 @@ export async function POST(
 		const course = await prismadb.$transaction(async (prisma) => {
 			const createdcourse = await prisma.course.create({
 				data: {
+					imageUrl,
 					c_title,
 					c_title_ar,
 					price_egp,
@@ -182,7 +190,7 @@ export async function POST(
 						),
 					},
 					c_intro_ar: {
-						create: c_intro_en.map(
+						create: c_intro_ar.map(
 							(expert) => ({
 								text: expert.text,
 							})
@@ -196,7 +204,7 @@ export async function POST(
 						),
 					},
 					c_benefit_ar: {
-						create: c_benefit_en.map(
+						create: c_benefit_ar.map(
 							(expert) => ({
 								text: expert.text,
 							})
@@ -210,7 +218,7 @@ export async function POST(
 						),
 					},
 					c_certification_ar: {
-						create: c_certification_en.map(
+						create: c_certification_ar.map(
 							(expert) => ({
 								text: expert.text,
 							})
@@ -224,7 +232,7 @@ export async function POST(
 						),
 					},
 					c_content_ar: {
-						create: c_content_en.map(
+						create: c_content_ar.map(
 							(expert) => ({
 								text: expert.text,
 							})
@@ -238,7 +246,7 @@ export async function POST(
 						),
 					},
 					c_date_ar: {
-						create: c_date_en.map(
+						create: c_date_ar.map(
 							(expert) => ({
 								text: expert.text,
 							})
@@ -252,7 +260,7 @@ export async function POST(
 						),
 					},
 					c_objective_ar: {
-						create: c_objective_en.map(
+						create: c_objective_ar.map(
 							(expert) => ({
 								text: expert.text,
 							})
@@ -266,7 +274,7 @@ export async function POST(
 						),
 					},
 					c_who_should_ar: {
-						create: c_who_should_en.map(
+						create: c_who_should_ar.map(
 							(expert) => ({
 								text: expert.text,
 							})

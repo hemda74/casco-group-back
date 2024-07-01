@@ -25,7 +25,6 @@ const CategoryPage = async ({
 			c_objective_en: true,
 			c_who_should_ar: true,
 			c_who_should_en: true,
-			images: true,
 		},
 	});
 

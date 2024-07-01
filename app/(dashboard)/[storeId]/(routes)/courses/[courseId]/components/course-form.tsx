@@ -8,7 +8,7 @@ import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import {
-	Course, CoursesCategory, Image, C_benefit_ar, C_benefit_en, C_certification_ar, C_certification_en, C_content_ar, C_content_en, C_date_ar, C_date_en, C_intro_ar, C_intro_en, C_objective_ar, C_who_should_en, C_who_should_ar, C_objective_en
+	Course, CoursesCategory, C_benefit_ar, C_benefit_en, C_certification_ar, C_certification_en, C_content_ar, C_content_en, C_date_ar, C_date_en, C_intro_ar, C_intro_en, C_objective_ar, C_who_should_en, C_who_should_ar, C_objective_en
 } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -36,7 +36,7 @@ import ImageUpload from '@/components/ui/image-upload';
 const formSchema = z.object({
 	c_title: z.string().min(2),
 	c_title_ar: z.string().min(2),
-	images: z.object({ url: z.string() }).array(),
+	imageUrl: z.string().min(2),
 	price_egp: z.coerce.number().min(1),
 	price_uae: z.coerce.number().min(1),
 	price_ksa: z.coerce.number().min(1),
@@ -99,7 +99,6 @@ type CourseFormValues = z.infer<typeof formSchema>;
 interface CourseFormProps {
 	initialData:
 	| (Course & {
-		images: Image[];
 		c_intro_ar: C_intro_ar[];
 		c_intro_en: C_intro_en[];
 		c_date_ar: C_date_ar[];
@@ -158,6 +157,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 		: {
 			c_title: '',
 			c_title_ar: '',
+			imageUrl: '',
 			categoryId: '',
 			c_delv_and_leaders_ar: '',
 			c_delv_and_leaders_en: '',
@@ -181,7 +181,6 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 			c_objective_en: [],
 			c_who_should_ar: [],
 			c_who_should_en: [],
-			images: [],
 			price_usd: 0,
 			price_egp: 0,
 			price_uae: 0,
@@ -324,50 +323,16 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 					<div className="md:grid md:grid-cols-2 gap-8">
 						<FormField
 							control={form.control}
-							name="images"
+							name="imageUrl"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>
-										Images
-									</FormLabel>
+									<FormLabel>Company Image</FormLabel>
 									<FormControl>
 										<ImageUpload
-											value={field.value.map(
-												(
-													image
-												) =>
-													image.url
-											)}
-											disabled={
-												loading
-											}
-											onChange={(
-												url
-											) =>
-												field.onChange(
-													[
-														...field.value,
-														{
-															url,
-														},
-													]
-												)
-											}
-											onRemove={(
-												url
-											) =>
-												field.onChange(
-													[
-														...field.value.filter(
-															(
-																current
-															) =>
-																current.url !==
-																url
-														),
-													]
-												)
-											}
+											value={field.value ? [field.value] : []}
+											disabled={loading}
+											onChange={(url) => field.onChange(url)}
+											onRemove={() => field.onChange('')}
 										/>
 									</FormControl>
 									<FormMessage />

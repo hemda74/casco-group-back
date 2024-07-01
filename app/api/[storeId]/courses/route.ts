@@ -4,6 +4,7 @@ import prismadb from '@/lib/prismadb';
 type courseRequestBody = {
 	categoryId: string;
 	c_title: string;
+	imageUrl: string;
 	c_title_ar: string;
 	price_egp: number;
 	price_ksa: number;
@@ -71,6 +72,7 @@ export async function POST(
 		const {
 			c_title,
 			c_title_ar,
+			imageUrl,
 			categoryId,
 			price_egp,
 			price_ksa,
@@ -138,6 +140,7 @@ export async function POST(
 		const category = await prismadb.course.create({
 			data: {
 				c_title,
+				imageUrl,
 				c_title_ar,
 				price_egp,
 				price_ksa,
