@@ -251,7 +251,7 @@ export async function GET(
 			});
 		}
 
-		const categories = await prismadb.courses.findMany({
+		const categories = await prismadb.course.findMany({
 			where: {
 				storeId: params.storeId,
 			},
