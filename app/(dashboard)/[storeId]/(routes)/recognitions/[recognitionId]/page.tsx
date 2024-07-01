@@ -1,8 +1,8 @@
 import prismadb from "@/lib/prismadb";
 
-import { InsidersViewForm } from "./components/insiders-form";
+import { RecognitionForm } from "./components/insiders-form";
 
-const recognitionPage = async ({
+const RecognitionPage = async ({
   params
 }: {
   params: { recognitionId: string }
@@ -16,10 +16,10 @@ const recognitionPage = async ({
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <InsidersViewForm initialData={recognition} />
+        <RecognitionForm initialData={recognition} />
       </div>
     </div>
   );
 }
 
-export default recognitionPage;
+export default RecognitionPage;

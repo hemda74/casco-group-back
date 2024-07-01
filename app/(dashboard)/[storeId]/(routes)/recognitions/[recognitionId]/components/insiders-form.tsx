@@ -36,7 +36,7 @@ interface recognitionFormProps {
   initialData: Recognition | null;
 };
 
-export const recognitionForm: React.FC<recognitionFormProps> = ({
+export const RecognitionForm: React.FC<recognitionFormProps> = ({
   initialData
 }) => {
   const params = useParams();
