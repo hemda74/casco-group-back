@@ -21,7 +21,8 @@ model Store {
   news                    News[]                          @relation("StoreToNews")
   events                  Event[]                         @relation("StoreToEvent")
   insidersView            InsidersView[]                  @relation("StoreToInsidersView")
-  recognition            Recognition[]                  @relation("StoreToRecognition")
+  testimonials           Testimonials[]                @relation("StoreTotestimonials")
+  recognition             Recognition[]                    @relation("StoreToRecognition")
   casestudies             CaseStudy[]                     @relation("StoreToCaseStudy")
   expertservice           ExpertService[]                 @relation("StoreToExpertService")
   expertIndustry          ExpertIndustry[]                @relation("StoreToExpertIndustry")
@@ -595,6 +596,19 @@ model Recognition{
     store                         Store       @relation("StoreToRecognition", fields: [storeId], references: [id])
     imageUrl                      String
     title                         String
+    title_ar                      String
+    @@index([storeId])
+}
+model Testimonials{
+    id                            String @id @default(uuid())
+    storeId                       String // Foreign Key to Store
+    store                         Store       @relation("StoreTotestimonials", fields: [storeId], references: [id])
+    imageUrl                      String
+    text                          String
+    name                          String
+    title                         String
+    text_ar                       String
+    name_ar                       String
     title_ar                      String
     @@index([storeId])
 }
