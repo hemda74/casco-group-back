@@ -212,7 +212,7 @@ model Team {
  address_ar           String
  linkedin        String
  phone            String
- images            Image4[]
+ imageUrl            String
  billboard        Billboard @relation(fields: [billboardId],references: [id])
  teammember       TeamMember[]  @relation("TeamToTeamMember")
  @@index([storeId])
@@ -263,7 +263,7 @@ model TeamMember{
     brief_1_ar              String 
     brief_2_ar              String 
     brief_3_ar              String 
-    images                  Image7[]
+    imageUrl                  String 
     @@index([storeId])
     @@index([teamId])
 }
@@ -293,9 +293,9 @@ model ExpertService {
   expert_title        String
   expert_title_ar     String
   expert_mail         String
-  expert_phone        String
-  images Image2[]
-  @@index([storeId])
+  expert_phone        String 
+  imageUrl            String 
+  @@index([storeId]) 
   @@index([serviceId])
 }
 model ServiceDesc {
@@ -349,7 +349,7 @@ model ExpertIndustry {
   expert_title_ar     String
   expert_mail         String
   expert_phone        String
-  images Image8[]
+  imageUrl            String
   @@index([storeId])
   @@index([industryId])
 }
@@ -421,9 +421,9 @@ model CaseStudy {
   paragraph_2_ar                String  
   industryId                    String // Foreign Key to Industry
   industry                      Industry  @relation("IndustryToCaseStudy",fields: [industryId],references: [id]) 
-  images                         Image3[]
-  caseStudyPoint                    CaseStudyPoint[] @relation("PointToCaseStudy")
-  caseStudyPointAr                 CaseStudyPointAr[] @relation("PointToCaseStudyAr")
+  imageUrl                      String
+  caseStudyPoint                CaseStudyPoint[] @relation("PointToCaseStudy")
+  caseStudyPointAr              CaseStudyPointAr[] @relation("PointToCaseStudyAr")
   @@index([storeId])
   @@index([industryId])
 }
@@ -441,64 +441,7 @@ model CaseStudyPointAr{
   case             CaseStudy  @relation("PointToCaseStudyAr",fields: [caseId],references: [id])
   @@index([caseId])
 }
-// model Image {
-//   id              String   @id @default(uuid())
-//   courseId        String
-//   course          Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
-//   url             String // URL of the image
-  
-//   @@index([courseId])
-// }
-model Image2 {
-  id              String   @id @default(uuid())
-  expertserviceId        String
-  expertService          ExpertService  @relation(fields: [expertserviceId], references: [id], onDelete: Cascade)
-  url             String // URL of the image
-  @@index([expertserviceId])
-}
-model Image3 {
-  id                    String   @id @default(uuid())
-  casestudyId           String
-  casestudy             CaseStudy  @relation(fields: [casestudyId], references: [id], onDelete: Cascade)
-  url                   String // URL of the image
-  @@index([casestudyId])
-}
-model Image4 {
-  id                    String   @id @default(uuid())
-  teamId                String
-  team                  Team  @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  url                   String // URL of the image
-  @@index([teamId])
-}
-model Image5 {
-  id                    String   @id @default(uuid())
-  newsId                String
-  news                  News  @relation(fields: [newsId], references: [id], onDelete: Cascade)
-  url                   String // URL of the image
-  @@index([newsId])
-}
-model Image6 {
-  id                    String   @id @default(uuid())
-  eventId                String
-  event                 Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  url                   String // URL of the image
-  @@index([eventId])
-}
-model Image7 {
-  id                    String   @id @default(uuid())
-  teammemberId                String
-  teammember              TeamMember  @relation(fields: [teammemberId], references: [id], onDelete: Cascade)
-  url                   String // URL of the image
-  @@index([teammemberId])
-}
-model Image8 {
-  id              String   @id @default(uuid())
-  expertIndustryId        String
-  expertIndustry          ExpertIndustry  @relation(fields: [expertIndustryId], references: [id], onDelete: Cascade)
-  url             String // URL of the image
-  
-  @@index([expertIndustryId])
-}
+
 model paragrph_news {
   id                    String   @id @default(uuid())
   newsId                String
@@ -536,12 +479,12 @@ model News {
     category                      NewsCategory    @relation("CategoryToNews", fields: [categoryId], references: [id])
     title                         String 
     title_ar                      String 
-    images                        Image5[] // Relation to Image model
+    imageUrl                      String // Relation to Image model
     paragraph_news                paragrph_news[] // Relation to paragraph_news model
     paragraph_news_ar             paragrph_news_ar[] // Relation to paragraph_news_ar model
-    createdAt                      DateTime               @default(now())
+    createdAt                     DateTime               @default(now())
     date_of_news                  String
-    date_of_news_ar                 String
+    date_of_news_ar               String
     @@index([storeId])
     @@index([categoryId])
 }
@@ -567,7 +510,7 @@ model Event {
     category                      NewsCategory    @relation("CategoryToEvent", fields: [categoryId], references: [id])
     title                         String 
     title_ar                      String 
-    images                        Image6[] // Relation to Image model
+    imageUrl                      String// Relation to Image model
     paragraph_event               paragrph_event[] // Relation to paragraph_event model
     paragraph_event_ar            paragrph_event_ar[] // Relation to paragraph_event_ar model
     createdAt                     DateTime               @default(now())
