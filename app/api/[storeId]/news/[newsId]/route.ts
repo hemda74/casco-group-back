@@ -19,7 +19,6 @@ export async function GET(
 				id: params.newsId,
 			},
 			include: {
-				images: true,
 				paragraph_news: true,
 				paragraph_news_ar: true,
 				category: true,
@@ -90,7 +89,7 @@ export async function PATCH(
 		const {
 			title,
 			title_ar,
-			images,
+			imageUrl,
 			categoryId,
 			paragraph_news,
 			paragraph_news_ar,
@@ -123,8 +122,8 @@ export async function PATCH(
 				status: 400,
 			});
 		}
-		if (!images || !images.length) {
-			return new NextResponse('Images are required', {
+		if (!imageUrl) {
+			return new NextResponse(' this field is required', {
 				status: 400,
 			});
 		}
@@ -169,9 +168,7 @@ export async function PATCH(
 				title_ar,
 				date_of_news,
 				date_of_news_ar,
-				images: {
-					deleteMany: {},
-				},
+				imageUrl,
 				paragraph_news: {
 					deleteMany: {},
 				},
@@ -186,17 +183,6 @@ export async function PATCH(
 				id: params.newsId,
 			},
 			data: {
-				images: {
-					createMany: {
-						data: [
-							...images.map(
-								(image: {
-									url: string;
-								}) => image
-							),
-						],
-					},
-				},
 				paragraph_news: {
 					createMany: {
 						data: [

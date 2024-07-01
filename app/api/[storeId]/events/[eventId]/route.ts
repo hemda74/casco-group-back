@@ -19,12 +19,9 @@ export async function GET(
 				id: params.eventId,
 			},
 			include: {
-				images: true,
 				paragraph_event: true,
 				paragraph_event_ar: true,
 				category: true,
-
-				// color: true,
 			},
 		});
 
@@ -92,7 +89,7 @@ export async function PATCH(
 		const {
 			title,
 			title_ar,
-			images,
+			imageUrl,
 			categoryId,
 			paragraph_event,
 			paragraph_event_ar,
@@ -110,16 +107,17 @@ export async function PATCH(
 				status: 400,
 			});
 		}
+		if (!imageUrl) {
+			return new NextResponse('Name is required', {
+				status: 400,
+			});
+		}
 		if (!title_ar) {
 			return new NextResponse(' Arabic Name is required', {
 				status: 400,
 			});
 		}
-		if (!images || !images.length) {
-			return new NextResponse('Images are required', {
-				status: 400,
-			});
-		}
+
 		if (!paragraph_event || !paragraph_event.length) {
 			return new NextResponse(
 				'paragraph_event are required',
@@ -172,11 +170,9 @@ export async function PATCH(
 			data: {
 				title,
 				title_ar,
+				imageUrl,
 				date_of_event,
 				date_of_event_ar,
-				images: {
-					deleteMany: {},
-				},
 				paragraph_event: {
 					deleteMany: {},
 				},
@@ -191,17 +187,6 @@ export async function PATCH(
 				id: params.eventId,
 			},
 			data: {
-				images: {
-					createMany: {
-						data: [
-							...images.map(
-								(image: {
-									url: string;
-								}) => image
-							),
-						],
-					},
-				},
 				paragraph_event: {
 					createMany: {
 						data: [

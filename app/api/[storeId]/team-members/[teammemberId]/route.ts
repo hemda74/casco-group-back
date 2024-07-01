@@ -19,7 +19,6 @@ export async function GET(
 				id: params.teammemberId,
 			},
 			include: {
-				images: true,
 				team: true,
 			},
 		});
@@ -89,7 +88,7 @@ export async function PATCH(
 			name,
 			name_ar,
 			teamId,
-			images,
+			imageUrl,
 			title,
 			title_ar,
 			brief_1,
@@ -155,8 +154,8 @@ export async function PATCH(
 				status: 400,
 			});
 		}
-		if (!images || !images.length) {
-			return new NextResponse('Images are required', {
+		if (!imageUrl) {
+			return new NextResponse(' this field is required', {
 				status: 400,
 			});
 		}
@@ -191,13 +190,11 @@ export async function PATCH(
 				brief_1,
 				brief_1_ar,
 				brief_2,
+				imageUrl,
 				brief_2_ar,
 				brief_3,
 				brief_3_ar,
 				teamId,
-				images: {
-					deleteMany: {},
-				},
 			},
 		});
 
@@ -205,19 +202,7 @@ export async function PATCH(
 			where: {
 				id: params.teammemberId,
 			},
-			data: {
-				images: {
-					createMany: {
-						data: [
-							...images.map(
-								(image: {
-									url: string;
-								}) => image
-							),
-						],
-					},
-				},
-			},
+			data: {},
 		});
 
 		return NextResponse.json(course);

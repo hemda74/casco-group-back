@@ -19,7 +19,6 @@ export async function GET(
 				id: params.casestudiesId,
 			},
 			include: {
-				images: true,
 				industry: true,
 			},
 		});
@@ -89,7 +88,7 @@ export async function PATCH(
 			sub_title,
 			sub_title_ar,
 			industryId,
-			images,
+			imageUrl,
 			title,
 			title_ar,
 			paragraph_1,
@@ -148,9 +147,8 @@ export async function PATCH(
 				status: 400,
 			});
 		}
-
-		if (!images || !images.length) {
-			return new NextResponse('Images are required', {
+		if (!imageUrl) {
+			return new NextResponse(' this field is required', {
 				status: 400,
 			});
 		}
@@ -187,9 +185,7 @@ export async function PATCH(
 				paragraph_2,
 				paragraph_2_ar,
 				industryId,
-				images: {
-					deleteMany: {},
-				},
+				imageUrl,
 				caseStudyPoint: { deleteMany: {} },
 				caseStudyPointAr: { deleteMany: {} },
 			},
@@ -200,17 +196,6 @@ export async function PATCH(
 				id: params.casestudiesId,
 			},
 			data: {
-				images: {
-					createMany: {
-						data: [
-							...images.map(
-								(image: {
-									url: string;
-								}) => image
-							),
-						],
-					},
-				},
 				caseStudyPoint: {
 					createMany: {
 						data: [

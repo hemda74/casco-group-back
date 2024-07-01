@@ -15,7 +15,7 @@ export async function POST(
 		const {
 			title,
 			title_ar,
-			images,
+			imageUrl,
 			categoryId,
 			paragraph_news,
 			paragraph_news_ar,
@@ -48,11 +48,7 @@ export async function POST(
 				status: 400,
 			});
 		}
-		if (!images || !images.length) {
-			return new NextResponse('Images are required', {
-				status: 400,
-			});
-		}
+
 		if (!paragraph_news || !paragraph_news.length) {
 			return new NextResponse(
 				'one pargraph at least is required are required',
@@ -100,19 +96,9 @@ export async function POST(
 				title_ar,
 				date_of_news,
 				date_of_news_ar,
+				imageUrl,
 				categoryId,
 				storeId: params.storeId,
-				images: {
-					createMany: {
-						data: [
-							...images.map(
-								(image: {
-									url: string;
-								}) => image
-							),
-						],
-					},
-				},
 				paragraph_news: {
 					createMany: {
 						data: [
@@ -167,7 +153,6 @@ export async function GET(
 				categoryId,
 			},
 			include: {
-				images: true,
 				paragraph_news: true,
 				paragraph_news_ar: true,
 				category: true,

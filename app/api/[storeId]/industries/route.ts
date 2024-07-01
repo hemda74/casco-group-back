@@ -12,6 +12,7 @@ type ServiceRequestBody = {
 		expert_mail: string;
 		expert_title: string;
 		expert_title_ar: string;
+		imageUrl: string;
 		store: { connect: { id: string } };
 	}[];
 	industryDetailes: {
@@ -112,6 +113,7 @@ export async function POST(
 								expert.expert_phone,
 							expert_mail:
 								expert.expert_mail,
+							imageUrl: expert.imageUrl,
 							store: {
 								connect: {
 									id: params.storeId,

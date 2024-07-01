@@ -14,9 +14,7 @@ type industryRequestBody = {
 		expert_title_ar: string;
 		expert_phone: string;
 		expert_mail: string;
-		images: {
-			url: string;
-		}[];
+		imageUrl: string;
 	}[];
 	industryDetailes: {
 		title: string;
@@ -133,19 +131,11 @@ export async function POST(
 									expert.expert_phone,
 								expert_mail:
 									expert.expert_mail,
+								imageUrl: expert.imageUrl,
 								store: {
 									connect: {
 										id: params.storeId,
 									},
-								},
-								images: {
-									create: expert.images.map(
-										(
-											image
-										) => ({
-											url: image.url,
-										})
-									),
 								},
 							})
 						),
@@ -218,11 +208,6 @@ export async function POST(
 					},
 				},
 				include: {
-					expertIndustry: {
-						include: {
-							images: true,
-						},
-					},
 					industryDetailes: {
 						include: {
 							industryDetailesPoint:
@@ -271,11 +256,7 @@ export async function GET(
 			where: { id: params.industryId },
 			include: {
 				category: true,
-				expertIndustry: {
-					include: {
-						images: true,
-					},
-				},
+
 				industryDetailes: {
 					include: {
 						industryDetailesPoint: true,
@@ -406,15 +387,6 @@ export async function PATCH(
 												id: params.storeId,
 											},
 										},
-										images: {
-											create: expert.images.map(
-												(
-													image
-												) => ({
-													url: image.url,
-												})
-											),
-										},
 									})
 								),
 							},
@@ -490,11 +462,6 @@ export async function PATCH(
 							},
 						},
 						include: {
-							expertIndustry: {
-								include: {
-									images: true,
-								},
-							},
 							industryDetailes: {
 								include: {
 									industryDetailesPoint:

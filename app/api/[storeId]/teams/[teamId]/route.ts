@@ -19,7 +19,6 @@ export async function GET(
 				id: params.teamId,
 			},
 			include: {
-				images: true,
 				billboard: true,
 			},
 		});
@@ -93,7 +92,7 @@ export async function PATCH(
 			linkedin,
 			phone,
 			billboardId,
-			images,
+			imageUrl,
 		} = body;
 
 		if (!userId) {
@@ -111,7 +110,7 @@ export async function PATCH(
 				status: 400,
 			});
 		}
-		if (!images || !images.length) {
+		if (!imageUrl) {
 			return new NextResponse('Images are required', {
 				status: 400,
 			});
@@ -164,10 +163,7 @@ export async function PATCH(
 				address,
 				address_ar,
 				billboardId,
-
-				images: {
-					deleteMany: {},
-				},
+				imageUrl,
 			},
 		});
 
@@ -175,19 +171,7 @@ export async function PATCH(
 			where: {
 				id: params.teamId,
 			},
-			data: {
-				images: {
-					createMany: {
-						data: [
-							...images.map(
-								(image: {
-									url: string;
-								}) => image
-							),
-						],
-					},
-				},
-			},
+			data: {},
 		});
 
 		return NextResponse.json(team);

@@ -14,7 +14,7 @@ export async function POST(
 
 		const {
 			industryId,
-			images,
+			imageUrl,
 			title,
 			title_ar,
 			sub_title,
@@ -39,6 +39,11 @@ export async function POST(
 			});
 		}
 		if (!title) {
+			return new NextResponse(' this field is required', {
+				status: 400,
+			});
+		}
+		if (!imageUrl) {
 			return new NextResponse(' this field is required', {
 				status: 400,
 			});
@@ -73,11 +78,7 @@ export async function POST(
 				status: 400,
 			});
 		}
-		if (!images || !images.length) {
-			return new NextResponse('Images are required', {
-				status: 400,
-			});
-		}
+
 		if (!industryId) {
 			return new NextResponse('team id is required', {
 				status: 400,
@@ -106,6 +107,7 @@ export async function POST(
 		const product = await prismadb.caseStudy.create({
 			data: {
 				title,
+				imageUrl,
 				title_ar,
 				sub_title,
 				sub_title_ar,
@@ -115,17 +117,7 @@ export async function POST(
 				paragraph_1_ar,
 				industryId,
 				storeId: params.storeId,
-				images: {
-					createMany: {
-						data: [
-							...images.map(
-								(image: {
-									url: string;
-								}) => image
-							),
-						],
-					},
-				},
+
 				caseStudyPoint: {
 					createMany: {
 						data: [
@@ -180,7 +172,6 @@ export async function GET(
 				industryId,
 			},
 			include: {
-				images: true,
 				industry: true,
 				caseStudyPoint: true,
 				caseStudyPointAr: true,

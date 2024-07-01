@@ -24,9 +24,7 @@ type ServiceRequestBody = {
 		expert_title_ar: string;
 		expert_phone: string;
 		expert_mail: string;
-		images: {
-			url: string;
-		}[];
+		imageUrl: string;
 	}[];
 };
 
@@ -138,6 +136,7 @@ export async function POST(
 					expertService: {
 						create: expertService.map(
 							(expert) => ({
+								imageUrl: expert.imageUrl,
 								expert_name:
 									expert.expert_name,
 								expert_name_ar:
@@ -155,15 +154,6 @@ export async function POST(
 										id: params.storeId,
 									},
 								},
-								images: {
-									create: expert.images.map(
-										(
-											image
-										) => ({
-											url: image.url,
-										})
-									),
-								},
 							})
 						),
 					},
@@ -171,11 +161,7 @@ export async function POST(
 				include: {
 					serviceDesc: true,
 					serviceDescAr: true,
-					expertService: {
-						include: {
-							images: true,
-						},
-					},
+					expertService: true,
 				},
 			});
 
@@ -210,11 +196,7 @@ export async function GET(
 				category: true,
 				serviceDesc: true,
 				serviceDescAr: true,
-				expertService: {
-					include: {
-						images: true,
-					},
-				},
+				expertService: true,
 			},
 		});
 
@@ -357,15 +339,6 @@ export async function PATCH(
 												id: params.storeId,
 											},
 										},
-										images: {
-											create: expert.images.map(
-												(
-													image
-												) => ({
-													url: image.url,
-												})
-											),
-										},
 									})
 								),
 							},
@@ -373,11 +346,7 @@ export async function PATCH(
 						include: {
 							serviceDesc: true,
 							serviceDescAr: true,
-							expertService: {
-								include: {
-									images: true,
-								},
-							},
+							expertService: true,
 						},
 					});
 

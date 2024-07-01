@@ -16,7 +16,7 @@ export async function POST(
 			name,
 			name_ar,
 			teamId,
-			images,
+			imageUrl,
 			title,
 			title_ar,
 			brief_1,
@@ -82,8 +82,8 @@ export async function POST(
 				status: 400,
 			});
 		}
-		if (!images || !images.length) {
-			return new NextResponse('Images are required', {
+		if (!imageUrl) {
+			return new NextResponse(' this field is required', {
 				status: 400,
 			});
 		}
@@ -125,18 +125,8 @@ export async function POST(
 				brief_3,
 				brief_3_ar,
 				teamId,
+				imageUrl,
 				storeId: params.storeId,
-				images: {
-					createMany: {
-						data: [
-							...images.map(
-								(image: {
-									url: string;
-								}) => image
-							),
-						],
-					},
-				},
 			},
 		});
 
@@ -167,7 +157,6 @@ export async function GET(
 				teamId,
 			},
 			include: {
-				images: true,
 				team: true,
 			},
 			orderBy: {

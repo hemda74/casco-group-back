@@ -15,7 +15,7 @@ export async function POST(
 		const {
 			title,
 			title_ar,
-			images,
+			imageUrl,
 			categoryId,
 			paragraph_event,
 			paragraph_event_ar,
@@ -48,8 +48,8 @@ export async function POST(
 				status: 400,
 			});
 		}
-		if (!images || !images.length) {
-			return new NextResponse('Images are required', {
+		if (!imageUrl) {
+			return new NextResponse(' this field is required', {
 				status: 400,
 			});
 		}
@@ -101,18 +101,8 @@ export async function POST(
 				categoryId,
 				date_of_event,
 				date_of_event_ar,
+				imageUrl,
 				storeId: params.storeId,
-				images: {
-					createMany: {
-						data: [
-							...images.map(
-								(image: {
-									url: string;
-								}) => image
-							),
-						],
-					},
-				},
 				paragraph_event: {
 					createMany: {
 						data: [
@@ -167,7 +157,6 @@ export async function GET(
 				categoryId,
 			},
 			include: {
-				images: true,
 				paragraph_event: true,
 				paragraph_event_ar: true,
 				category: true,

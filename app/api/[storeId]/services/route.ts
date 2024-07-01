@@ -24,7 +24,7 @@ type ServiceRequestBody = {
 		expert_mail: string;
 		expert_title: string;
 		expert_title_ar: string;
-		// expert_imageUrl: string;
+		imageUrl: string;
 		store: { connect: { id: string } };
 	}[];
 	categoryId: string;
@@ -122,8 +122,7 @@ export async function POST(
 					expertService: {
 						create: expertService.map(
 							(expert) => ({
-								// expert_imageUrl:
-								// 	expert.expert_imageUrl,
+								imageUrl: expert.imageUrl,
 								expert_name:
 									expert.expert_name,
 								expert_name_ar:

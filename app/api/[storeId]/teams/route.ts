@@ -18,7 +18,7 @@ export async function POST(
 			address_ar,
 			phone,
 			billboardId,
-			images,
+			imageUrl,
 		} = body;
 
 		if (!userId) {
@@ -56,7 +56,7 @@ export async function POST(
 				status: 400,
 			});
 		}
-		if (!images || !images.length) {
+		if (!imageUrl) {
 			return new NextResponse('Images are required', {
 				status: 400,
 			});
@@ -95,18 +95,8 @@ export async function POST(
 				address,
 				address_ar,
 				linkedin,
+				imageUrl,
 				storeId: params.storeId,
-				images: {
-					createMany: {
-						data: [
-							...images.map(
-								(image: {
-									url: string;
-								}) => image
-							),
-						],
-					},
-				},
 			},
 		});
 
@@ -138,7 +128,6 @@ export async function GET(
 				billboardId,
 			},
 			include: {
-				images: true,
 				billboard: true,
 			},
 			orderBy: {
