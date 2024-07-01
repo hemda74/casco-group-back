@@ -83,7 +83,6 @@ export async function PATCH(
 ) {
 	try {
 		const { userId } = auth();
-
 		const body = await req.json();
 
 		const {
@@ -103,58 +102,50 @@ export async function PATCH(
 			});
 		}
 		if (!title) {
-			return new NextResponse('Name is required', {
-				status: 400,
-			});
-		}
-		if (!imageUrl) {
-			return new NextResponse('Name is required', {
+			return new NextResponse('Title is required', {
 				status: 400,
 			});
 		}
 		if (!title_ar) {
-			return new NextResponse(' Arabic Name is required', {
+			return new NextResponse('Arabic Title is required', {
 				status: 400,
 			});
 		}
-
-		if (!paragraph_event || !paragraph_event.length) {
-			return new NextResponse(
-				'paragraph_event are required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!paragraph_event_ar || !paragraph_event_ar.length) {
-			return new NextResponse(
-				'paragraph_event in arabic are required',
-				{
-					status: 400,
-				}
-			);
-		}
-		if (!date_of_event) {
-			return new NextResponse(' this field is required', {
-				status: 400,
-			});
-		}
-		if (!date_of_event_ar) {
-			return new NextResponse(' this field is required', {
+		if (!imageUrl) {
+			return new NextResponse('Image URL is required', {
 				status: 400,
 			});
 		}
 		if (!categoryId) {
-			return new NextResponse('Category id is required', {
+			return new NextResponse('Category ID is required', {
 				status: 400,
 			});
 		}
+		if (!paragraph_event || !paragraph_event.length) {
+			return new NextResponse('Paragraph Event is required', {
+				status: 400,
+			});
+		}
+		if (!paragraph_event_ar || !paragraph_event_ar.length) {
+			return new NextResponse(
+				'Paragraph Event in Arabic is required',
+				{ status: 400 }
+			);
+		}
+		if (!date_of_event) {
+			return new NextResponse('Date of Event is required', {
+				status: 400,
+			});
+		}
+		if (!date_of_event_ar) {
+			return new NextResponse(
+				'Date of Event in Arabic is required',
+				{ status: 400 }
+			);
+		}
 
 		const storeByUserId = await prismadb.store.findFirst({
-			where: {
-				id: params.storeId,
-				userId,
-			},
+			where: { id: params.storeId, userId },
 		});
 
 		if (!storeByUserId) {
@@ -163,52 +154,44 @@ export async function PATCH(
 			});
 		}
 
+		// First, delete existing paragraph events
 		await prismadb.event.update({
-			where: {
-				id: params.eventId,
-			},
+			where: { id: params.eventId },
 			data: {
 				title,
 				title_ar,
 				imageUrl,
 				date_of_event,
 				date_of_event_ar,
-				paragraph_event: {
-					deleteMany: {},
-				},
-				paragraph_event_ar: {
-					deleteMany: {},
-				},
+				paragraph_event: { deleteMany: {} },
+				paragraph_event_ar: { deleteMany: {} },
 			},
 		});
 
+		// Then, create new paragraph events
 		const event = await prismadb.event.update({
-			where: {
-				id: params.eventId,
-			},
+			where: { id: params.eventId },
 			data: {
 				paragraph_event: {
 					createMany: {
-						data: [
-							...paragraph_event.map(
-								(paragraph_event: {
-									text: string;
-								}) =>
-									paragraph_event
-							),
-						],
+						data: paragraph_event.map(
+							(paragraph: {
+								text: string;
+							}) => ({
+								text: paragraph.text,
+							})
+						),
 					},
 				},
 				paragraph_event_ar: {
 					createMany: {
-						data: [
-							...paragraph_event_ar.map(
-								(paragraph_event_ar: {
-									text: string;
-								}) =>
-									paragraph_event_ar
-							),
-						],
+						data: paragraph_event_ar.map(
+							(paragraph: {
+								text: string;
+							}) => ({
+								text: paragraph.text,
+							})
+						),
 					},
 				},
 			},
@@ -216,7 +199,7 @@ export async function PATCH(
 
 		return NextResponse.json(event);
 	} catch (error) {
-		console.log('[event_PATCH]', error);
+		console.error('[event_PATCH]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
