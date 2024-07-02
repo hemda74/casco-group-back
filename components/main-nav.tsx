@@ -24,7 +24,7 @@ export function MainNav({
 		},
 		{
 			href: `/${params.storeId}/course-type`,
-			label: 'course-type',
+			label: 'Courses Type',
 			active: pathname === `/${params.storeId}/course-type`,
 		},
 		{
