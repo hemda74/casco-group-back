@@ -43,7 +43,7 @@ export const ServiceClient: React.FC<ServiceClientProps> = ({ data }) => {
 			/>
 			<Separator />
 			<ApiList
-				entityName="service"
+				entityName="services"
 				entityIdName="serviceId"
 			/>
 		</>
