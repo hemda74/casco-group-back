@@ -7,7 +7,7 @@ const SizesPage = async ({
 }: {
   params: { storeId: string }
 }) => {
-  const sizes = await prismadb.size.findMany({
+  const courseTypes = await prismadb.courseType.findMany({
     where: {
       storeId: params.storeId
     },
@@ -16,7 +16,7 @@ const SizesPage = async ({
     }
   });
 
-  const formattedSizes: SizeColumn[] = sizes.map((item) => ({
+  const formattedSizes: SizeColumn[] = courseTypes.map((item) => ({
     id: item.id,
     name: item.name,
     name_ar: item.name_ar,

@@ -51,7 +51,7 @@ export async function POST(
 			});
 		}
 
-		const size = await prismadb.size.create({
+		const courseType = await prismadb.courseType.create({
 			data: {
 				name,
 				name_ar,
@@ -59,9 +59,9 @@ export async function POST(
 			},
 		});
 
-		return NextResponse.json(size);
+		return NextResponse.json(courseType);
 	} catch (error) {
-		console.log('[SIZES_POST]', error);
+		console.log('[courseTypeS_POST]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
@@ -77,15 +77,15 @@ export async function GET(
 			});
 		}
 
-		const sizes = await prismadb.size.findMany({
+		const courseTypes = await prismadb.courseType.findMany({
 			where: {
 				storeId: params.storeId,
 			},
 		});
 
-		return NextResponse.json(sizes);
+		return NextResponse.json(courseTypes);
 	} catch (error) {
-		console.log('[SIZES_GET]', error);
+		console.log('[courseTypeS_GET]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }

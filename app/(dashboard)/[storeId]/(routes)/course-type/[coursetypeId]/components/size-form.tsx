@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "react-hot-toast"
 import { Trash } from "lucide-react"
-import { Size } from "@prisma/client"
+import { CourseType } from "@prisma/client"
 import { useParams, useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -28,13 +28,13 @@ const formSchema = z.object({
   name_ar: z.string().min(1),
 });
 
-type SizeFormValues = z.infer<typeof formSchema>
+type CourseTypeFormValues = z.infer<typeof formSchema>
 
-interface SizeFormProps {
-  initialData: Size | null;
+interface CourseTypeFormProps {
+  initialData: CourseType | null;
 };
 
-export const SizeForm: React.FC<SizeFormProps> = ({
+export const CourseTypeForm: React.FC<CourseTypeFormProps> = ({
   initialData
 }) => {
   const params = useParams();
@@ -48,7 +48,7 @@ export const SizeForm: React.FC<SizeFormProps> = ({
   const toastMessage = initialData ? 'Type updated.' : 'Type created.';
   const action = initialData ? 'Save changes' : 'Create';
 
-  const form = useForm<SizeFormValues>({
+  const form = useForm<CourseTypeFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       name: '',
@@ -56,7 +56,7 @@ export const SizeForm: React.FC<SizeFormProps> = ({
     }
   });
 
-  const onSubmit = async (data: SizeFormValues) => {
+  const onSubmit = async (data: CourseTypeFormValues) => {
     try {
       setLoading(true);
       if (initialData) {
@@ -80,9 +80,9 @@ export const SizeForm: React.FC<SizeFormProps> = ({
       await axios.delete(`/api/${params.storeId}/course-type/${params.coursetypeId}`);
       router.refresh();
       router.push(`/${params.storeId}/course-type`);
-      toast.success('Size deleted.');
+      toast.success('CourseType deleted.');
     } catch (error: any) {
-      toast.error('Make sure you removed all products using this size first.');
+      toast.error('Make sure you removed all products using this CourseType first.');
     } finally {
       setLoading(false);
       setOpen(false);

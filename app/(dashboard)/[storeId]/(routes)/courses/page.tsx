@@ -8,6 +8,7 @@ const CategoriesPage = async ({ params }: { params: { storeId: string } }) => {
 			storeId: params.storeId,
 		},
 		include: {
+			CourseType: true,
 			category: true,
 			c_benefit_ar: true,
 			c_benefit_en: true,
@@ -34,6 +35,7 @@ const CategoriesPage = async ({ params }: { params: { storeId: string } }) => {
 		c_title: item.c_title,
 		c_title_ar: item.c_title_ar,
 		category: item.category.name,
+		CourseType: item.CourseType.name,
 		price_egp: item.price_egp,
 		price_ksa: item.price_ksa,
 		price_uae: item.price_uae,

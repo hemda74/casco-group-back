@@ -4,6 +4,7 @@ import prismadb from '@/lib/prismadb';
 
 type courseRequestBody = {
 	categoryId: string;
+	coursetypeId: string;
 	c_title: string;
 	c_title_ar: string;
 	price_egp: number;
@@ -64,12 +65,14 @@ type courseRequestBody = {
 };
 
 const validateRequestBody = (body: courseRequestBody) => {
-	const { c_title, c_title_ar, categoryId, imageUrl } = body;
+	const { c_title, c_title_ar, categoryId, coursetypeId, imageUrl } =
+		body;
 
 	if (!c_title) throw new Error('c_title is required');
 	if (!c_title_ar) throw new Error('Arabic c_title is required');
 	if (!imageUrl) throw new Error('Image is required');
 	if (!categoryId) throw new Error('Category id is required');
+	if (!coursetypeId) throw new Error('Category id is required');
 };
 
 const handleErrorResponse = (error: any) => {
@@ -88,6 +91,7 @@ export async function POST(
 		const {
 			c_title,
 			imageUrl,
+			coursetypeId,
 			c_title_ar,
 			categoryId,
 			price_egp,
@@ -123,7 +127,11 @@ export async function POST(
 				status: 403,
 			});
 		}
-
+		if (!coursetypeId) {
+			return new NextResponse('c_title is required', {
+				status: 400,
+			});
+		}
 		if (!c_title) {
 			return new NextResponse('c_title is required', {
 				status: 400,
@@ -144,7 +152,11 @@ export async function POST(
 				status: 400,
 			});
 		}
-
+		if (!coursetypeId) {
+			return new NextResponse('Category id is required', {
+				status: 400,
+			});
+		}
 		const storeByUserId = await prismadb.store.findFirst({
 			where: {
 				id: params.storeId,
@@ -181,6 +193,9 @@ export async function POST(
 					},
 					category: {
 						connect: { id: categoryId },
+					},
+					CourseType: {
+						connect: { id: coursetypeId },
 					},
 					c_intro_en: {
 						create: c_intro_en.map(
@@ -311,6 +326,7 @@ export async function GET(
 		const course = await prismadb.course.findUnique({
 			where: { id: params.courseId },
 			include: {
+				CourseType: true,
 				category: true,
 				c_benefit_ar: true,
 				c_benefit_en: true,
@@ -486,6 +502,8 @@ export async function PATCH(
 						},
 						data: {
 							categoryId: body.categoryId,
+							coursetypeId:
+								body.coursetypeId,
 							c_title: body.c_title,
 							c_title_ar: body.c_title_ar,
 							c_benefit_ar: {

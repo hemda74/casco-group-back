@@ -11,6 +11,7 @@ const CategoryPage = async ({
 			id: params.courseId,
 		},
 		include: {
+			CourseType: true,
 			c_intro_ar: true,
 			c_intro_en: true,
 			c_certification_ar: true,
@@ -33,12 +34,18 @@ const CategoryPage = async ({
 			storeId: params.storeId,
 		},
 	});
+	const types = await prismadb.courseType.findMany({
+		where: {
+			storeId: params.storeId,
+		},
+	});
 	return (
 		<div className="flex-col">
 			<div className="flex-1 space-y-4 p-8 pt-6">
 				<CourseForm
 					categories={categories}
 					initialData={course}
+					types={types}
 				/>
 			</div>
 		</div>

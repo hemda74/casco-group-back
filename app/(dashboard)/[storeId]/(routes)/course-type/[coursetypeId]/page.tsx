@@ -1,13 +1,13 @@
 import prismadb from "@/lib/prismadb";
 
-import { SizeForm } from "./components/size-form";
+import { CourseTypeForm } from "./components/size-form";
 
 const SizePage = async ({
   params
 }: {
   params: { coursetypeId: string }
 }) => {
-  const size = await prismadb.size.findUnique({
+  const size = await prismadb.courseType.findUnique({
     where: {
       id: params.coursetypeId
     }
@@ -16,7 +16,7 @@ const SizePage = async ({
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <SizeForm initialData={size} />
+        <CourseTypeForm initialData={size} />
       </div>
     </div>
   );

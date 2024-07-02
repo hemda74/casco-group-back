@@ -33,7 +33,7 @@ model Store {
   servicedescar           ServiceDescAr[]                 @relation("ServiceDescAr")
   idustryDetailes         IndustryDetailes[]              @relation("IndustryDetailes")
   idustryDetailes2        IndustryDetailes2[]             @relation("IndustryDetailes2")
-  size                    Size[]                          @relation("StoreToSize")
+  CourseType                    CourseType[]                          @relation("StoreToCourseType")
   createdAt               DateTime                        @default(now())
   updatedAt               DateTime                        @updatedAt
 }
@@ -101,11 +101,11 @@ model Course {
     c_certification_ar         C_certification_ar[] 
     c_date_en                  C_date_en[]   
     c_date_ar                  C_date_ar[]  
-    sizeId      String    // Foreign Key to Size
-    size        Size      @relation(fields: [sizeId], references: [id])
+    coursetypeId      String    // Foreign Key to CourseType
+    CourseType        CourseType      @relation(fields: [coursetypeId], references: [id])
     @@index([storeId])
     @@index([categoryId])
-    @@index([sizeId])
+    @@index([coursetypeId])
 }
 model C_intro_en{
     id         Int @id @default(autoincrement())
@@ -558,10 +558,10 @@ model Testimonials{
     title_ar                      String
     @@index([storeId])
 }
-model Size {
+model CourseType {
   id          String    @id @default(uuid())
   storeId     String    // Foreign Key to Store
-  store       Store     @relation("StoreToSize", fields: [storeId], references: [id])
+  store       Store     @relation("StoreToCourseType", fields: [storeId], references: [id])
   name        String
   name_ar        String
   courses    Course[] // Relation to Product model

@@ -8,7 +8,7 @@ import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import {
-	Course, CoursesCategory, C_benefit_ar, C_benefit_en, C_certification_ar, C_certification_en, C_content_ar, C_content_en, C_date_ar, C_date_en, C_intro_ar, C_intro_en, C_objective_ar, C_who_should_en, C_who_should_ar, C_objective_en
+	Course, CoursesCategory, CourseType, C_benefit_ar, C_benefit_en, C_certification_ar, C_certification_en, C_content_ar, C_content_en, C_date_ar, C_date_en, C_intro_ar, C_intro_en, C_objective_ar, C_who_should_en, C_who_should_ar, C_objective_en
 } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -42,6 +42,7 @@ const formSchema = z.object({
 	price_ksa: z.coerce.number().min(1),
 	price_usd: z.coerce.number().min(1),
 	categoryId: z.string().min(1),
+	coursetypeId: z.string().min(1),
 	c_short_intro_en: z.string().min(1),
 	c_short_intro_ar: z.string().min(1),
 	c_delv_and_leaders_en: z.string().min(1),
@@ -99,6 +100,7 @@ type CourseFormValues = z.infer<typeof formSchema>;
 interface CourseFormProps {
 	initialData:
 	| (Course & {
+
 		c_intro_ar: C_intro_ar[];
 		c_intro_en: C_intro_en[];
 		c_date_ar: C_date_ar[];
@@ -116,11 +118,13 @@ interface CourseFormProps {
 	})
 	| null;
 	categories: CoursesCategory[];
+	types: CourseType[];
 }
 
 export const CourseForm: React.FC<CourseFormProps> = ({
 	initialData,
 	categories,
+	types,
 }) => {
 	const params = useParams();
 	const router = useRouter();
@@ -155,6 +159,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 			),
 		}
 		: {
+			coursetypeId: '',
 			c_title: '',
 			c_title_ar: '',
 			imageUrl: '',
@@ -345,7 +350,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Billboard
+										Course Category
 									</FormLabel>
 									<Select
 										disabled={
@@ -373,6 +378,63 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 										</FormControl>
 										<SelectContent>
 											{categories.map(
+												(
+													billboard
+												) => (
+													<SelectItem
+														key={
+															billboard.id
+														}
+														value={
+															billboard.id
+														}
+													>
+														{
+															billboard.name
+														}
+													</SelectItem>
+												)
+											)}
+										</SelectContent>
+									</Select>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="coursetypeId"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>
+										Course Type
+									</FormLabel>
+									<Select
+										disabled={
+											loading
+										}
+										onValueChange={
+											field.onChange
+										}
+										value={
+											field.value
+										}
+										defaultValue={
+											field.value
+										}
+									>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue
+													defaultValue={
+														field.value
+													}
+													placeholder="Select a Type"
+												/>
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											{types.map(
 												(
 													billboard
 												) => (

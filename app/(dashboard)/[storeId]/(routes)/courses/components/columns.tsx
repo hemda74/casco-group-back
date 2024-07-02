@@ -8,6 +8,7 @@ export type CourseColumn = {
 	c_title: string;
 	c_title_ar: string;
 	category: string;
+	CourseType: string;
 	price_egp: Decimal;
 	price_ksa: Decimal;
 	price_uae: Decimal;
@@ -48,6 +49,10 @@ export const columns: ColumnDef<CourseColumn>[] = [
 	{
 		accessorKey: 'category',
 		header: 'Course_Category',
+	},
+	{
+		accessorKey: 'CourseType',
+		header: 'Course_Type',
 	},
 	{
 		accessorKey: 'c_short_intro_en',

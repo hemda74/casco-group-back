@@ -9,20 +9,20 @@ export async function GET(
 ) {
 	try {
 		if (!params.coursetypeId) {
-			return new NextResponse('Size id is required', {
+			return new NextResponse('courseType id is required', {
 				status: 400,
 			});
 		}
 
-		const size = await prismadb.size.findUnique({
+		const courseType = await prismadb.courseType.findUnique({
 			where: {
 				id: params.coursetypeId,
 			},
 		});
 
-		return NextResponse.json(size);
+		return NextResponse.json(courseType);
 	} catch (error) {
-		console.log('[SIZE_GET]', error);
+		console.log('[courseType_GET]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
@@ -41,7 +41,7 @@ export async function DELETE(
 		}
 
 		if (!params.coursetypeId) {
-			return new NextResponse('Size id is required', {
+			return new NextResponse('courseType id is required', {
 				status: 400,
 			});
 		}
@@ -59,15 +59,15 @@ export async function DELETE(
 			});
 		}
 
-		const size = await prismadb.size.delete({
+		const courseType = await prismadb.courseType.delete({
 			where: {
 				id: params.coursetypeId,
 			},
 		});
 
-		return NextResponse.json(size);
+		return NextResponse.json(courseType);
 	} catch (error) {
-		console.log('[SIZE_DELETE]', error);
+		console.log('[courseType_DELETE]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
@@ -96,7 +96,7 @@ export async function PATCH(
 		}
 
 		if (!params.coursetypeId) {
-			return new NextResponse('Size id is required', {
+			return new NextResponse('courseType id is required', {
 				status: 400,
 			});
 		}
@@ -114,7 +114,7 @@ export async function PATCH(
 			});
 		}
 
-		const size = await prismadb.size.update({
+		const courseType = await prismadb.courseType.update({
 			where: {
 				id: params.coursetypeId,
 			},
@@ -124,9 +124,9 @@ export async function PATCH(
 			},
 		});
 
-		return NextResponse.json(size);
+		return NextResponse.json(courseType);
 	} catch (error) {
-		console.log('[SIZE_PATCH]', error);
+		console.log('[courseType_PATCH]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }

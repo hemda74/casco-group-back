@@ -3,6 +3,7 @@ import { auth } from '@clerk/nextjs';
 import prismadb from '@/lib/prismadb';
 type courseRequestBody = {
 	categoryId: string;
+	coursetypeId: string;
 	c_title: string;
 	imageUrl: string;
 	c_title_ar: string;
@@ -74,6 +75,7 @@ export async function POST(
 			c_title_ar,
 			imageUrl,
 			categoryId,
+			coursetypeId,
 			price_egp,
 			price_ksa,
 			price_uae,
@@ -117,6 +119,11 @@ export async function POST(
 			});
 		}
 		if (!categoryId) {
+			return new NextResponse('Billboard ID is required', {
+				status: 400,
+			});
+		}
+		if (!coursetypeId) {
 			return new NextResponse('Billboard ID is required', {
 				status: 400,
 			});
@@ -229,6 +236,9 @@ export async function POST(
 				},
 				category: {
 					connect: { id: categoryId },
+				},
+				CourseType: {
+					connect: { id: coursetypeId },
 				},
 			},
 		});
