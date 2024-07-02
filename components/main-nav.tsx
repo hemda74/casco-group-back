@@ -97,6 +97,11 @@ export function MainNav({
 			active: pathname === `/${params.storeId}/recognitions`,
 		},
 		{
+			href: `/${params.storeId}/course-type`,
+			label: 'course-type',
+			active: pathname === `/${params.storeId}/course-type`,
+		},
+		{
 			href: `/${params.storeId}/settings`,
 			label: 'Settings',
 			active: pathname === `/${params.storeId}/settings`,
