@@ -23,6 +23,11 @@ export function MainNav({
 				`/${params.storeId}/courses-categories`,
 		},
 		{
+			href: `/${params.storeId}/course-type`,
+			label: 'course-type',
+			active: pathname === `/${params.storeId}/course-type`,
+		},
+		{
 			href: `/${params.storeId}/courses`,
 			label: 'Courses',
 			active: pathname === `/${params.storeId}/courses`,
@@ -96,11 +101,7 @@ export function MainNav({
 			label: 'Recognitions',
 			active: pathname === `/${params.storeId}/recognitions`,
 		},
-		{
-			href: `/${params.storeId}/course-type`,
-			label: 'course-type',
-			active: pathname === `/${params.storeId}/course-type`,
-		},
+
 		{
 			href: `/${params.storeId}/settings`,
 			label: 'Settings',
