@@ -11,9 +11,7 @@ const ProductPage = async ({
 		where: {
 			id: params.teammemberId,
 		},
-		include: {
-			images: true,
-		},
+
 	});
 
 	const teams = await prismadb.team.findMany({

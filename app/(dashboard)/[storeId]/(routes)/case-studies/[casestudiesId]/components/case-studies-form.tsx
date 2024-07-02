@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
-import { CaseStudy, Image3, Industry, CaseStudyPoint, CaseStudyPointAr } from '@prisma/client';
+import { CaseStudy, Industry, CaseStudyPoint, CaseStudyPointAr } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
@@ -29,8 +29,6 @@ import {
 	SelectValue,
 } from '@/components/ui/select';
 import ImageUpload from '@/components/ui/image-upload';
-import { title } from 'process';
-
 const formSchema = z.object({
 	title: z.string().min(1),
 	title_ar: z.string().min(1),
@@ -41,7 +39,7 @@ const formSchema = z.object({
 	paragraph_2: z.string().min(1),
 	paragraph_2_ar: z.string().min(1),
 	industryId: z.string().min(1),
-	images: z.object({ url: z.string() }).array(),
+	imageUrl: z.string().min(1),
 	caseStudyPoint: z.array(z.object({
 		p1: z.string().min(1),
 	})),
@@ -57,7 +55,6 @@ interface CaseFormProps {
 	| (CaseStudy & {
 		caseStudyPoint: CaseStudyPoint[];
 		caseStudyPointAr: CaseStudyPointAr[];
-		images: Image3[];
 	})
 	| null;
 	industries: Industry[];
@@ -95,7 +92,7 @@ export const CaseForm: React.FC<CaseFormProps> = ({
 			paragraph_2_ar: '',
 			caseStudyPoint: [],
 			caseStudyPointAr: [],
-			images: [],
+			imageUrl: '',
 		};
 
 	const form = useForm<CaseFormValues>({
@@ -185,50 +182,16 @@ export const CaseForm: React.FC<CaseFormProps> = ({
 					<div className="md:grid md:grid-cols-2 gap-8">
 						<FormField
 							control={form.control}
-							name="images"
+							name="imageUrl"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>
-										Images
-									</FormLabel>
+									<FormLabel>Image</FormLabel>
 									<FormControl>
 										<ImageUpload
-											value={field.value.map(
-												(
-													image
-												) =>
-													image.url
-											)}
-											disabled={
-												loading
-											}
-											onChange={(
-												url
-											) =>
-												field.onChange(
-													[
-														...field.value,
-														{
-															url,
-														},
-													]
-												)
-											}
-											onRemove={(
-												url
-											) =>
-												field.onChange(
-													[
-														...field.value.filter(
-															(
-																current
-															) =>
-																current.url !==
-																url
-														),
-													]
-												)
-											}
+											value={field.value ? [field.value] : []}
+											disabled={loading}
+											onChange={(url) => field.onChange(url)}
+											onRemove={() => field.onChange('')}
 										/>
 									</FormControl>
 									<FormMessage />

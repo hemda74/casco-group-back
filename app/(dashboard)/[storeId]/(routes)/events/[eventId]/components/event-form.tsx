@@ -172,7 +172,7 @@ export const EventForm: React.FC<EventFormProps> = ({
 						)}
 					/>
 					{/* Rest of your form fields */}
-					<div className="md:grid md:grid-cols-1 gap-8">
+					<div className="md:grid md:grid-cols-2 gap-8">
 						{/* Other form fields */}
 						<FormField
 							control={form.control}
@@ -274,98 +274,97 @@ export const EventForm: React.FC<EventFormProps> = ({
 								</FormItem>
 							)}
 						/>
-
-						<div>
-							<Heading description='Paragraph ' title="Paragraph  (English)" />
-							{paragraph_eventFields.map((field, index) => (
-								<div key={field.id} className="grid grid-cols-2 gap-8">
-									<FormField
-										control={form.control}
-										name={`paragraph_event.${index}.text`}
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Title</FormLabel>
-												<FormControl>
-													<Textarea
-														disabled={loading}
-														placeholder="Enter a Value"
-														{...field}
-													/>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<Button
-										disabled={loading}
-										variant="destructive"
-										className='w-1/2 mt-10'
-										onClick={() => removeparagraph_event(index)}
-									>
-										Remove
-									</Button>
-								</div>
-							))}
-							<Button
-								type="button"
-								disabled={loading}
-								variant="secondary"
-								className="mt-5"
-								onClick={() =>
-									appendparagraph_event({
-										text: ''
-									})
-								}
-							>
-								Add New Point
-							</Button>
-						</div>
-						<hr />
-						<div>
-							<Heading description='Paragraph ' title="Paragraph  (Arabic)" />
-							{paragraph_event_arFields.map((field, index) => (
-								<div key={field.id} className="grid grid-cols-2 gap-8">
-									<FormField
-										control={form.control}
-										name={`paragraph_event_ar.${index}.text`}
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Title</FormLabel>
-												<FormControl>
-													<Textarea
-														disabled={loading}
-														placeholder="Enter a Value"
-														{...field}
-													/>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-									<Button
-										disabled={loading}
-										variant="destructive"
-										className='w-1/2 mt-10'
-										onClick={() => removeparagraph_event_ar(index)}
-									>
-										Remove
-									</Button>
-								</div>
-							))}
-							<Button
-								type="button"
-								disabled={loading}
-								variant="secondary"
-								className="mt-5"
-								onClick={() =>
-									appendparagraph_event_ar({
-										text: ''
-									})
-								}
-							>
-								Add New Point
-							</Button>
-						</div>
+					</div>
+					<div>
+						<Heading description='Paragraph ' title="Paragraph  (English)" />
+						{paragraph_eventFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-2 gap-8">
+								<FormField
+									control={form.control}
+									name={`paragraph_event.${index}.text`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Title</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									variant="destructive"
+									className='w-1/2 mt-10'
+									onClick={() => removeparagraph_event(index)}
+								>
+									Remove
+								</Button>
+							</div>
+						))}
+						<Button
+							type="button"
+							disabled={loading}
+							variant="secondary"
+							className="mt-5"
+							onClick={() =>
+								appendparagraph_event({
+									text: ''
+								})
+							}
+						>
+							Add New Point
+						</Button>
+					</div>
+					<hr />
+					<div>
+						<Heading description='Paragraph ' title="Paragraph  (Arabic)" />
+						{paragraph_event_arFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-2 gap-8">
+								<FormField
+									control={form.control}
+									name={`paragraph_event_ar.${index}.text`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Title</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									variant="destructive"
+									className='w-1/2 mt-10'
+									onClick={() => removeparagraph_event_ar(index)}
+								>
+									Remove
+								</Button>
+							</div>
+						))}
+						<Button
+							type="button"
+							disabled={loading}
+							variant="secondary"
+							className="mt-5"
+							onClick={() =>
+								appendparagraph_event_ar({
+									text: ''
+								})
+							}
+						>
+							Add New Point
+						</Button>
 					</div>
 					<Button disabled={loading} className="ml-auto" type="submit">
 						{action}

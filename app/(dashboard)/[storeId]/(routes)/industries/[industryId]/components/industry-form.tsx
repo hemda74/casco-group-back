@@ -8,7 +8,6 @@ import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
 import { Industry, IndustryCategory, ExpertIndustry, IndustryDetailes, IndustryDetailes2, IndustryDetailesPoint, IndustryDetailesPointAr } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
 	Form,
@@ -42,7 +41,7 @@ const formSchema = z.object({
 		expert_title_ar: z.string().min(1),
 		expert_phone: z.string().min(1),
 		expert_mail: z.string().min(1),
-		images: z.object({ url: z.string() }).array(),
+		imageUrl: z.string().min(1),
 	})),
 	industryDetailes: z.array(z.object({
 		title: z.string().min(1),
@@ -305,24 +304,16 @@ export const IndustryForm: React.FC<IndustryFormProps> = ({
 							<div key={field.id} className="grid grid-cols-2 gap-8">
 								<FormField
 									control={form.control}
-									name={`expertIndustry.${index}.images`}
+									name={`expertIndustry.${index}.imageUrl`}
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Images</FormLabel>
+											<FormLabel>ImageUrl</FormLabel>
 											<FormControl>
 												<ImageUpload
-													value={field.value?.map((image) => image.url) || []}
+													value={field.value ? [field.value] : []}
 													disabled={loading}
-													onChange={(url) =>
-														field.onChange([...(field.value || []), { url }])
-													}
-													onRemove={(url) =>
-														field.onChange(
-															(field.value || []).filter(
-																(current) => current.url !== url
-															)
-														)
-													}
+													onChange={(url) => field.onChange(url)}
+													onRemove={() => field.onChange('')}
 												/>
 											</FormControl>
 											<FormMessage />
@@ -437,7 +428,7 @@ export const IndustryForm: React.FC<IndustryFormProps> = ({
 									onClick={() => removeexpertIndustry(index)}
 									variant="destructive"
 									size="sm"
-									className="mt-1"
+									className="mt-10 w-1/2"
 								>
 									Remove
 								</Button>
@@ -455,7 +446,7 @@ export const IndustryForm: React.FC<IndustryFormProps> = ({
 									expert_title_ar: '',
 									expert_phone: '',
 									expert_mail: '',
-									images: [],
+									imageUrl: '',
 								})
 							}
 							variant="secondary"
@@ -613,7 +604,7 @@ export const IndustryForm: React.FC<IndustryFormProps> = ({
 									onClick={() => removeindustryDetailes(index)}
 									variant="destructive"
 									size="sm"
-									className="mt-1"
+									className="mt-10 w-1/2"
 								>
 									Remove
 								</Button>
@@ -783,7 +774,7 @@ export const IndustryForm: React.FC<IndustryFormProps> = ({
 									onClick={() => removeIndustryDetailes2(index)}
 									variant="destructive"
 									size="sm"
-									className="mt-1"
+									className="mt-10 w-1/2"
 								>
 									Remove
 								</Button>

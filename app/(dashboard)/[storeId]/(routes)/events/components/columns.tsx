@@ -1,7 +1,6 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
-import { Decimal } from '@prisma/client/runtime';
 // Define the ProductColumn type with all required properties
 export interface ProductColumn {
 	id: string;
@@ -14,26 +13,25 @@ export interface ProductColumn {
 	paragraph_event_ar: string[];
 	createdAt: string;
 }
-
 export const columns: ColumnDef<ProductColumn>[] = [
 	{
 		accessorKey: 'title',
-		header: 'event_title',
+		header: 'Event_title',
 	},
 	{
 		accessorKey: 'title_ar',
-		header: 'event_Arabic_title',
+		header: 'Event_Arabic_title',
 	},
 	{
 		id: 'paragraphs',
-		header: 'Paragraphs',
+		header: 'Paragraphs_(English)',
 		cell: ({ row }) => (
 			<div dangerouslySetInnerHTML={{ __html: row.original.paragraph_event.join('<br><hr style="margin-top: 20px;margin-bottom: 20px;">') }} />
 		),
 	},
 	{
 		id: 'paragraphs',
-		header: 'Paragraphs',
+		header: 'Paragraphss_(Arabic)',
 		cell: ({ row }) => (
 			<div dangerouslySetInnerHTML={{ __html: row.original.paragraph_event_ar.join('<br><hr style="margin-top: 20px;margin-bottom: 20px;">') }} />
 		),
@@ -56,6 +54,7 @@ export const columns: ColumnDef<ProductColumn>[] = [
 		header: 'Event_Date_in_Arabic',
 	},
 	{
+		header: 'Actions',
 		id: 'actions',
 		cell: ({ row }) => <CellAction data={row.original} />,
 	},

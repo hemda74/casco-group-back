@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
-import { Team, Image7, TeamMember } from '@prisma/client';
+import { Team, TeamMember } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 
 import { Input } from '@/components/ui/input';
@@ -47,7 +47,7 @@ const formSchema = z.object({
 	brief_2: z.string().min(1),
 	brief_3_ar: z.string().min(1),
 	brief_3: z.string().min(1),
-	images: z.object({ url: z.string() }).array(),
+	imageUrl: z.string().min(1),
 
 });
 
@@ -55,9 +55,7 @@ type CourseFormValues = z.infer<typeof formSchema>;
 
 interface CourseFormProps {
 	initialData:
-	| (TeamMember & {
-		images: Image7[];
-	})
+	TeamMember
 	| null;
 	teams: Team[];
 }
@@ -93,7 +91,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 			brief_1_ar: '',
 			brief_2_ar: '',
 			brief_3_ar: '',
-			images: [],
+			imageUrl: '',
 		},
 	});
 
@@ -171,57 +169,23 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 				>
 					<FormField
 						control={form.control}
-						name="images"
+						name="imageUrl"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>
-									Images
-								</FormLabel>
+								<FormLabel>Image</FormLabel>
 								<FormControl>
 									<ImageUpload
-										value={field.value.map(
-											(
-												image
-											) =>
-												image.url
-										)}
-										disabled={
-											loading
-										}
-										onChange={(
-											url
-										) =>
-											field.onChange(
-												[
-													...field.value,
-													{
-														url,
-													},
-												]
-											)
-										}
-										onRemove={(
-											url
-										) =>
-											field.onChange(
-												[
-													...field.value.filter(
-														(
-															current
-														) =>
-															current.url !==
-															url
-													),
-												]
-											)
-										}
+										value={field.value ? [field.value] : []}
+										disabled={loading}
+										onChange={(url) => field.onChange(url)}
+										onRemove={() => field.onChange('')}
 									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
-					<div className="md:grid md:grid-cols-1 gap-8">
+					<div className="md:grid md:grid-cols-2 gap-8">
 						<FormField
 							control={form.control}
 							name="teamId"

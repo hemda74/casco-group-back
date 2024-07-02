@@ -326,7 +326,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 							name="imageUrl"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Company Image</FormLabel>
+									<FormLabel>Image</FormLabel>
 									<FormControl>
 										<ImageUpload
 											value={field.value ? [field.value] : []}

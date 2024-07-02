@@ -12,7 +12,6 @@ const ProductPage = async ({
 			id: params.newsId,
 		},
 		include: {
-			images: true,
 			paragraph_news: true,
 			paragraph_news_ar: true
 		},

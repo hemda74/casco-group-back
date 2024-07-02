@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
-import { Billboard, Team, Image4 } from '@prisma/client';
+import { Billboard, Team } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 import ImageUpload from '@/components/ui/image-upload';
 import { Input } from '@/components/ui/input';
@@ -32,7 +32,7 @@ import {
 } from '@/components/ui/select';
 
 const formSchema = z.object({
-	images: z.object({ url: z.string() }).array(),
+	imageUrl: z.string().min(1),
 	name: z.string().min(1),
 	address: z.string().min(1),
 	name_ar: z.string().min(1),
@@ -43,9 +43,7 @@ const formSchema = z.object({
 });
 type CategoryFormValues = z.infer<typeof formSchema>;
 interface CategoryFormProps {
-	initialData: | (Team & {
-		images: Image4[];
-	}) | null;
+	initialData: Team | null;
 	billboards: Billboard[];
 }
 
@@ -78,7 +76,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 			linkedin: '',
 			phone: '',
 			address_ar: '',
-			images: [],
+			imageUrl: '',
 		},
 	});
 
@@ -157,24 +155,16 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 				>
 					<FormField
 						control={form.control}
-						name="images"
+						name="imageUrl"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Images</FormLabel>
+								<FormLabel>Image</FormLabel>
 								<FormControl>
 									<ImageUpload
-										value={field.value.map((image) => image.url)}
+										value={field.value ? [field.value] : []}
 										disabled={loading}
-										onChange={(url) =>
-											field.onChange([...field.value, { url }])
-										}
-										onRemove={(url) =>
-											field.onChange(
-												field.value.filter(
-													(current) => current.url !== url
-												)
-											)
-										}
+										onChange={(url) => field.onChange(url)}
+										onRemove={() => field.onChange('')}
 									/>
 								</FormControl>
 								<FormMessage />

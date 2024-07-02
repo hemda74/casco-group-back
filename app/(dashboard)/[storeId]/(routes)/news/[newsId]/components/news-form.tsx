@@ -3,10 +3,10 @@ import * as z from 'zod';
 import axios from 'axios';
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
-import { Trash, PlusCircle } from 'lucide-react';
-import { News, Image5, NewsCategory, paragrph_news, paragrph_news_ar } from '@prisma/client';
+import { Trash } from 'lucide-react';
+import { News, NewsCategory, paragrph_news, paragrph_news_ar } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation'; // Corrected from 'next/navigation'
 import { Button } from '@/components/ui/button';
 import {
@@ -31,7 +31,7 @@ import {
 import ImageUpload from '@/components/ui/image-upload';
 
 const formSchema = z.object({
-	images: z.object({ url: z.string() }).array(),
+	imageUrl: z.string().min(1),
 	title: z.string().min(1),
 	title_ar: z.string().min(1),
 	categoryId: z.string().min(1),
@@ -46,7 +46,6 @@ type NewsFormValues = z.infer<typeof formSchema>;
 interface NewsFormProps {
 	initialData:
 	| (News & {
-		images: Image5[];
 		paragraph_news: paragrph_news[];
 		paragraph_news_ar: paragrph_news_ar[];
 	})
@@ -60,76 +59,57 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 }) => {
 	const params = useParams();
 	const router = useRouter();
-
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [paragraph_news, setParagraph_news] = useState<string[]>(
-		initialData?.paragraph_news.map((p) => p.text) || ['']
-	);
-	const [paragraph_news_ar, setParagraph_news_ar] = useState<string[]>(
-		initialData?.paragraph_news_ar.map((p) => p.text) || ['']
-	);
-
 	const title = initialData ? 'Edit News' : 'Create News';
 	const description = initialData ? 'Edit a News.' : 'Add a new News';
 	const toastMessage = initialData ? 'News updated.' : 'News created.';
 	const action = initialData ? 'Save changes' : 'Create';
-
-	const form = useForm<NewsFormValues>({
-		resolver: zodResolver(formSchema),
-		defaultValues: initialData ? {
-			title: '',
-			title_ar: '',
-			categoryId: '',
-			date_of_news: '',
-			date_of_news_ar: '',
-			images: [],
-			paragraph_news: initialData.paragraph_news.map(p => ({ text: p.text })),
-			paragraph_news_ar: initialData.paragraph_news_ar.map(p => ({ text: p.text })),
+	const defaultValues = initialData
+		? {
+			...initialData,
 		} : {
 			title: '',
 			title_ar: '',
 			categoryId: '',
+			imageUrl: '',
 			date_of_news: '',
 			date_of_news_ar: '',
-			images: [],
 			paragraph_news: [],
 			paragraph_news_ar: [],
-		},
+		}
+	const form = useForm<NewsFormValues>({
+		resolver: zodResolver(formSchema),
+		defaultValues,
+	});
+	const { fields: paragraph_newsFields, append: appendparagraph_news, remove: removeparagraph_news } = useFieldArray({
+		control: form.control,
+		name: 'paragraph_news',
+	});
+	const { fields: paragraph_news_arFields, append: appendparagraph_news_ar, remove: removeparagraph_news_ar } = useFieldArray({
+		control: form.control,
+		name: 'paragraph_news_ar',
 	});
 
-	const handleAddParagraphNews = () => {
-		setParagraph_news([...paragraph_news, '']);
-	};
-	const handleAddParagraphNewsAr = () => {
-		setParagraph_news_ar([...paragraph_news_ar, '']);
-	};
-
-	const handleParagraphChangeNews = (index: number, value: string) => {
-		const newParagraphNews = [...paragraph_news];
-		newParagraphNews[index] = value;
-		setParagraph_news(newParagraphNews);
-	};
-	const handleParagraphChangeNewsAr = (index: number, value: string) => {
-		const newParagraphNewsAr = [...paragraph_news_ar];
-		newParagraphNewsAr[index] = value;
-		setParagraph_news_ar(newParagraphNewsAr);
-	};
 	const onSubmit = async (data: NewsFormValues) => {
 		try {
 			setLoading(true);
-			data.paragraph_news = paragraph_news.map(text => ({ text }));
-			data.paragraph_news_ar = paragraph_news_ar.map(text => ({ text }));
 			if (initialData) {
-				await axios.patch(`/api/${params.storeId}/news/${params.NewsId}`, data);
+				await axios.patch(
+					`/api/${params.storeId}/news/${params.newsId}`,
+					data
+				);
 			} else {
-				await axios.post(`/api/${params.storeId}/news`, data);
+				await axios.post(
+					`/api/${params.storeId}/news`,
+					data
+				);
 			}
 			router.refresh();
 			router.push(`/${params.storeId}/news`);
 			toast.success(toastMessage);
 		} catch (error: any) {
-			toast.error('Something went wrong.');
+			toast.error('Something went wrong.', error);
 			console.log(error);
 		} finally {
 			setLoading(false);
@@ -176,24 +156,16 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
 					<FormField
 						control={form.control}
-						name="images"
+						name="imageUrl"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Images</FormLabel>
+								<FormLabel>Image</FormLabel>
 								<FormControl>
 									<ImageUpload
-										value={field.value.map((image) => image.url)}
+										value={field.value ? [field.value] : []}
 										disabled={loading}
-										onChange={(url) =>
-											field.onChange([...field.value, { url }])
-										}
-										onRemove={(url) =>
-											field.onChange(
-												field.value.filter(
-													(current) => current.url !== url
-												)
-											)
-										}
+										onChange={(url) => field.onChange(url)}
+										onRemove={() => field.onChange('')}
 									/>
 								</FormControl>
 								<FormMessage />
@@ -201,7 +173,7 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 						)}
 					/>
 					{/* Rest of your form fields */}
-					<div className="md:grid md:grid-cols-1 gap-8">
+					<div className="md:grid md:grid-cols-2 gap-8">
 						<FormField
 							control={form.control}
 							name="categoryId"
@@ -302,56 +274,98 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 								</FormItem>
 							)}
 						/>
-						<h5> The Pargraphs in English</h5>
-						{paragraph_news.map((p, index) => (
-							<FormItem key={index}>
-								<FormLabel>Paragraph {index + 1}</FormLabel>
-								<FormControl>
-									<Textarea
-										disabled={loading}
-										placeholder="Enter a Value"
-										value={p}
-										onChange={(e) => handleParagraphChangeNews(index, e.target.value)}
-									/>
-								</FormControl>
-								<FormMessage />
-								{index === paragraph_news.length - 1 && (
-									<Button
-										type="button"
-										variant="ghost"
-										onClick={handleAddParagraphNews}
-									>
-										<PlusCircle className="h-6 w-6 text-gray-600" />
-									</Button>
-								)}
-							</FormItem>
-						))}
-						<hr />
-						<h5> The Pargraphs in Arabic</h5>
 
-						{paragraph_news_ar.map((p, index) => (
-							<FormItem key={index}>
-								<FormLabel>Paragraph {index + 1}</FormLabel>
-								<FormControl>
-									<Textarea
-										disabled={loading}
-										placeholder="Enter a Value"
-										value={p}
-										onChange={(e) => handleParagraphChangeNewsAr(index, e.target.value)}
-									/>
-								</FormControl>
-								<FormMessage />
-								{index === paragraph_news_ar.length - 1 && (
-									<Button
-										type="button"
-										variant="ghost"
-										onClick={handleAddParagraphNewsAr}
-									>
-										<PlusCircle className="h-6 w-6 text-gray-600" />
-									</Button>
-								)}
-							</FormItem>
+					</div>
+					<div>
+						<Heading description='Paragraph ' title="Paragraph  (English)" />
+						{paragraph_newsFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-2 gap-8">
+								<FormField
+									control={form.control}
+									name={`paragraph_news.${index}.text`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Title</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									variant="destructive"
+									className='w-1/2 mt-10'
+									onClick={() => removeparagraph_news(index)}
+								>
+									Remove
+								</Button>
+							</div>
 						))}
+						<Button
+							type="button"
+							disabled={loading}
+							variant="secondary"
+							className="mt-5"
+							onClick={() =>
+								appendparagraph_news({
+									text: ''
+								})
+							}
+						>
+							Add New Point
+						</Button>
+					</div>
+					<hr />
+					<div>
+						<Heading description='Paragraph ' title="Paragraph  (Arabic)" />
+						{paragraph_news_arFields.map((field, index) => (
+							<div key={field.id} className="grid grid-cols-2 gap-8">
+								<FormField
+									control={form.control}
+									name={`paragraph_news_ar.${index}.text`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Title</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={loading}
+													placeholder="Enter a Value"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button
+									disabled={loading}
+									variant="destructive"
+									className='w-1/2 mt-10'
+									onClick={() => removeparagraph_news_ar(index)}
+								>
+									Remove
+								</Button>
+							</div>
+						))}
+						<Button
+							type="button"
+							disabled={loading}
+							variant="secondary"
+							className="mt-5"
+							onClick={() =>
+								appendparagraph_news_ar({
+									text: ''
+								})
+							}
+						>
+							Add New Point
+						</Button>
 					</div>
 					<Button disabled={loading} className="ml-auto" type="submit">
 						{action}

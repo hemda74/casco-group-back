@@ -10,7 +10,6 @@ const ProductPage = async ({
 			id: params.casestudiesId,
 		},
 		include: {
-			images: true,
 			caseStudyPoint: true,
 			caseStudyPointAr: true,
 		},

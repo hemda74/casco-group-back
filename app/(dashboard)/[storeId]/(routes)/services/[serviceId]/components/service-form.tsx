@@ -52,7 +52,7 @@ const formSchema = z.object({
 		expert_title_ar: z.string().min(1),
 		expert_phone: z.string().min(1),
 		expert_mail: z.string().min(1),
-		images: z.object({ url: z.string() }).array(),
+		imageUrl: z.string().min(1),
 
 	})),
 });
@@ -425,23 +425,16 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 							<div key={field.id} className="grid grid-cols-2 gap-8">
 								<FormField
 									control={form.control}
-									name={`expertService.${index}.images`} render={({ field }) => (
+									name={`expertService.${index}.imageUrl`}
+									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Images</FormLabel>
+											<FormLabel>ImageUrl</FormLabel>
 											<FormControl>
 												<ImageUpload
-													value={field.value.map((image) => image.url)}
+													value={field.value ? [field.value] : []}
 													disabled={loading}
-													onChange={(url) =>
-														field.onChange([...field.value, { url }])
-													}
-													onRemove={(url) =>
-														field.onChange(
-															field.value.filter(
-																(current) => current.url !== url
-															)
-														)
-													}
+													onChange={(url) => field.onChange(url)}
+													onRemove={() => field.onChange('')}
 												/>
 											</FormControl>
 											<FormMessage />
@@ -572,7 +565,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 									expert_title_ar: '',
 									expert_mail: '',
 									expert_phone: '',
-									images: [],
+									imageUrl: '',
 								})
 							}
 						>
