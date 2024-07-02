@@ -17,8 +17,8 @@ export const ServiceClient: React.FC<ServiceClientProps> = ({ data }) => {
 		<>
 			<div className="flex items-center justify-between">
 				<Heading
-					title={`Services (${data.length})`}
-					description="Manage Services "
+					title={`services (${data.length})`}
+					description="Manage services "
 				/>
 				<Button
 					onClick={() =>
@@ -39,7 +39,7 @@ export const ServiceClient: React.FC<ServiceClientProps> = ({ data }) => {
 			/>
 			<Heading
 				title="API"
-				description="API Calls for Services"
+				description="API Calls for services"
 			/>
 			<Separator />
 			<ApiList

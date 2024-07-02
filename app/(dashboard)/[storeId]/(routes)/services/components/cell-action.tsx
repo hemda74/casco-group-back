@@ -30,7 +30,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 		try {
 			setLoading(true);
 			await axios.delete(
-				`/api/${params.storeId}/services/${data.id}`
+				`/api/${params.storeId}/servicess/${data.id}`
 			);
 			toast.success('Service deleted.');
 			router.refresh();
@@ -80,7 +80,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 					<DropdownMenuItem
 						onClick={() =>
 							router.push(
-								`/${params.storeId}/services/${data.id}`
+								`/${params.storeId}/servicess/${data.id}`
 							)
 						}
 					>

@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 
 const ServicesPage = async ({ params }: { params: { storeId: string } }) => {
 	try {
-		const services = await prismadb.service.findMany({
+		const service = await prismadb.service.findMany({
 			where: {
 				storeId: params.storeId,
 			},
@@ -20,7 +20,7 @@ const ServicesPage = async ({ params }: { params: { storeId: string } }) => {
 			},
 		});
 
-		const formattedServices: ServiceColumn[] = services.map((item) => ({
+		const formattedServices: ServiceColumn[] = service.map((item) => ({
 			id: item.id,
 			name: item.name,
 			name_ar: item.name_ar,
