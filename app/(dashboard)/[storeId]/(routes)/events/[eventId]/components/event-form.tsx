@@ -3,10 +3,10 @@ import * as z from 'zod';
 import axios from 'axios';
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
-import { Trash, PlusCircle } from 'lucide-react';
-import { Event, Image6, NewsCategory, paragrph_event, paragrph_event_ar } from '@prisma/client';
+import { Trash } from 'lucide-react';
+import { Event, NewsCategory, paragrph_event, paragrph_event_ar } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
@@ -31,7 +31,7 @@ import {
 import ImageUpload from '@/components/ui/image-upload';
 
 const formSchema = z.object({
-	images: z.object({ url: z.string() }).array(),
+	imageUrl: z.string().min(1),
 	title: z.string().min(1),
 	title_ar: z.string().min(1),
 	categoryId: z.string().min(1),
@@ -46,7 +46,6 @@ type EventFormValues = z.infer<typeof formSchema>;
 interface EventFormProps {
 	initialData:
 	| (Event & {
-		images: Image6[];
 		paragraph_event: paragrph_event[];
 		paragraph_event_ar: paragrph_event_ar[];
 	})
@@ -61,66 +60,48 @@ export const EventForm: React.FC<EventFormProps> = ({
 	const router = useRouter();
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [paragraph_event, setParagraph_event] = useState<string[]>(
-		initialData?.paragraph_event.map((p) => p.text) || ['']
-	);
-	const [paragraph_event_ar, setParagraph_event_ar] = useState<string[]>(
-		initialData?.paragraph_event_ar.map((p) => p.text) || ['']
-	);
-
 	const title = initialData ? 'Edit event' : 'Create event';
 	const description = initialData ? 'Edit a event.' : 'Add a new event';
 	const toastMessage = initialData ? 'event updated.' : 'event created.';
 	const action = initialData ? 'Save changes' : 'Create';
-
-	const form = useForm<EventFormValues>({
-		resolver: zodResolver(formSchema),
-		defaultValues: initialData ? {
-			title: '',
-			title_ar: '',
-			categoryId: '',
-			images: [],
-			date_of_event: '',
-			date_of_event_ar: '',
-			paragraph_event: [],
-			paragraph_event_ar: [],
+	const defaultValues = initialData
+		? {
+			...initialData,
 		} : {
 			title: '',
 			title_ar: '',
 			categoryId: '',
-			images: [],
+			imageUrl: '',
 			date_of_event: '',
 			date_of_event_ar: '',
 			paragraph_event: [],
 			paragraph_event_ar: [],
-		},
+		}
+	const form = useForm<EventFormValues>({
+		resolver: zodResolver(formSchema),
+		defaultValues,
 	});
-	const handleAddParagraphevent = () => {
-		setParagraph_event([...paragraph_event, '']);
-	};
-	const handleAddParagrapheventAr = () => {
-		setParagraph_event_ar([...paragraph_event_ar, '']);
-	};
-
-	const handleParagraphChangeevent = (index: number, value: string) => {
-		const newParagraphevent = [...paragraph_event];
-		newParagraphevent[index] = value;
-		setParagraph_event(newParagraphevent);
-	};
-	const handleParagraphChangeeventAr = (index: number, value: string) => {
-		const newParagrapheventAr = [...paragraph_event_ar];
-		newParagrapheventAr[index] = value;
-		setParagraph_event_ar(newParagrapheventAr);
-	};
+	const { fields: paragraph_eventFields, append: appendparagraph_event, remove: removeparagraph_event } = useFieldArray({
+		control: form.control,
+		name: 'paragraph_event',
+	});
+	const { fields: paragraph_event_arFields, append: appendparagraph_event_ar, remove: removeparagraph_event_ar } = useFieldArray({
+		control: form.control,
+		name: 'paragraph_event_ar',
+	});
 	const onSubmit = async (data: EventFormValues) => {
 		try {
 			setLoading(true);
-			data.paragraph_event = paragraph_event.map((text) => ({ text }));
-			data.paragraph_event_ar = paragraph_event_ar.map((text) => ({ text }));
 			if (initialData) {
-				await axios.patch(`/api/${params.storeId}/events/${params.eventId}`, data);
+				await axios.patch(
+					`/api/${params.storeId}/events/${params.eventId}`,
+					data
+				);
 			} else {
-				await axios.post(`/api/${params.storeId}/events`, data);
+				await axios.post(
+					`/api/${params.storeId}/events`,
+					data
+				);
 			}
 			router.refresh();
 			router.push(`/${params.storeId}/events`);
@@ -132,6 +113,7 @@ export const EventForm: React.FC<EventFormProps> = ({
 			setLoading(false);
 		}
 	};
+
 	const onDelete = async () => {
 		try {
 			setLoading(true);
@@ -173,24 +155,16 @@ export const EventForm: React.FC<EventFormProps> = ({
 				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
 					<FormField
 						control={form.control}
-						name="images"
+						name="imageUrl"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Images</FormLabel>
+								<FormLabel>Image</FormLabel>
 								<FormControl>
 									<ImageUpload
-										value={field.value.map((image) => image.url)}
+										value={field.value ? [field.value] : []}
 										disabled={loading}
-										onChange={(url) =>
-											field.onChange([...field.value, { url }])
-										}
-										onRemove={(url) =>
-											field.onChange(
-												field.value.filter(
-													(current) => current.url !== url
-												)
-											)
-										}
+										onChange={(url) => field.onChange(url)}
+										onRemove={() => field.onChange('')}
 									/>
 								</FormControl>
 								<FormMessage />
@@ -301,53 +275,97 @@ export const EventForm: React.FC<EventFormProps> = ({
 							)}
 						/>
 
-						{paragraph_event.map((p, index) => (
-							<FormItem key={index}>
-								<FormLabel>Paragraph {index + 1}</FormLabel>
-								<FormControl>
-									<Textarea
-										disabled={loading}
-										placeholder="Enter a Value"
-										value={p}
-										onChange={(e) => handleParagraphChangeevent(index, e.target.value)}
+						<div>
+							<Heading description='Paragraph ' title="Paragraph  (English)" />
+							{paragraph_eventFields.map((field, index) => (
+								<div key={field.id} className="grid grid-cols-2 gap-8">
+									<FormField
+										control={form.control}
+										name={`paragraph_event.${index}.text`}
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Title</FormLabel>
+												<FormControl>
+													<Textarea
+														disabled={loading}
+														placeholder="Enter a Value"
+														{...field}
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
 									/>
-								</FormControl>
-								<FormMessage />
-								{index === paragraph_event.length - 1 && (
 									<Button
-										type="button"
-										variant="ghost"
-										onClick={handleAddParagraphevent}
+										disabled={loading}
+										variant="destructive"
+										className='w-1/2 mt-10'
+										onClick={() => removeparagraph_event(index)}
 									>
-										<PlusCircle className="h-6 w-6 text-gray-600" />
+										Remove
 									</Button>
-								)}
-							</FormItem>
-						))}
+								</div>
+							))}
+							<Button
+								type="button"
+								disabled={loading}
+								variant="secondary"
+								className="mt-5"
+								onClick={() =>
+									appendparagraph_event({
+										text: ''
+									})
+								}
+							>
+								Add New Point
+							</Button>
+						</div>
 						<hr />
-						{paragraph_event_ar.map((p, index) => (
-							<FormItem key={index}>
-								<FormLabel>Paragraph {index + 1}</FormLabel>
-								<FormControl>
-									<Textarea
-										disabled={loading}
-										placeholder="Enter a Value"
-										value={p}
-										onChange={(e) => handleParagraphChangeeventAr(index, e.target.value)}
+						<div>
+							<Heading description='Paragraph ' title="Paragraph  (Arabic)" />
+							{paragraph_event_arFields.map((field, index) => (
+								<div key={field.id} className="grid grid-cols-2 gap-8">
+									<FormField
+										control={form.control}
+										name={`paragraph_event_ar.${index}.text`}
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Title</FormLabel>
+												<FormControl>
+													<Textarea
+														disabled={loading}
+														placeholder="Enter a Value"
+														{...field}
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
 									/>
-								</FormControl>
-								<FormMessage />
-								{index === paragraph_event_ar.length - 1 && (
 									<Button
-										type="button"
-										variant="ghost"
-										onClick={handleAddParagrapheventAr}
+										disabled={loading}
+										variant="destructive"
+										className='w-1/2 mt-10'
+										onClick={() => removeparagraph_event_ar(index)}
 									>
-										<PlusCircle className="h-6 w-6 text-gray-600" />
+										Remove
 									</Button>
-								)}
-							</FormItem>
-						))}
+								</div>
+							))}
+							<Button
+								type="button"
+								disabled={loading}
+								variant="secondary"
+								className="mt-5"
+								onClick={() =>
+									appendparagraph_event_ar({
+										text: ''
+									})
+								}
+							>
+								Add New Point
+							</Button>
+						</div>
 					</div>
 					<Button disabled={loading} className="ml-auto" type="submit">
 						{action}
