@@ -41,6 +41,7 @@ export const columns: ColumnDef<CategoryColumn>[] = [
 		header: 'Billboard',
 	},
 	{
+		header: 'Actions',
 		id: 'actions',
 		cell: ({ row }) => <CellAction data={row.original} />,
 	},

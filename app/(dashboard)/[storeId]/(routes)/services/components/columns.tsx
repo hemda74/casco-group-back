@@ -123,7 +123,7 @@ export const columns: ColumnDef<ServiceColumn>[] = [
 		header: 'Created_At',
 	},
 	{
-		accessorKey: 'Actions',
+		header: 'Actions',
 		id: 'actions',
 		cell: ({ row }) => <CellAction data={row.original} />,
 	},

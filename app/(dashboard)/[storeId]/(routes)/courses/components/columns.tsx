@@ -205,7 +205,7 @@ export const columns: ColumnDef<CourseColumn>[] = [
 		header: 'Course_Category',
 	},
 	{
-		accessorKey: 'Actions',
+		header: 'Actions',
 		id: 'actions',
 		cell: ({ row }) => <CellAction data={row.original} />,
 	},
