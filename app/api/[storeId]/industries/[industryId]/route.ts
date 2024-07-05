@@ -256,7 +256,7 @@ export async function GET(
 			where: { id: params.industryId },
 			include: {
 				category: true,
-
+				expertIndustry: true,
 				industryDetailes: {
 					include: {
 						industryDetailesPoint: true,
