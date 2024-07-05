@@ -145,26 +145,21 @@ export async function GET(
 	{ params }: { params: { storeId: string } }
 ) {
 	try {
-		const { userId } = auth();
-
-		if (!userId) {
-			return new NextResponse('Unauthenticated', {
-				status: 403,
+		if (!params.storeId) {
+			return new NextResponse('Store id is required', {
+				status: 400,
 			});
 		}
 
-		const services = await prismadb.service.findMany({
-			where: { storeId: params.storeId },
-			include: {
-				serviceDesc: true,
-				serviceDescAr: true,
-				expertService: true,
+		const categories = await prismadb.service.findMany({
+			where: {
+				storeId: params.storeId,
 			},
 		});
 
-		return NextResponse.json(services);
+		return NextResponse.json(categories);
 	} catch (error) {
-		console.error('[SERVICE_GET]', error);
+		console.log('[CATEGORIES_GET]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
