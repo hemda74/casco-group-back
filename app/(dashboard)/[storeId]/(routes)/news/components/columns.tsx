@@ -24,37 +24,6 @@ export const columns: ColumnDef<ProductColumn>[] = [
 		header: 'News_Arabic_title',
 	},
 	{
-		accessorKey: 'date_of_news',
-		header: 'English_Date',
-	},
-	{
-		accessorKey: 'date_of_news_ar',
-		header: 'Arabic_Date',
-	},
-	{
-		id: 'paragraphs',
-		header: 'Paragraphs',
-		cell: ({ row }) => (
-			<div dangerouslySetInnerHTML={{ __html: row.original.paragraph_news.join('<br><hr style="margin-top: 20px;margin-bottom: 20px;">') }} />
-		),
-	},
-	{
-		id: 'paragraphs',
-		header: 'Paragraphs',
-		cell: ({ row }) => (
-			<div dangerouslySetInnerHTML={{ __html: row.original.paragraph_news_ar.join('<br><hr style="margin-top: 20px;margin-bottom: 20px;">') }} />
-		),
-	},
-
-	{
-		accessorKey: 'category',
-		header: 'Category',
-	},
-	{
-		accessorKey: 'createdAt',
-		header: 'Created_Date',
-	},
-	{
 		header: 'Actions',
 		id: 'actions',
 		cell: ({ row }) => <CellAction data={row.original} />,

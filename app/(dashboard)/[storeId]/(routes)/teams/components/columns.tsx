@@ -22,25 +22,6 @@ export const columns: ColumnDef<CategoryColumn>[] = [
 		header: 'Team_Arabic_Name',
 	},
 	{
-		accessorKey: 'linkedin',
-		header: 'Team_linkedin',
-	},
-	{
-		accessorKey: 'phone',
-		header: 'Team_Phone',
-	},
-	{
-		accessorKey: 'address',
-		header: 'Team_Address',
-	}, {
-		accessorKey: 'address_ar',
-		header: 'Team_Address_in_arabic',
-	},
-	{
-		accessorKey: 'billboardLabel',
-		header: 'Billboard',
-	},
-	{
 		header: 'Actions',
 		id: 'actions',
 		cell: ({ row }) => <CellAction data={row.original} />,

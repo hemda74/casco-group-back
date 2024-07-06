@@ -24,23 +24,6 @@ export const columns: ColumnDef<InsidersViewColumn>[] = [
     header: "name_ar",
   },
   {
-    accessorKey: "title",
-    header: "title",
-  },
-  {
-    accessorKey: "title_ar",
-    header: "title_ar",
-  },
-  {
-    accessorKey: "text",
-    header: "text",
-  },
-  {
-    accessorKey: "text_ar",
-    header: "text_ar",
-  },
-
-  {
     header: "Actions",
     id: "actions",
     cell: ({ row }) => <CellAction data={row.original} />
