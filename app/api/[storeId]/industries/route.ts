@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
 import prismadb from '@/lib/prismadb';
-type ServiceRequestBody = {
+type industryRequestBody = {
 	name: string;
 	name_ar: string;
 	categoryId: string;
@@ -43,7 +43,7 @@ export async function POST(
 ) {
 	try {
 		const { userId } = auth();
-		const body: ServiceRequestBody = await req.json();
+		const body: industryRequestBody = await req.json();
 		const {
 			name,
 			name_ar,
@@ -216,6 +216,246 @@ export async function GET(
 		return NextResponse.json(categories);
 	} catch (error) {
 		console.log('[CATEGORIES_GET]', error);
+		return new NextResponse('Internal error', { status: 500 });
+	}
+}
+
+export async function PATCH(
+	req: Request,
+	{ params }: { params: { storeId: string; industryId: string } }
+) {
+	try {
+		const { userId } = auth();
+		const body: industryRequestBody = await req.json();
+		const {
+			name,
+			name_ar,
+			industryDetailes,
+			industryDetailes2,
+			expertIndustry,
+			categoryId,
+		} = body;
+
+		if (!userId) {
+			return new NextResponse('Unauthenticated', {
+				status: 403,
+			});
+		}
+
+		if (!name || !name_ar || !categoryId) {
+			return new NextResponse(
+				'Name, Arabic Name and Category ID are required',
+				{ status: 400 }
+			);
+		}
+
+		const storeByUserId = await prismadb.store.findFirst({
+			where: { id: params.storeId, userId },
+		});
+
+		if (!storeByUserId) {
+			return new NextResponse('Unauthorized', {
+				status: 405,
+			});
+		}
+
+		const updatedindustry = await prismadb.$transaction(
+			async (prisma) => {
+				await prisma.industryDetailes.deleteMany({
+					where: {
+						industryId: params.industryId,
+					},
+				});
+				await prisma.industryDetailes2.deleteMany({
+					where: {
+						industryId: params.industryId,
+					},
+				});
+				await prisma.expertIndustry.deleteMany({
+					where: {
+						industryId: params.industryId,
+					},
+				});
+
+				const industry = await prisma.industry.update({
+					where: { id: params.industryId },
+					data: {
+						name,
+						name_ar,
+						store: {
+							connect: {
+								id: params.storeId,
+							},
+						},
+						category: {
+							connect: {
+								id: categoryId,
+							},
+						},
+						expertIndustry: {
+							create: expertIndustry.map(
+								(expert) => ({
+									expert_name:
+										expert.expert_name,
+									expert_name_ar:
+										expert.expert_name_ar,
+									expert_title:
+										expert.expert_title,
+									expert_title_ar:
+										expert.expert_title_ar,
+									expert_phone:
+										expert.expert_phone,
+									expert_mail:
+										expert.expert_mail,
+									imageUrl: expert.imageUrl,
+									store: {
+										connect: {
+											id: params.storeId,
+										},
+									},
+								})
+							),
+						},
+						industryDetailes: {
+							create: industryDetailes.map(
+								(i) => ({
+									title: i.title,
+									title_ar: i.title_ar,
+									store: {
+										connect: {
+											id: params.storeId,
+										},
+									},
+									industryDetailesPoint:
+										{
+											create: i.industryDetailesPoint.map(
+												(
+													point
+												) => ({
+													text: point.text,
+												})
+											),
+										},
+									industryDetailesPointAr:
+										{
+											create: i.industryDetailesPointAr.map(
+												(
+													point
+												) => ({
+													text: point.text,
+												})
+											),
+										},
+								})
+							),
+						},
+						industryDetailes2: {
+							create: industryDetailes2.map(
+								(i) => ({
+									title: i.title,
+									title_ar: i.title_ar,
+									store: {
+										connect: {
+											id: params.storeId,
+										},
+									},
+									industryDetailesPoint2:
+										{
+											create: i.industryDetailesPoint2.map(
+												(
+													point
+												) => ({
+													text: point.text,
+												})
+											),
+										},
+									industryDetailesPointAr2:
+										{
+											create: i.industryDetailesPointAr2.map(
+												(
+													point
+												) => ({
+													text: point.text,
+												})
+											),
+										},
+								})
+							),
+						},
+					},
+					include: {
+						industryDetailes: {
+							include: {
+								industryDetailesPoint:
+									true,
+								industryDetailesPointAr:
+									true,
+							},
+						},
+						industryDetailes2: {
+							include: {
+								industryDetailesPoint2:
+									true,
+								industryDetailesPointAr2:
+									true,
+							},
+						},
+					},
+				});
+			}
+		);
+
+		return NextResponse.json(updatedindustry);
+	} catch (error) {
+		console.error('[industry_PATCH]', error);
+		return new NextResponse('Internal error', { status: 500 });
+	}
+}
+
+export async function DELETE(
+	req: Request,
+	{ params }: { params: { storeId: string; categoryId: string } }
+) {
+	try {
+		const { userId } = auth();
+
+		if (!userId) {
+			return new NextResponse('Unauthenticated', {
+				status: 403,
+			});
+		}
+		if (!params.storeId || !params.categoryId) {
+			return new NextResponse(
+				'Store id and category id are required',
+				{
+					status: 400,
+				}
+			);
+		}
+
+		const storeByUserId = await prismadb.store.findFirst({
+			where: {
+				id: params.storeId,
+				userId,
+			},
+		});
+		if (!storeByUserId) {
+			return new NextResponse('Unauthorized', {
+				status: 405,
+			});
+		}
+
+		await prismadb.industry.delete({
+			where: {
+				id: params.categoryId,
+			},
+		});
+
+		return new NextResponse('Category deleted successfully', {
+			status: 200,
+		});
+	} catch (error) {
+		console.log('[CATEGORIES_DELETE]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
