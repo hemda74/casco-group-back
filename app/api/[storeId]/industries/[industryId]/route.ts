@@ -229,8 +229,18 @@ export async function GET(
 			where: { id: params.industryId },
 			include: {
 				category: true,
-				industryDetailes: true,
-				industryDetailes2: true,
+				industryDetailes: {
+					include: {
+						industryDetailesPoint: true,
+						industryDetailesPointAr: true,
+					},
+				},
+				industryDetailes2: {
+					include: {
+						industryDetailesPoint2: true,
+						industryDetailesPointAr2: true,
+					},
+				},
 				expertIndustry: true,
 			},
 		});
