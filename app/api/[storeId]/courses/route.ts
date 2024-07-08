@@ -49,10 +49,10 @@ type courseRequestBody = {
 	c_benefit_ar: {
 		text: string;
 	}[];
-	c_certification_en: {
+	c_content2_en: {
 		text: string;
 	}[];
-	c_certification_ar: {
+	c_content2_ar: {
 		text: string;
 	}[];
 	c_date_en: {
@@ -92,8 +92,8 @@ export async function POST(
 			c_intro_ar,
 			c_benefit_ar,
 			c_benefit_en,
-			c_certification_ar,
-			c_certification_en,
+			c_content2_ar,
+			c_content2_en,
 			c_content_ar,
 			c_content_en,
 			c_date_ar,
@@ -201,13 +201,13 @@ export async function POST(
 						text: i.text,
 					})),
 				},
-				c_certification_en: {
-					create: c_certification_en.map((i) => ({
+				c_content2_en: {
+					create: c_content2_en.map((i) => ({
 						text: i.text,
 					})),
 				},
-				c_certification_ar: {
-					create: c_certification_ar.map((i) => ({
+				c_content2_ar: {
+					create: c_content2_ar.map((i) => ({
 						text: i.text,
 					})),
 				},

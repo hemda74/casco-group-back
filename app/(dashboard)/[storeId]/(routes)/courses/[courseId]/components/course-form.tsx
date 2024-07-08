@@ -8,7 +8,7 @@ import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import {
-	Course, CoursesCategory, CourseType, C_benefit_ar, C_benefit_en, C_certification_ar, C_certification_en, C_content_ar, C_content_en, C_date_ar, C_date_en, C_intro_ar, C_intro_en, C_objective_ar, C_who_should_en, C_who_should_ar, C_objective_en
+	Course, CoursesCategory, CourseType, C_benefit_ar, C_benefit_en, C_content2_ar, C_content2_en, C_content_ar, C_content_en, C_date_ar, C_date_en, C_intro_ar, C_intro_en, C_objective_ar, C_who_should_en, C_who_should_ar, C_objective_en
 } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -81,10 +81,10 @@ const formSchema = z.object({
 	c_benefit_ar: z.array(z.object({
 		text: z.string().min(1),
 	})),
-	c_certification_en: z.array(z.object({
+	c_content2_en: z.array(z.object({
 		text: z.string().min(1),
 	})),
-	c_certification_ar: z.array(z.object({
+	c_content2_ar: z.array(z.object({
 		text: z.string().min(1),
 	})),
 	c_date_en: z.array(z.object({
@@ -109,8 +109,8 @@ interface CourseFormProps {
 		c_content_en: C_content_en[];
 		c_benefit_ar: C_benefit_ar[];
 		c_benefit_en: C_benefit_en[];
-		c_certification_ar: C_certification_ar[];
-		c_certification_en: C_certification_en[];
+		c_content2_ar: C_content2_ar[];
+		c_content2_en: C_content2_en[];
 		c_objective_ar: C_objective_ar[];
 		c_objective_en: C_objective_en[];
 		c_who_should_ar: C_who_should_ar[];
@@ -174,8 +174,8 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 			c_short_intro_en: '',
 			c_intro_ar: [],
 			c_intro_en: [],
-			c_certification_ar: [],
-			c_certification_en: [],
+			c_content2_ar: [],
+			c_content2_en: [],
 			c_date_ar: [],
 			c_date_en: [],
 			c_benefit_ar: [],
@@ -228,13 +228,13 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 		control: form.control,
 		name: 'c_benefit_ar',
 	});
-	const { fields: c_certification_enFields, append: appendc_certification_en, remove: removec_certification_en } = useFieldArray({
+	const { fields: c_content2_enFields, append: appendc_content2_en, remove: removec_content2_en } = useFieldArray({
 		control: form.control,
-		name: 'c_certification_en',
+		name: 'c_content2_en',
 	});
-	const { fields: c_certification_arFields, append: appendc_certification_ar, remove: removec_certification_ar } = useFieldArray({
+	const { fields: c_content2_arFields, append: appendc_content2_ar, remove: removec_content2_ar } = useFieldArray({
 		control: form.control,
-		name: 'c_certification_ar',
+		name: 'c_content2_ar',
 	});
 	const { fields: c_objective_enFields, append: appendc_objective_en, remove: removec_objective_en } = useFieldArray({
 		control: form.control,
@@ -1352,15 +1352,15 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 					</div>
 					<Separator />
 					<div>
-						<Heading description="Managing Course certifications (English)" title="Managing Course certifications (English)" />
-						{c_certification_enFields.map((field, index) => (
+						<Heading description="Managing Course content2s (English)" title="Managing Course content2s (English)" />
+						{c_content2_enFields.map((field, index) => (
 							<div key={field.id} className="grid grid-cols-2 gap-8">
 								<FormField
 									control={form.control}
-									name={`c_certification_en.${index}.text`}
+									name={`c_content2_en.${index}.text`}
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>{`certifications Pargraph (English) ${index + 1} `}</FormLabel>
+											<FormLabel>{`content2s Pargraph (English) ${index + 1} `}</FormLabel>
 											<FormControl>
 												<Textarea
 													disabled={loading}
@@ -1375,7 +1375,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 								<Button
 									disabled={loading}
 									type="button"
-									onClick={() => removec_certification_en(index)}
+									onClick={() => removec_content2_en(index)}
 									variant="destructive"
 									size="sm"
 									className="mt-10"
@@ -1389,7 +1389,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 							disabled={loading}
 							type="button"
 							onClick={() =>
-								appendc_certification_en({
+								appendc_content2_en({
 									text: '',
 								})
 							}
@@ -1401,15 +1401,15 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 					</div>
 					<Separator />
 					<div>
-						<Heading description="Managing Course certifications (Arabic)" title="Managing Course certifications (Arabic)" />
-						{c_certification_arFields.map((field, index) => (
+						<Heading description="Managing Course content2s (Arabic)" title="Managing Course content2s (Arabic)" />
+						{c_content2_arFields.map((field, index) => (
 							<div key={field.id} className="grid grid-cols-2 gap-8">
 								<FormField
 									control={form.control}
-									name={`c_certification_ar.${index}.text`}
+									name={`c_content2_ar.${index}.text`}
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>{`certification Pargraph ${index + 1} `}</FormLabel>
+											<FormLabel>{`content2 Pargraph ${index + 1} `}</FormLabel>
 											<FormControl>
 												<Textarea
 													disabled={loading}
@@ -1424,7 +1424,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 								<Button
 									disabled={loading}
 									type="button"
-									onClick={() => removec_certification_ar(index)}
+									onClick={() => removec_content2_ar(index)}
 									variant="destructive"
 									size="sm"
 									className="mt-10"
@@ -1438,7 +1438,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 							disabled={loading}
 							type="button"
 							onClick={() =>
-								appendc_certification_ar({
+								appendc_content2_ar({
 									text: '',
 								})
 							}

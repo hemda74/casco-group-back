@@ -50,10 +50,10 @@ type courseRequestBody = {
 	c_benefit_ar: {
 		text: string;
 	}[];
-	c_certification_en: {
+	c_content2_en: {
 		text: string;
 	}[];
-	c_certification_ar: {
+	c_content2_ar: {
 		text: string;
 	}[];
 	c_date_en: {
@@ -110,8 +110,8 @@ export async function POST(
 			c_intro_ar,
 			c_benefit_ar,
 			c_benefit_en,
-			c_certification_ar,
-			c_certification_en,
+			c_content2_ar,
+			c_content2_en,
 			c_content_ar,
 			c_content_en,
 			c_date_ar,
@@ -225,15 +225,15 @@ export async function POST(
 							})
 						),
 					},
-					c_certification_en: {
-						create: c_certification_en.map(
+					c_content2_en: {
+						create: c_content2_en.map(
 							(expert) => ({
 								text: expert.text,
 							})
 						),
 					},
-					c_certification_ar: {
-						create: c_certification_ar.map(
+					c_content2_ar: {
+						create: c_content2_ar.map(
 							(expert) => ({
 								text: expert.text,
 							})
@@ -330,8 +330,8 @@ export async function GET(
 				category: true,
 				c_benefit_ar: true,
 				c_benefit_en: true,
-				c_certification_ar: true,
-				c_certification_en: true,
+				c_content2_ar: true,
+				c_content2_en: true,
 				c_content_ar: true,
 				c_content_en: true,
 				c_date_ar: true,
@@ -407,15 +407,12 @@ export async function PATCH(
 		validateRequestBody(body);
 
 		if (!params.courseId)
-			return new NextResponse('course Id is required', {
+			return new NextResponse('Course Id is required', {
 				status: 400,
 			});
 
 		const storeByUserId = await prismadb.store.findFirst({
-			where: {
-				id: params.storeId,
-				userId,
-			},
+			where: { id: params.storeId, userId },
 		});
 
 		if (!storeByUserId)
@@ -423,208 +420,170 @@ export async function PATCH(
 				status: 405,
 			});
 
-		const updatedcourse = await prismadb.$transaction(
-			async (prisma) => {
-				await prisma.c_benefit_ar.deleteMany({
-					where: {
-						courseId: params.courseId,
-					},
-				});
-				await prisma.c_intro_ar.deleteMany({
-					where: {
-						courseId: params.courseId,
-					},
-				});
-				await prisma.c_certification_ar.deleteMany({
-					where: {
-						courseId: params.courseId,
-					},
-				});
-				await prisma.c_benefit_en.deleteMany({
-					where: {
-						courseId: params.courseId,
-					},
-				});
-				await prisma.c_intro_en.deleteMany({
-					where: {
-						courseId: params.courseId,
-					},
-				});
-				await prisma.c_certification_en.deleteMany({
-					where: {
-						courseId: params.courseId,
-					},
-				});
-				await prisma.c_date_ar.deleteMany({
-					where: {
-						courseId: params.courseId,
-					},
-				});
-				await prisma.c_content_ar.deleteMany({
-					where: {
-						courseId: params.courseId,
-					},
-				});
-				await prisma.c_objective_ar.deleteMany({
-					where: {
-						courseId: params.courseId,
-					},
-				});
-				await prisma.c_date_en.deleteMany({
-					where: {
-						courseId: params.courseId,
-					},
-				});
-				await prisma.c_content_en.deleteMany({
-					where: {
-						courseId: params.courseId,
-					},
-				});
-				await prisma.c_objective_en.deleteMany({
-					where: {
-						courseId: params.courseId,
-					},
-				});
-				await prisma.c_who_should_ar.deleteMany({
-					where: {
-						courseId: params.courseId,
-					},
-				});
-				await prisma.c_who_should_en.deleteMany({
-					where: {
-						courseId: params.courseId,
-					},
-				});
-				const updatedcourse =
-					await prisma.course.update({
-						where: {
-							id: params.courseId,
-						},
-						data: {
-							categoryId: body.categoryId,
-							coursetypeId:
-								body.coursetypeId,
-							c_title: body.c_title,
-							c_title_ar: body.c_title_ar,
-							c_benefit_ar: {
-								create: body.c_benefit_ar.map(
-									(
-										expert
-									) => ({
-										...expert,
-									})
-								),
-							},
-							c_benefit_en: {
-								create: body.c_benefit_en.map(
-									(
-										expert
-									) => ({
-										...expert,
-									})
-								),
-							},
-							c_date_ar: {
-								create: body.c_date_ar.map(
-									(
-										expert
-									) => ({
-										...expert,
-									})
-								),
-							},
-							c_date_en: {
-								create: body.c_date_en.map(
-									(
-										expert
-									) => ({
-										...expert,
-									})
-								),
-							},
-							c_intro_ar: {
-								create: body.c_intro_ar.map(
-									(
-										expert
-									) => ({
-										...expert,
-									})
-								),
-							},
-							c_intro_en: {
-								create: body.c_intro_en.map(
-									(
-										expert
-									) => ({
-										...expert,
-									})
-								),
-							},
-							c_content_ar: {
-								create: body.c_content_ar.map(
-									(
-										expert
-									) => ({
-										...expert,
-									})
-								),
-							},
-							c_content_en: {
-								create: body.c_content_en.map(
-									(
-										expert
-									) => ({
-										...expert,
-									})
-								),
-							},
-							c_objective_ar: {
-								create: body.c_objective_ar.map(
-									(
-										expert
-									) => ({
-										...expert,
-									})
-								),
-							},
-							c_objective_en: {
-								create: body.c_objective_en.map(
-									(
-										expert
-									) => ({
-										...expert,
-									})
-								),
-							},
-							c_who_should_ar: {
-								create: body.c_who_should_ar.map(
-									(
-										expert
-									) => ({
-										...expert,
-									})
-								),
-							},
-							c_who_should_en: {
-								create: body.c_who_should_en.map(
-									(
-										expert
-									) => ({
-										...expert,
-									})
-								),
-							},
-						},
-					});
+		// Deletion operations
+		await prismadb.c_benefit_ar.deleteMany({
+			where: { courseId: params.courseId },
+		});
+		await prismadb.c_intro_ar.deleteMany({
+			where: { courseId: params.courseId },
+		});
+		await prismadb.c_content2_ar.deleteMany({
+			where: { courseId: params.courseId },
+		});
+		await prismadb.c_benefit_en.deleteMany({
+			where: { courseId: params.courseId },
+		});
+		await prismadb.c_intro_en.deleteMany({
+			where: { courseId: params.courseId },
+		});
+		await prismadb.c_content2_en.deleteMany({
+			where: { courseId: params.courseId },
+		});
+		await prismadb.c_date_ar.deleteMany({
+			where: { courseId: params.courseId },
+		});
+		await prismadb.c_content_ar.deleteMany({
+			where: { courseId: params.courseId },
+		});
+		await prismadb.c_objective_ar.deleteMany({
+			where: { courseId: params.courseId },
+		});
+		await prismadb.c_date_en.deleteMany({
+			where: { courseId: params.courseId },
+		});
+		await prismadb.c_content_en.deleteMany({
+			where: { courseId: params.courseId },
+		});
+		await prismadb.c_objective_en.deleteMany({
+			where: { courseId: params.courseId },
+		});
+		await prismadb.c_who_should_ar.deleteMany({
+			where: { courseId: params.courseId },
+		});
+		await prismadb.c_who_should_en.deleteMany({
+			where: { courseId: params.courseId },
+		});
 
-				return updatedcourse;
-			}
-		);
+		// Update course with new data
+		const updatedCourse = await prismadb.course.update({
+			where: { id: params.courseId },
+			data: {
+				categoryId: body.categoryId,
+				coursetypeId: body.coursetypeId,
+				c_title: body.c_title,
+				c_title_ar: body.c_title_ar,
+				price_egp: body.price_egp,
+				price_ksa: body.price_ksa,
+				price_uae: body.price_uae,
+				price_usd: body.price_usd,
+				c_short_intro_en: body.c_short_intro_en,
+				c_short_intro_ar: body.c_short_intro_ar,
+				c_duration_en: body.c_duration_en,
+				c_duration_ar: body.c_duration_ar,
+				c_in_house_en: body.c_in_house_en,
+				c_in_house_ar: body.c_in_house_ar,
+				c_delv_and_leaders_en:
+					body.c_delv_and_leaders_en,
+				c_delv_and_leaders_ar:
+					body.c_delv_and_leaders_ar,
+				c_benefit_ar: {
+					create: body.c_benefit_ar.map(
+						(item) => ({
+							...item,
+						})
+					),
+				},
+				c_benefit_en: {
+					create: body.c_benefit_en.map(
+						(item) => ({
+							...item,
+						})
+					),
+				},
+				c_date_ar: {
+					create: body.c_date_ar.map((item) => ({
+						...item,
+					})),
+				},
+				c_date_en: {
+					create: body.c_date_en.map((item) => ({
+						...item,
+					})),
+				},
+				c_intro_ar: {
+					create: body.c_intro_ar.map((item) => ({
+						...item,
+					})),
+				},
+				c_intro_en: {
+					create: body.c_intro_en.map((item) => ({
+						...item,
+					})),
+				},
+				c_content_ar: {
+					create: body.c_content_ar.map(
+						(item) => ({
+							...item,
+						})
+					),
+				},
+				c_content_en: {
+					create: body.c_content_en.map(
+						(item) => ({
+							...item,
+						})
+					),
+				},
+				c_objective_ar: {
+					create: body.c_objective_ar.map(
+						(item) => ({
+							...item,
+						})
+					),
+				},
+				c_objective_en: {
+					create: body.c_objective_en.map(
+						(item) => ({
+							...item,
+						})
+					),
+				},
+				c_who_should_ar: {
+					create: body.c_who_should_ar.map(
+						(item) => ({
+							...item,
+						})
+					),
+				},
+				c_who_should_en: {
+					create: body.c_who_should_en.map(
+						(item) => ({
+							...item,
+						})
+					),
+				},
+				c_content2_ar: {
+					create: body.c_content2_ar.map(
+						(item) => ({
+							...item,
+						})
+					),
+				},
+				c_content2_en: {
+					create: body.c_content2_en.map(
+						(item) => ({
+							...item,
+						})
+					),
+				},
+			},
+		});
 
-		return new NextResponse(JSON.stringify(updatedcourse), {
+		return new NextResponse(JSON.stringify(updatedCourse), {
 			status: 200,
 		});
 	} catch (error) {
+		console.error('Error during update:', error);
 		return handleErrorResponse(error);
 	}
 }
