@@ -17,7 +17,6 @@ export async function POST(
 			address,
 			address_ar,
 			phone,
-			billboardId,
 			imageUrl,
 		} = body;
 
@@ -61,12 +60,6 @@ export async function POST(
 				status: 400,
 			});
 		}
-		if (!billboardId) {
-			return new NextResponse('billboard id is required', {
-				status: 400,
-			});
-		}
-
 		if (!params.storeId) {
 			return new NextResponse('Store id is required', {
 				status: 400,
@@ -90,7 +83,7 @@ export async function POST(
 			data: {
 				name,
 				name_ar,
-				billboardId,
+
 				phone,
 				address,
 				address_ar,
@@ -125,11 +118,8 @@ export async function GET(
 		const courses = await prismadb.team.findMany({
 			where: {
 				storeId: params.storeId,
-				billboardId,
 			},
-			include: {
-				billboard: true,
-			},
+
 			orderBy: {
 				name: 'desc',
 			},

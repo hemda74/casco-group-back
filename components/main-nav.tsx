@@ -8,13 +8,7 @@ export function MainNav({
 }: React.HTMLAttributes<HTMLElement>) {
 	const pathname = usePathname();
 	const params = useParams();
-
 	const routes = [
-		{
-			href: `/${params.storeId}/billboards`,
-			label: 'Main Categories',
-			active: pathname === `/${params.storeId}/billboards`,
-		},
 		{
 			href: `/${params.storeId}/courses-categories`,
 			label: 'Courses Categories',

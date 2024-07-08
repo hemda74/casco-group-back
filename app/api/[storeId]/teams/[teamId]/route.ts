@@ -18,9 +18,6 @@ export async function GET(
 			where: {
 				id: params.teamId,
 			},
-			include: {
-				billboard: true,
-			},
 		});
 
 		return NextResponse.json(team);
@@ -91,7 +88,6 @@ export async function PATCH(
 			address_ar,
 			linkedin,
 			phone,
-			billboardId,
 			imageUrl,
 		} = body;
 
@@ -135,11 +131,7 @@ export async function PATCH(
 				status: 400,
 			});
 		}
-		if (!billboardId) {
-			return new NextResponse('billboard id is required', {
-				status: 400,
-			});
-		}
+
 		const storeByUserId = await prismadb.store.findFirst({
 			where: {
 				id: params.storeId,
@@ -162,7 +154,7 @@ export async function PATCH(
 				phone,
 				address,
 				address_ar,
-				billboardId,
+
 				imageUrl,
 			},
 		});

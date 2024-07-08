@@ -12,7 +12,7 @@ export async function POST(
 
 		const body = await req.json();
 
-		const { name, name_ar, billboardId } = body;
+		const { name, name_ar } = body;
 
 		if (!userId) {
 			return new NextResponse('Unauthenticated', {
@@ -30,13 +30,6 @@ export async function POST(
 				status: 400,
 			});
 		}
-
-		if (!billboardId) {
-			return new NextResponse('Billboard ID is required', {
-				status: 400,
-			});
-		}
-
 		if (!params.storeId) {
 			return new NextResponse('Store id is required', {
 				status: 400,
@@ -60,7 +53,7 @@ export async function POST(
 			data: {
 				name,
 				name_ar,
-				billboardId,
+
 				storeId: params.storeId,
 			},
 		});
