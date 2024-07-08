@@ -274,7 +274,6 @@ model Industry {
    id                       String              @id @default(uuid())
    storeId                  String   //Foreign Key to Store
    store                    Store               @relation("StoreToIndustry", fields: [storeId], references: [id])
-   categoryId               String  // Foreign Key to Category
    casestudy                CaseStudy[]          @relation("IndustryToCaseStudy")
    industryDetailes         IndustryDetailes[]   @relation("IndustryToIndustryDetailes")
    industryDetailes2        IndustryDetailes2[]  @relation("IndustryToIndustryDetailes2")
@@ -282,7 +281,6 @@ model Industry {
    name                     String              
    name_ar                  String                           
    @@index([storeId])
-   @@index([categoryId])
 }
 model ExpertIndustry {
   id           String  @id @default(uuid())
@@ -407,8 +405,6 @@ model NewsCategory {
   id                String    @id @default(uuid())
   storeId           String // Foreign Key to Store
   store             Store     @relation("StoreToCategory", fields: [storeId], references: [id])
- 
-  
   name              String
   name_ar           String
   news           News[] @relation("CategoryToNews")

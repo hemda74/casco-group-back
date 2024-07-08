@@ -4,7 +4,6 @@ import prismadb from '@/lib/prismadb';
 type industryRequestBody = {
 	name: string;
 	name_ar: string;
-	categoryId: string;
 	expertIndustry: {
 		expert_name: string;
 		expert_name_ar: string;
@@ -48,7 +47,6 @@ export async function POST(
 			name,
 			name_ar,
 			expertIndustry,
-			categoryId,
 			industryDetailes,
 			industryDetailes2,
 		} = body;
@@ -67,11 +65,7 @@ export async function POST(
 				status: 400,
 			});
 		}
-		if (!categoryId) {
-			return new NextResponse('Billboard ID is required', {
-				status: 400,
-			});
-		}
+
 		if (!params.storeId) {
 			return new NextResponse('Store id is required', {
 				status: 400,
@@ -95,9 +89,7 @@ export async function POST(
 				store: {
 					connect: { id: params.storeId },
 				},
-				category: {
-					connect: { id: categoryId },
-				},
+
 				expertIndustry: {
 					create: expertIndustry.map(
 						(expert) => ({
@@ -233,7 +225,6 @@ export async function PATCH(
 			industryDetailes,
 			industryDetailes2,
 			expertIndustry,
-			categoryId,
 		} = body;
 
 		if (!userId) {
@@ -242,9 +233,9 @@ export async function PATCH(
 			});
 		}
 
-		if (!name || !name_ar || !categoryId) {
+		if (!name || !name_ar) {
 			return new NextResponse(
-				'Name, Arabic Name and Category ID are required',
+				'Name, Arabic Name are required',
 				{ status: 400 }
 			);
 		}
@@ -287,11 +278,7 @@ export async function PATCH(
 								id: params.storeId,
 							},
 						},
-						category: {
-							connect: {
-								id: categoryId,
-							},
-						},
+
 						expertIndustry: {
 							create: expertIndustry.map(
 								(expert) => ({

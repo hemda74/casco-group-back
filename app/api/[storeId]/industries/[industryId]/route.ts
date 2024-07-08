@@ -3,7 +3,6 @@ import { auth } from '@clerk/nextjs';
 import prismadb from '@/lib/prismadb';
 
 type IndustryRequestBody = {
-	categoryId: string;
 	name: string;
 	name_ar: string;
 	industryDetailes: {
@@ -31,11 +30,10 @@ type IndustryRequestBody = {
 };
 
 const validateRequestBody = (body: IndustryRequestBody) => {
-	const { name, name_ar, categoryId } = body;
+	const { name, name_ar } = body;
 
 	if (!name) throw new Error('Name is required');
 	if (!name_ar) throw new Error('Arabic Name is required');
-	if (!categoryId) throw new Error('Category id is required');
 };
 
 const handleErrorResponse = (error: any) => {
@@ -51,7 +49,7 @@ export async function POST(
 		const { userId } = auth();
 		const body: IndustryRequestBody = await req.json();
 
-		const { name, name_ar, categoryId } = body;
+		const { name, name_ar } = body;
 
 		if (!userId) {
 			return new NextResponse('Unauthenticated', {
@@ -66,12 +64,6 @@ export async function POST(
 		}
 		if (!name_ar) {
 			return new NextResponse('Arabic Name is required', {
-				status: 400,
-			});
-		}
-
-		if (!categoryId) {
-			return new NextResponse('Category id is required', {
 				status: 400,
 			});
 		}
@@ -97,9 +89,7 @@ export async function POST(
 					store: {
 						connect: { id: params.storeId },
 					},
-					category: {
-						connect: { id: categoryId },
-					},
+
 					industryDetailes: {
 						create: body.industryDetailes.map(
 							(deta) => ({
@@ -228,7 +218,6 @@ export async function GET(
 		const industry = await prismadb.industry.findUnique({
 			where: { id: params.industryId },
 			include: {
-				category: true,
 				industryDetailes: {
 					include: {
 						industryDetailesPoint: true,
@@ -350,7 +339,6 @@ export async function PATCH(
 							id: params.industryId,
 						},
 						data: {
-							categoryId: body.categoryId,
 							name: body.name,
 							name_ar: body.name_ar,
 							industryDetailes: {
