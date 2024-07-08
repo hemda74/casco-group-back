@@ -12,8 +12,8 @@ const CategoriesPage = async ({ params }: { params: { storeId: string } }) => {
 			category: true,
 			c_benefit_ar: true,
 			c_benefit_en: true,
-			c_certification_ar: true,
-			c_certification_en: true,
+			c_content2_ar: true,
+			c_content2_en: true,
 			c_content_ar: true,
 			c_content_en: true,
 			c_date_ar: true,
@@ -60,8 +60,8 @@ const CategoriesPage = async ({ params }: { params: { storeId: string } }) => {
 		c_objective_ar: item.c_objective_ar.map((ex) => ex.text),
 		c_benefit_en: item.c_benefit_en.map((ex) => ex.text),
 		c_benefit_ar: item.c_benefit_ar.map((ex) => ex.text),
-		c_certification_en: item.c_certification_en.map((ex) => ex.text),
-		c_certification_ar: item.c_certification_ar.map((ex) => ex.text),
+		c_content2_en: item.c_content2_en.map((ex) => ex.text),
+		c_content2_ar: item.c_content2_ar.map((ex) => ex.text),
 	}));
 	return (
 		<div className="flex-col">

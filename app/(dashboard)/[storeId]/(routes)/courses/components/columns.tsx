@@ -31,8 +31,8 @@ export type CourseColumn = {
 	c_content_ar: string[];
 	c_benefit_en: string[];
 	c_benefit_ar: string[];
-	c_certification_en: string[];
-	c_certification_ar: string[];
+	c_content2_en: string[];
+	c_content2_ar: string[];
 	c_date_en: string[];
 	c_date_ar: string[];
 };
