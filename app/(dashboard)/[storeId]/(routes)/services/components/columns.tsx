@@ -5,7 +5,6 @@ export type ServiceColumn = {
 	id: string;
 	name: string;
 	name_ar: string;
-	category: string;
 	expert_name: string[];
 	expert_name_ar: string[];
 	expert_phone: string[];

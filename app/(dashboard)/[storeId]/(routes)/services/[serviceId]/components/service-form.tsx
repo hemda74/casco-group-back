@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
-import { Service, ServicesCategory, ServiceDesc, ServiceDescAr, ExpertService } from '@prisma/client';
+import { Service, ServiceDesc, ServiceDescAr, ExpertService } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
@@ -34,7 +34,6 @@ import ImageUpload from '@/components/ui/image-upload';
 const formSchema = z.object({
 	name: z.string().min(1),
 	name_ar: z.string().min(1),
-	categoryId: z.string().min(1),
 	serviceDesc: z.array(z.object({
 		title: z.string().min(1),
 		desc_1: z.string().min(1),
@@ -67,12 +66,11 @@ interface ServiceFormProps {
 		expertService: ExpertService[];
 	})
 	| null;
-	categories: ServicesCategory[];
 }
 
 export const ServiceForm: React.FC<ServiceFormProps> = ({
 	initialData,
-	categories
+
 }) => {
 	const params = useParams();
 	const router = useRouter();
@@ -91,7 +89,6 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 		}
 		: {
 			id: '',
-			categoryId: '',
 			name: '',
 			name_ar: '',
 			serviceDesc: [],
@@ -222,41 +219,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
 								</FormItem>
 							)}
 						/>
-						<FormField
-							control={form.control}
-							name="categoryId"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Category</FormLabel>
-									<Select
-										disabled={loading}
-										onValueChange={field.onChange}
-										value={field.value}
-										defaultValue={field.value}
-									>
-										<FormControl>
-											<SelectTrigger>
-												<SelectValue
-													defaultValue={field.value}
-													placeholder="Select a category"
-												/>
-											</SelectTrigger>
-										</FormControl>
-										<SelectContent>
-											{categories.map((category) => (
-												<SelectItem
-													key={category.id}
-													value={category.id}
-												>
-													{category.name}
-												</SelectItem>
-											))}
-										</SelectContent>
-									</Select>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+
 					</div>
 					<div>
 						<Heading description='cedcedc' title="Service Descriptions" />

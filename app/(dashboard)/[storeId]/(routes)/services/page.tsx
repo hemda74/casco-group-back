@@ -10,7 +10,6 @@ const ServicesPage = async ({ params }: { params: { storeId: string } }) => {
 				storeId: params.storeId,
 			},
 			include: {
-				category: true,
 				serviceDesc: true,
 				serviceDescAr: true,
 				expertService: true,
@@ -24,7 +23,6 @@ const ServicesPage = async ({ params }: { params: { storeId: string } }) => {
 			id: item.id,
 			name: item.name,
 			name_ar: item.name_ar,
-			category: item.category?.name ?? '',
 			expert_name: item.expertService.map((ex) => ex.expert_name),
 			expert_name_ar: item.expertService.map((ex) => ex.expert_name_ar),
 			expert_title: item.expertService.map((ex) => ex.expert_title),

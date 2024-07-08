@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
-import { Industry, IndustryCategory, ExpertIndustry, IndustryDetailes, IndustryDetailes2, IndustryDetailesPoint, IndustryDetailesPointAr } from '@prisma/client';
+import { Industry, ExpertIndustry, IndustryDetailes, IndustryDetailes2, IndustryDetailesPoint, IndustryDetailesPointAr } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
@@ -33,7 +33,6 @@ import ImageUpload from '@/components/ui/image-upload';
 const formSchema = z.object({
 	name: z.string().min(2),
 	name_ar: z.string().min(2),
-	categoryId: z.string().min(1),
 	expertIndustry: z.array(z.object({
 		expert_name: z.string().min(1),
 		expert_name_ar: z.string().min(1),
@@ -76,12 +75,11 @@ interface IndustryFormProps {
 
 	})
 	| null;
-	categories: IndustryCategory[];
 }
 
 export const IndustryForm: React.FC<IndustryFormProps> = ({
 	initialData,
-	categories,
+
 }) => {
 	const params = useParams();
 	const router = useRouter();
@@ -103,7 +101,6 @@ export const IndustryForm: React.FC<IndustryFormProps> = ({
 		defaultValues: initialData || {
 			name: '',
 			name_ar: '',
-			categoryId: '',
 			expertIndustry: [],
 			industryDetailes: [],
 			industryDetailes2: [],
@@ -236,63 +233,6 @@ export const IndustryForm: React.FC<IndustryFormProps> = ({
 											{...field}
 										/>
 									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="categoryId"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Billboard
-									</FormLabel>
-									<Select
-										disabled={
-											loading
-										}
-										onValueChange={
-											field.onChange
-										}
-										value={
-											field.value
-										}
-										defaultValue={
-											field.value
-										}
-									>
-										<FormControl>
-											<SelectTrigger>
-												<SelectValue
-													defaultValue={
-														field.value
-													}
-													placeholder="Select a billboard"
-												/>
-											</SelectTrigger>
-										</FormControl>
-										<SelectContent>
-											{categories.map(
-												(
-													billboard
-												) => (
-													<SelectItem
-														key={
-															billboard.id
-														}
-														value={
-															billboard.id
-														}
-													>
-														{
-															billboard.name
-														}
-													</SelectItem>
-												)
-											)}
-										</SelectContent>
-									</Select>
 									<FormMessage />
 								</FormItem>
 							)}

@@ -17,18 +17,12 @@ const ServicePage = async ({
 		}
 	});
 
-	const categories = await prismadb.servicesCategory.findMany({
-		where: {
-			storeId: params.storeId,
-		},
-	});
 
 
 	return (
 		<div className="flex-row">
 			<div className="flex-1 space-x-4 p-8 pt-6">
 				<ServiceForm
-					categories={categories}
 					initialData={service}
 				/>
 			</div>

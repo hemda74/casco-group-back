@@ -8,7 +8,6 @@ const CategoriesPage = async ({ params }: { params: { storeId: string } }) => {
 			storeId: params.storeId,
 		},
 		include: {
-			category: true,
 			expertIndustry: true,
 			industryDetailes: {
 				include: {
@@ -32,7 +31,6 @@ const CategoriesPage = async ({ params }: { params: { storeId: string } }) => {
 		id: item.id,
 		name: item.name,
 		name_ar: item.name_ar,
-		category: item.category.name,
 		expert_name: item.expertIndustry.map((ex) => ex.expert_name),
 		expert_name_ar: item.expertIndustry.map((ex) => ex.expert_name_ar),
 		expert_title: item.expertIndustry.map((ex) => ex.expert_title),
