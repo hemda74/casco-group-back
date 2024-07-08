@@ -1352,7 +1352,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 					</div>
 					<Separator />
 					<div>
-						<Heading description="Managing Course Certifications (English)" title="Managing Course Certifications (English)" />
+						<Heading description="Managing Course certifications (English)" title="Managing Course certifications (English)" />
 						{c_certification_enFields.map((field, index) => (
 							<div key={field.id} className="grid grid-cols-2 gap-8">
 								<FormField
@@ -1360,7 +1360,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 									name={`c_certification_en.${index}.text`}
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>{`Certifications Pargraph (English) ${index + 1} `}</FormLabel>
+											<FormLabel>{`certifications Pargraph (English) ${index + 1} `}</FormLabel>
 											<FormControl>
 												<Textarea
 													disabled={loading}
@@ -1401,7 +1401,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 					</div>
 					<Separator />
 					<div>
-						<Heading description="Managing Course Certifications (Arabic)" title="Managing Course Certifications (Arabic)" />
+						<Heading description="Managing Course certifications (Arabic)" title="Managing Course certifications (Arabic)" />
 						{c_certification_arFields.map((field, index) => (
 							<div key={field.id} className="grid grid-cols-2 gap-8">
 								<FormField
@@ -1409,7 +1409,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 									name={`c_certification_ar.${index}.text`}
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>{`Certification Pargraph ${index + 1} `}</FormLabel>
+											<FormLabel>{`certification Pargraph ${index + 1} `}</FormLabel>
 											<FormControl>
 												<Textarea
 													disabled={loading}
