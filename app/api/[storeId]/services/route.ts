@@ -27,7 +27,6 @@ type ServiceRequestBody = {
 		imageUrl: string;
 		store: { connect: { id: string } };
 	}[];
-	categoryId: string;
 };
 
 export async function POST(
@@ -43,7 +42,6 @@ export async function POST(
 			serviceDesc,
 			serviceDescAr,
 			expertService,
-			categoryId,
 		} = body;
 
 		if (!userId) {
@@ -52,7 +50,7 @@ export async function POST(
 			});
 		}
 
-		if (!name || !name_ar || !categoryId) {
+		if (!name || !name_ar) {
 			return new NextResponse(
 				'Name, Arabic Name and Category ID are required',
 				{ status: 400 }
@@ -75,7 +73,7 @@ export async function POST(
 					storeId: params.storeId,
 					name,
 					name_ar,
-					categoryId,
+
 					serviceDesc: {
 						create: serviceDesc.map(
 							(desc) => ({
@@ -177,7 +175,6 @@ export async function PATCH(
 			serviceDesc,
 			serviceDescAr,
 			expertService,
-			categoryId,
 		} = body;
 
 		if (!userId) {
@@ -186,7 +183,7 @@ export async function PATCH(
 			});
 		}
 
-		if (!name || !name_ar || !categoryId) {
+		if (!name || !name_ar) {
 			return new NextResponse(
 				'Name, Arabic Name and Category ID are required',
 				{ status: 400 }
@@ -220,7 +217,7 @@ export async function PATCH(
 					data: {
 						name,
 						name_ar,
-						categoryId,
+
 						serviceDesc: {
 							create: serviceDesc.map(
 								(desc) => ({

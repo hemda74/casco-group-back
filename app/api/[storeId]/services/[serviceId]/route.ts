@@ -55,7 +55,6 @@ export async function POST(
 			serviceDesc,
 			serviceDescAr,
 			expertService,
-			categoryId,
 		} = body;
 
 		if (!userId) {
@@ -71,12 +70,6 @@ export async function POST(
 		}
 		if (!name_ar) {
 			return new NextResponse('Arabic Name is required', {
-				status: 400,
-			});
-		}
-
-		if (!categoryId) {
-			return new NextResponse('Category id is required', {
 				status: 400,
 			});
 		}
@@ -102,9 +95,7 @@ export async function POST(
 					store: {
 						connect: { id: params.storeId },
 					},
-					category: {
-						connect: { id: categoryId },
-					},
+
 					serviceDesc: {
 						create: serviceDesc.map(
 							(desc) => ({
@@ -193,7 +184,6 @@ export async function GET(
 		const service = await prismadb.service.findUnique({
 			where: { id: params.serviceId },
 			include: {
-				category: true,
 				serviceDesc: true,
 				serviceDescAr: true,
 				expertService: true,
@@ -297,7 +287,6 @@ export async function PATCH(
 					await prisma.service.update({
 						where: { id: params.serviceId },
 						data: {
-							categoryId: body.categoryId,
 							name: body.name,
 							name_ar: body.name_ar,
 							serviceDesc: {
