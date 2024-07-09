@@ -40,7 +40,6 @@ const handleErrorResponse = (error: any) => {
 	console.error(error);
 	return new NextResponse('Internal error', { status: 500 });
 };
-
 export async function POST(
 	req: Request,
 	{ params }: { params: { storeId: string } }
@@ -313,143 +312,156 @@ export async function PATCH(
 				status: 405,
 			});
 
-		const updatedIndustry = await prismadb.$transaction(
-			async (prisma) => {
-				await prisma.industryDetailes.deleteMany({
-					where: {
-						industryId: params.industryId,
-					},
-				});
+		// Delete all related IndustryDetailesPoint and IndustryDetailesPointAr records
+		const industryDetailsIds = (
+			await prismadb.industryDetailes.findMany({
+				where: { industryId: params.industryId },
+				select: { id: true },
+			})
+		).map((detail) => detail.id);
 
-				await prisma.industryDetailes2.deleteMany({
-					where: {
-						industryId: params.industryId,
-					},
-				});
+		await prismadb.industryDetailesPoint.deleteMany({
+			where: {
+				industrydetailesId: { in: industryDetailsIds },
+			},
+		});
+		await prismadb.industryDetailesPointAr.deleteMany({
+			where: {
+				industrydetailesId: { in: industryDetailsIds },
+			},
+		});
 
-				await prisma.expertIndustry.deleteMany({
-					where: {
-						industryId: params.industryId,
-					},
-				});
+		const industryDetails2Ids = (
+			await prismadb.industryDetailes2.findMany({
+				where: { industryId: params.industryId },
+				select: { id: true },
+			})
+		).map((detail) => detail.id);
 
-				const updatedIndustry =
-					await prisma.industry.update({
-						where: {
-							id: params.industryId,
-						},
-						data: {
-							name: body.name,
-							name_ar: body.name_ar,
-							industryDetailes: {
-								create: body.industryDetailes.map(
+		await prismadb.industryDetailesPoint2.deleteMany({
+			where: { detaId: { in: industryDetails2Ids } },
+		});
+		await prismadb.industryDetailesPointAr2.deleteMany({
+			where: { detaId: { in: industryDetails2Ids } },
+		});
+
+		// Delete all related IndustryDetailes and IndustryDetailes2 records
+		await prismadb.industryDetailes.deleteMany({
+			where: { industryId: params.industryId },
+		});
+		await prismadb.industryDetailes2.deleteMany({
+			where: { industryId: params.industryId },
+		});
+
+		// Delete all related ExpertIndustry records
+		await prismadb.expertIndustry.deleteMany({
+			where: { industryId: params.industryId },
+		});
+
+		// Update the industry with the new details
+		const updatedIndustry = await prismadb.industry.update({
+			where: { id: params.industryId },
+			data: {
+				name: body.name,
+				name_ar: body.name_ar,
+				industryDetailes: {
+					create: body.industryDetailes.map(
+						(deta) => ({
+							title: deta.title,
+							title_ar: deta.title_ar,
+							industryDetailesPoint: {
+								create: deta.industryDetailesPoint.map(
 									(
-										deta
+										point
 									) => ({
-										title: deta.title,
-										title_ar: deta.title_ar,
-										industryDetailesPoint:
-											{
-												create: deta.industryDetailesPoint.map(
-													(
-														point
-													) => ({
-														text: point.text,
-													})
-												),
-											},
-										industryDetailesPointAr:
-											{
-												create: deta.industryDetailesPointAr.map(
-													(
-														point
-													) => ({
-														text: point.text,
-													})
-												),
-											},
-										store: {
-											connect: {
-												id: params.storeId,
-											},
-										},
+										text: point.text,
 									})
 								),
 							},
-							industryDetailes2: {
-								create: body.industryDetailes2.map(
-									(
-										deta2
-									) => ({
-										title: deta2.title,
-										title_ar: deta2.title_ar,
-										industryDetailesPoint2:
-											{
-												create: deta2.industryDetailesPoint2.map(
-													(
-														point2
-													) => ({
-														text: point2.text,
-													})
-												),
-											},
-										industryDetailesPointAr2:
-											{
-												create: deta2.industryDetailesPointAr2.map(
-													(
-														pointAr2
-													) => ({
-														text: pointAr2.text,
-													})
-												),
-											},
-										store: {
-											connect: {
-												id: params.storeId,
-											},
-										},
-									})
-								),
+							industryDetailesPointAr:
+								{
+									create: deta.industryDetailesPointAr.map(
+										(
+											point
+										) => ({
+											text: point.text,
+										})
+									),
+								},
+							store: {
+								connect: {
+									id: params.storeId,
+								},
 							},
-							expertIndustry: {
-								create: body.expertIndustry.map(
-									(
-										expert
-									) => ({
-										expert_imageUrl:
-											expert.expert_imageUrl,
-										expert_name:
-											expert.expert_name,
-										expert_name_ar:
-											expert.expert_name_ar,
-										expert_title:
-											expert.expert_title,
-										expert_title_ar:
-											expert.expert_title_ar,
-										expert_phone:
-											expert.expert_phone,
-										expert_mail:
-											expert.expert_mail,
-										imageUrl: expert.imageUrl,
-										store: {
-											connect: {
-												id: params.storeId,
-											},
-										},
-									})
-								),
+						})
+					),
+				},
+				industryDetailes2: {
+					create: body.industryDetailes2.map(
+						(deta2) => ({
+							title: deta2.title,
+							title_ar: deta2.title_ar,
+							industryDetailesPoint2:
+								{
+									create: deta2.industryDetailesPoint2.map(
+										(
+											point2
+										) => ({
+											text: point2.text,
+										})
+									),
+								},
+							industryDetailesPointAr2:
+								{
+									create: deta2.industryDetailesPointAr2.map(
+										(
+											pointAr2
+										) => ({
+											text: pointAr2.text,
+										})
+									),
+								},
+							store: {
+								connect: {
+									id: params.storeId,
+								},
 							},
-						},
-						include: {
-							industryDetailes: true,
-							industryDetailes2: true,
-							expertIndustry: true,
-						},
-					});
-
-				return updatedIndustry;
-			}
-		);
+						})
+					),
+				},
+				expertIndustry: {
+					create: body.expertIndustry.map(
+						(expert) => ({
+							expert_imageUrl:
+								expert.expert_imageUrl,
+							expert_name:
+								expert.expert_name,
+							expert_name_ar:
+								expert.expert_name_ar,
+							expert_title:
+								expert.expert_title,
+							expert_title_ar:
+								expert.expert_title_ar,
+							expert_phone:
+								expert.expert_phone,
+							expert_mail:
+								expert.expert_mail,
+							imageUrl: expert.imageUrl,
+							store: {
+								connect: {
+									id: params.storeId,
+								},
+							},
+						})
+					),
+				},
+			},
+			include: {
+				industryDetailes: true,
+				industryDetailes2: true,
+				expertIndustry: true,
+			},
+		});
 
 		return new NextResponse(JSON.stringify(updatedIndustry), {
 			status: 200,
