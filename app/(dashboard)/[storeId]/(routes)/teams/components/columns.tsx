@@ -6,7 +6,6 @@ export interface CategoryColumn {
 	id: string;
 	name: string;
 	name_ar: string;
-	billboardLabel: string;
 	linkedin: string;
 	phone: string;
 	address: string;

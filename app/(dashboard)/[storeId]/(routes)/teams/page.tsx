@@ -7,9 +7,7 @@ const CategoriesPage = async ({ params }: { params: { storeId: string } }) => {
 		where: {
 			storeId: params.storeId,
 		},
-		include: {
-			billboard: true,
-		},
+
 		orderBy: {
 			name: 'desc',
 		},
@@ -24,7 +22,6 @@ const CategoriesPage = async ({ params }: { params: { storeId: string } }) => {
 			address_ar: item.address_ar,
 			phone: item.phone,
 			linkedin: item.linkedin,
-			billboardLabel: item.billboard.label,
 		})
 	);
 
