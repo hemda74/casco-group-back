@@ -1352,7 +1352,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 					</div>
 					<Separator />
 					<div>
-						<Heading description="Managing Course content2s (English)" title="Managing Course content2s (English)" />
+						<Heading description="Managing Course Certification (English)" title="Managing Course Certification (English)" />
 						{c_content2_enFields.map((field, index) => (
 							<div key={field.id} className="grid grid-cols-2 gap-8">
 								<FormField
@@ -1360,7 +1360,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 									name={`c_content2_en.${index}.text`}
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>{`content2s Pargraph (English) ${index + 1} `}</FormLabel>
+											<FormLabel>{`Certification Pargraph (English) ${index + 1} `}</FormLabel>
 											<FormControl>
 												<Textarea
 													disabled={loading}
@@ -1401,7 +1401,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 					</div>
 					<Separator />
 					<div>
-						<Heading description="Managing Course content2s (Arabic)" title="Managing Course content2s (Arabic)" />
+						<Heading description="Managing Course Certification (Arabic)" title="Managing Course Certification (Arabic)" />
 						{c_content2_arFields.map((field, index) => (
 							<div key={field.id} className="grid grid-cols-2 gap-8">
 								<FormField
@@ -1409,7 +1409,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 									name={`c_content2_ar.${index}.text`}
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>{`content2 Pargraph ${index + 1} `}</FormLabel>
+											<FormLabel>{`Certification Pargraph ${index + 1} `}</FormLabel>
 											<FormControl>
 												<Textarea
 													disabled={loading}
