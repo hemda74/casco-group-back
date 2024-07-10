@@ -26,25 +26,13 @@ export function MainNav({
 			label: 'Courses',
 			active: pathname === `/${params.storeId}/courses`,
 		},
-		{
-			href: `/${params.storeId}/services-categories`,
-			label: 'Services Categories',
-			active:
-				pathname ===
-				`/${params.storeId}/services-categories`,
-		},
+
 		{
 			href: `/${params.storeId}/services`,
 			label: 'Services',
 			active: pathname === `/${params.storeId}/services`,
 		},
-		{
-			href: `/${params.storeId}/industries-categories`,
-			label: 'Industries Categories',
-			active:
-				pathname ===
-				`/${params.storeId}/industries-categories`,
-		},
+
 		{
 			href: `/${params.storeId}/industries`,
 			label: 'Industries',
