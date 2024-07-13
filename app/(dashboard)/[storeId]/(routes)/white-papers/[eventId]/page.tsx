@@ -7,13 +7,13 @@ const ProductPage = async ({
 }: {
 	params: { eventId: string; storeId: string };
 }) => {
-	const event = await prismadb.event.findUnique({
+	const event = await prismadb.event2.findUnique({
 		where: {
 			id: params.eventId,
 		},
 		include: {
-			paragraph_event: true,
-			paragraph_event_ar: true
+			paragraph_event2: true,
+			paragraph_event_ar2: true
 		},
 	});
 

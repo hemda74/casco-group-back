@@ -60,9 +60,9 @@ export const EventForm: React.FC<EventFormProps> = ({
 	const router = useRouter();
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const title = initialData ? 'Edit event' : 'Create event';
-	const description = initialData ? 'Edit a event.' : 'Add a new event';
-	const toastMessage = initialData ? 'event updated.' : 'event created.';
+	const title = initialData ? 'Edit article' : 'Create article';
+	const description = initialData ? 'Edit a article.' : 'Add a new article';
+	const toastMessage = initialData ? 'article updated.' : 'article created.';
 	const action = initialData ? 'Save changes' : 'Create';
 	const defaultValues = initialData
 		? {

@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
-import { Event, NewsCategory, paragrph_event, paragrph_event_ar } from '@prisma/client';
+import { Event2, NewsCategory, paragrph_event2, paragrph_event_ar2 } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
@@ -35,8 +35,8 @@ const formSchema = z.object({
 	title: z.string().min(1),
 	title_ar: z.string().min(1),
 	categoryId: z.string().min(1),
-	paragraph_event: z.array(z.any()),
-	paragraph_event_ar: z.array(z.any()),
+	paragraph_event2: z.array(z.any()),
+	paragraph_event_ar2: z.array(z.any()),
 	date_of_event: z.string().min(1),
 	date_of_event_ar: z.string().min(1)
 });
@@ -45,9 +45,9 @@ type EventFormValues = z.infer<typeof formSchema>;
 
 interface EventFormProps {
 	initialData:
-	| (Event & {
-		paragraph_event: paragrph_event[];
-		paragraph_event_ar: paragrph_event_ar[];
+	| (Event2 & {
+		paragraph_event2: paragrph_event2[];
+		paragraph_event_ar2: paragrph_event_ar2[];
 	})
 	| null;
 	categories: NewsCategory[];
@@ -60,9 +60,9 @@ export const EventForm: React.FC<EventFormProps> = ({
 	const router = useRouter();
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const title = initialData ? 'Edit event' : 'Create event';
-	const description = initialData ? 'Edit a event.' : 'Add a new event';
-	const toastMessage = initialData ? 'event updated.' : 'event created.';
+	const title = initialData ? 'Edit paper' : 'Create paper';
+	const description = initialData ? 'Edit a paper.' : 'Add a new paper';
+	const toastMessage = initialData ? 'paper updated.' : 'paper created.';
 	const action = initialData ? 'Save changes' : 'Create';
 	const defaultValues = initialData
 		? {
@@ -74,37 +74,37 @@ export const EventForm: React.FC<EventFormProps> = ({
 			imageUrl: '',
 			date_of_event: '',
 			date_of_event_ar: '',
-			paragraph_event: [],
-			paragraph_event_ar: [],
+			paragraph_event2: [],
+			paragraph_event_ar2: [],
 		}
 	const form = useForm<EventFormValues>({
 		resolver: zodResolver(formSchema),
 		defaultValues,
 	});
-	const { fields: paragraph_eventFields, append: appendparagraph_event, remove: removeparagraph_event } = useFieldArray({
+	const { fields: paragraph_event2Fields, append: appendparagraph_event2, remove: removeparagraph_event2 } = useFieldArray({
 		control: form.control,
-		name: 'paragraph_event',
+		name: 'paragraph_event2',
 	});
-	const { fields: paragraph_event_arFields, append: appendparagraph_event_ar, remove: removeparagraph_event_ar } = useFieldArray({
+	const { fields: paragraph_event_ar2Fields, append: appendparagraph_event_ar2, remove: removeparagraph_event_ar2 } = useFieldArray({
 		control: form.control,
-		name: 'paragraph_event_ar',
+		name: 'paragraph_event_ar2',
 	});
 	const onSubmit = async (data: EventFormValues) => {
 		try {
 			setLoading(true);
 			if (initialData) {
 				await axios.patch(
-					`/api/${params.storeId}/events/${params.eventId}`,
+					`/api/${params.storeId}/white-papers/${params.paperId}`,
 					data
 				);
 			} else {
 				await axios.post(
-					`/api/${params.storeId}/events`,
+					`/api/${params.storeId}/white-papers`,
 					data
 				);
 			}
 			router.refresh();
-			router.push(`/${params.storeId}/events`);
+			router.push(`/${params.storeId}/white-papers`);
 			toast.success(toastMessage);
 		} catch (error: any) {
 			toast.error('Something went wrong.', error);
@@ -117,9 +117,9 @@ export const EventForm: React.FC<EventFormProps> = ({
 	const onDelete = async () => {
 		try {
 			setLoading(true);
-			await axios.delete(`/api/${params.storeId}/events/${params.eventId}`);
+			await axios.delete(`/api/${params.storeId}/white-papers/${params.paperId}`);
 			router.refresh();
-			router.push(`/${params.storeId}/events`);
+			router.push(`/${params.storeId}/white-papers`);
 			toast.success('event deleted.');
 		} catch (error: any) {
 			toast.error('Something went wrong.');
@@ -245,7 +245,7 @@ export const EventForm: React.FC<EventFormProps> = ({
 							name="date_of_event"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Date Of Event in English</FormLabel>
+									<FormLabel>Date Of Aritcle in English</FormLabel>
 									<FormControl>
 										<Textarea
 											disabled={loading}
@@ -262,7 +262,7 @@ export const EventForm: React.FC<EventFormProps> = ({
 							name="date_of_event_ar"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Date Of Event in Arabic</FormLabel>
+									<FormLabel>Date Of Aritcle in Arabic</FormLabel>
 									<FormControl>
 										<Textarea
 											disabled={loading}
@@ -277,14 +277,14 @@ export const EventForm: React.FC<EventFormProps> = ({
 					</div>
 					<div>
 						<Heading description='Paragraph ' title="Paragraph  (English)" />
-						{paragraph_eventFields.map((field, index) => (
+						{paragraph_event2Fields.map((field, index) => (
 							<div key={field.id} className="grid grid-cols-2 gap-8">
 								<FormField
 									control={form.control}
-									name={`paragraph_event.${index}.text`}
+									name={`paragraph_event2.${index}.text`}
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Title</FormLabel>
+											<FormLabel>{`Paragraph ${index + 1}`}</FormLabel>
 											<FormControl>
 												<Textarea
 													disabled={loading}
@@ -300,7 +300,7 @@ export const EventForm: React.FC<EventFormProps> = ({
 									disabled={loading}
 									variant="destructive"
 									className='w-1/2 mt-10'
-									onClick={() => removeparagraph_event(index)}
+									onClick={() => removeparagraph_event2(index)}
 								>
 									Remove
 								</Button>
@@ -312,7 +312,7 @@ export const EventForm: React.FC<EventFormProps> = ({
 							variant="secondary"
 							className="mt-5"
 							onClick={() =>
-								appendparagraph_event({
+								appendparagraph_event2({
 									text: ''
 								})
 							}
@@ -323,14 +323,14 @@ export const EventForm: React.FC<EventFormProps> = ({
 					<hr />
 					<div>
 						<Heading description='Paragraph ' title="Paragraph  (Arabic)" />
-						{paragraph_event_arFields.map((field, index) => (
+						{paragraph_event_ar2Fields.map((field, index) => (
 							<div key={field.id} className="grid grid-cols-2 gap-8">
 								<FormField
 									control={form.control}
-									name={`paragraph_event_ar.${index}.text`}
+									name={`paragraph_event_ar2.${index}.text`}
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Title</FormLabel>
+											<FormLabel>{`Paragraph ${index + 1}`}</FormLabel>
 											<FormControl>
 												<Textarea
 													disabled={loading}
@@ -346,7 +346,7 @@ export const EventForm: React.FC<EventFormProps> = ({
 									disabled={loading}
 									variant="destructive"
 									className='w-1/2 mt-10'
-									onClick={() => removeparagraph_event_ar(index)}
+									onClick={() => removeparagraph_event_ar2(index)}
 								>
 									Remove
 								</Button>
@@ -358,12 +358,12 @@ export const EventForm: React.FC<EventFormProps> = ({
 							variant="secondary"
 							className="mt-5"
 							onClick={() =>
-								appendparagraph_event_ar({
+								appendparagraph_event_ar2({
 									text: ''
 								})
 							}
 						>
-							Add New Point
+							Add New Paragraph
 						</Button>
 					</div>
 					<Button disabled={loading} className="ml-auto" type="submit">

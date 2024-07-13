@@ -21,7 +21,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 	const onConfirm = async () => {
 		try {
 			setLoading(true);
-			await axios.delete(`/api/${params.storeId}/events/${data.id}`);
+			await axios.delete(`/api/${params.storeId}/white-papers/${data.id}`);
 			toast.success('courses-category deleted.');
 			router.refresh();
 		} catch (error) {
@@ -40,7 +40,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 				loading={loading}
 			/>
 			<div className="flex-col space-y-2">
-				<Button variant="default" onClick={() => router.push(`/${params.storeId}/events/${data.id}`)}>
+				<Button variant="default" onClick={() => router.push(`/${params.storeId}/white-papers/${data.id}`)}>
 					<Edit className="mr-2 h-4 w-4" /> Update
 				</Button>
 				<Button variant="destructive" onClick={() => setOpen(true)}>

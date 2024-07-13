@@ -7,14 +7,14 @@ import { ProductsClient } from './components/client';
 import { ProductColumn } from './components/columns';
 
 const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
-	const event = await prismadb.event.findMany({
+	const event = await prismadb.event2.findMany({
 		where: {
 			storeId: params.storeId,
 		},
 		include: {
 			category: true,
-			paragraph_event: true,
-			paragraph_event_ar: true
+			paragraph_event2: true,
+			paragraph_event_ar2: true
 		},
 		orderBy: {
 			createdAt: 'desc',
@@ -28,8 +28,8 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
 		date_of_event: item.date_of_event,
 		date_of_event_ar: item.date_of_event_ar,
 		category: item.category.name,
-		paragraph_event: item.paragraph_event.map(p => p.text),
-		paragraph_event_ar: item.paragraph_event_ar.map(p => p.text),
+		paragraph_event: item.paragraph_event2.map(p => p.text),
+		paragraph_event_ar: item.paragraph_event_ar2.map(p => p.text),
 		createdAt: format(item.createdAt, 'MMMM do, yyyy'),
 	}));
 

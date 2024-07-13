@@ -64,6 +64,11 @@ export function MainNav({
 			active: pathname === `/${params.storeId}/articles`,
 		},
 		{
+			href: `/${params.storeId}/white-papers`,
+			label: 'White Papers',
+			active: pathname === `/${params.storeId}/white-papers`,
+		},
+		{
 			href: `/${params.storeId}/teams`,
 			label: 'Teams',
 			active: pathname === `/${params.storeId}/teams`,
