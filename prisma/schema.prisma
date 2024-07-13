@@ -103,7 +103,7 @@ model C_intro_ar{
     @@index([courseId])
 }
 model C_content2_en{
-   id         Int @id @default(autoincrement())
+     id         Int @id @default(autoincrement())
     text       String
     courseId   String
     course     Course @relation(fields: [courseId],references: [id])
@@ -388,7 +388,6 @@ model CaseStudyPointAr{
   case             CaseStudy  @relation("PointToCaseStudyAr",fields: [caseId],references: [id])
   @@index([caseId])
 }
-
 model paragrph_news {
   id                    String   @id @default(uuid())
   newsId                String
@@ -411,9 +410,8 @@ model NewsCategory {
   name_ar           String
   news           News[] @relation("CategoryToNews")
   event           Event[] @relation("CategoryToEvent")
-    event2           Event2[] @relation("CategoryToEvent2")
+  event2           Event2[] @relation("CategoryToEvent2")
   event3           Event3[] @relation("CategoryToEvent3")
-
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
   @@index([storeId])
