@@ -16,11 +16,11 @@ export interface ProductColumn {
 export const columns: ColumnDef<ProductColumn>[] = [
 	{
 		accessorKey: 'title',
-		header: 'Event_title',
+		header: 'Article_title',
 	},
 	{
 		accessorKey: 'title_ar',
-		header: 'Event_Arabic_title',
+		header: 'Article_Arabic_title',
 	},
 
 	{

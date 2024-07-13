@@ -5,15 +5,15 @@ import { EventForm } from './components/event-form';
 const ProductPage = async ({
 	params,
 }: {
-	params: { eventId: string; storeId: string };
+	params: { articleId: string; storeId: string };
 }) => {
-	const event = await prismadb.event.findUnique({
+	const article = await prismadb.event3.findUnique({
 		where: {
-			id: params.eventId,
+			id: params.articleId,
 		},
 		include: {
-			paragraph_event: true,
-			paragraph_event_ar: true
+			paragraph_event3: true,
+			paragraph_event_ar3: true
 		},
 	});
 
@@ -27,7 +27,7 @@ const ProductPage = async ({
 			<div className="flex-1 space-x-4 p-8 pt-6">
 				<EventForm
 					categories={categories}
-					initialData={event}
+					initialData={article}
 				/>
 			</div>
 		</div>

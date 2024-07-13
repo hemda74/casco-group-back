@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
-import { Event, NewsCategory, paragrph_event, paragrph_event_ar } from '@prisma/client';
+import { Event3, NewsCategory, paragrph_event3, paragrph_event_ar3 } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
@@ -35,8 +35,8 @@ const formSchema = z.object({
 	title: z.string().min(1),
 	title_ar: z.string().min(1),
 	categoryId: z.string().min(1),
-	paragraph_event: z.array(z.any()),
-	paragraph_event_ar: z.array(z.any()),
+	paragraph_event3: z.array(z.any()),
+	paragraph_event_ar3: z.array(z.any()),
 	date_of_event: z.string().min(1),
 	date_of_event_ar: z.string().min(1)
 });
@@ -45,9 +45,9 @@ type EventFormValues = z.infer<typeof formSchema>;
 
 interface EventFormProps {
 	initialData:
-	| (Event & {
-		paragraph_event: paragrph_event[];
-		paragraph_event_ar: paragrph_event_ar[];
+	| (Event3 & {
+		paragraph_event3: paragrph_event3[];
+		paragraph_event_ar3: paragrph_event_ar3[];
 	})
 	| null;
 	categories: NewsCategory[];
@@ -83,28 +83,28 @@ export const EventForm: React.FC<EventFormProps> = ({
 	});
 	const { fields: paragraph_eventFields, append: appendparagraph_event, remove: removeparagraph_event } = useFieldArray({
 		control: form.control,
-		name: 'paragraph_event',
+		name: 'paragraph_event3',
 	});
 	const { fields: paragraph_event_arFields, append: appendparagraph_event_ar, remove: removeparagraph_event_ar } = useFieldArray({
 		control: form.control,
-		name: 'paragraph_event_ar',
+		name: 'paragraph_event_ar3',
 	});
 	const onSubmit = async (data: EventFormValues) => {
 		try {
 			setLoading(true);
 			if (initialData) {
 				await axios.patch(
-					`/api/${params.storeId}/events/${params.eventId}`,
+					`/api/${params.storeId}/articles/${params.articleId}`,
 					data
 				);
 			} else {
 				await axios.post(
-					`/api/${params.storeId}/events`,
+					`/api/${params.storeId}/articles`,
 					data
 				);
 			}
 			router.refresh();
-			router.push(`/${params.storeId}/events`);
+			router.push(`/${params.storeId}/articles`);
 			toast.success(toastMessage);
 		} catch (error: any) {
 			toast.error('Something went wrong.', error);
@@ -117,9 +117,9 @@ export const EventForm: React.FC<EventFormProps> = ({
 	const onDelete = async () => {
 		try {
 			setLoading(true);
-			await axios.delete(`/api/${params.storeId}/events/${params.eventId}`);
+			await axios.delete(`/api/${params.storeId}/articles/${params.articleId}`);
 			router.refresh();
-			router.push(`/${params.storeId}/events`);
+			router.push(`/${params.storeId}/articles`);
 			toast.success('event deleted.');
 		} catch (error: any) {
 			toast.error('Something went wrong.');
@@ -245,7 +245,7 @@ export const EventForm: React.FC<EventFormProps> = ({
 							name="date_of_event"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Date Of Event in English</FormLabel>
+									<FormLabel>Date Of Article in English</FormLabel>
 									<FormControl>
 										<Textarea
 											disabled={loading}
@@ -262,7 +262,7 @@ export const EventForm: React.FC<EventFormProps> = ({
 							name="date_of_event_ar"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Date Of Event in Arabic</FormLabel>
+									<FormLabel>Date Of Article in Arabic</FormLabel>
 									<FormControl>
 										<Textarea
 											disabled={loading}
@@ -281,10 +281,10 @@ export const EventForm: React.FC<EventFormProps> = ({
 							<div key={field.id} className="grid grid-cols-2 gap-8">
 								<FormField
 									control={form.control}
-									name={`paragraph_event.${index}.text`}
+									name={`paragraph_event3.${index}.text`}
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Title</FormLabel>
+											<FormLabel>{`Paragraph ${index + 1}`}</FormLabel>
 											<FormControl>
 												<Textarea
 													disabled={loading}
@@ -317,7 +317,7 @@ export const EventForm: React.FC<EventFormProps> = ({
 								})
 							}
 						>
-							Add New Point
+							Add New Paragraph
 						</Button>
 					</div>
 					<hr />
@@ -327,10 +327,10 @@ export const EventForm: React.FC<EventFormProps> = ({
 							<div key={field.id} className="grid grid-cols-2 gap-8">
 								<FormField
 									control={form.control}
-									name={`paragraph_event_ar.${index}.text`}
+									name={`paragraph_event_ar3.${index}.text`}
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Title</FormLabel>
+											<FormLabel>{`Paragraph ${index + 1}`}</FormLabel>
 											<FormControl>
 												<Textarea
 													disabled={loading}

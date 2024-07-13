@@ -45,7 +45,7 @@ export function MainNav({
 		},
 		{
 			href: `/${params.storeId}/news-categories`,
-			label: 'News & Events categories',
+			label: 'News & Insights categories',
 			active: pathname === `/${params.storeId}/news-categories`,
 		},
 		{
@@ -57,6 +57,11 @@ export function MainNav({
 			href: `/${params.storeId}/events`,
 			label: 'Events',
 			active: pathname === `/${params.storeId}/events`,
+		},
+		{
+			href: `/${params.storeId}/articles`,
+			label: 'Articles',
+			active: pathname === `/${params.storeId}/articles`,
 		},
 		{
 			href: `/${params.storeId}/teams`,
