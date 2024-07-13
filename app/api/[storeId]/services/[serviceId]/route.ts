@@ -3,7 +3,6 @@ import { auth } from '@clerk/nextjs';
 import prismadb from '@/lib/prismadb';
 
 type ServiceRequestBody = {
-	categoryId: string;
 	name: string;
 	name_ar: string;
 	serviceDesc: {
@@ -29,11 +28,10 @@ type ServiceRequestBody = {
 };
 
 const validateRequestBody = (body: ServiceRequestBody) => {
-	const { name, name_ar, categoryId } = body;
+	const { name, name_ar } = body;
 
 	if (!name) throw new Error('Name is required');
 	if (!name_ar) throw new Error('Arabic Name is required');
-	if (!categoryId) throw new Error('Category id is required');
 };
 
 const handleErrorResponse = (error: any) => {
@@ -269,79 +267,68 @@ export async function PATCH(
 				status: 405,
 			});
 
-		const updatedService = await prismadb.$transaction(
-			async (prisma) => {
-				await prisma.serviceDesc.deleteMany({
-					where: { serviceId: params.serviceId },
-				});
+		// Delete existing related records
+		await prismadb.serviceDesc.deleteMany({
+			where: { serviceId: params.serviceId },
+		});
 
-				await prisma.serviceDescAr.deleteMany({
-					where: { serviceId: params.serviceId },
-				});
+		await prismadb.serviceDescAr.deleteMany({
+			where: { serviceId: params.serviceId },
+		});
 
-				await prisma.expertService.deleteMany({
-					where: { serviceId: params.serviceId },
-				});
+		await prismadb.expertService.deleteMany({
+			where: { serviceId: params.serviceId },
+		});
 
-				const updatedService =
-					await prisma.service.update({
-						where: { id: params.serviceId },
-						data: {
-							name: body.name,
-							name_ar: body.name_ar,
-							serviceDesc: {
-								create: body.serviceDesc.map(
-									(
-										desc
-									) => ({
-										...desc,
-										store: {
-											connect: {
-												id: params.storeId,
-											},
-										},
-									})
-								),
+		// Update the service and create related records
+		const updatedService = await prismadb.service.update({
+			where: { id: params.serviceId },
+			data: {
+				name: body.name,
+				name_ar: body.name_ar,
+				serviceDesc: {
+					create: body.serviceDesc.map(
+						(desc) => ({
+							...desc,
+							store: {
+								connect: {
+									id: params.storeId,
+								},
 							},
-							serviceDescAr: {
-								create: body.serviceDescAr.map(
-									(
-										descAr
-									) => ({
-										...descAr,
-										store: {
-											connect: {
-												id: params.storeId,
-											},
-										},
-									})
-								),
+						})
+					),
+				},
+				serviceDescAr: {
+					create: body.serviceDescAr.map(
+						(descAr) => ({
+							...descAr,
+							store: {
+								connect: {
+									id: params.storeId,
+								},
 							},
-							expertService: {
-								create: body.expertService.map(
-									(
-										expert
-									) => ({
-										...expert,
-										store: {
-											connect: {
-												id: params.storeId,
-											},
-										},
-									})
-								),
+						})
+					),
+				},
+				expertService: {
+					create: body.expertService.map(
+						(expert) => ({
+							...expert,
+							store: {
+								connect: {
+									id: params.storeId,
+								},
 							},
-						},
-						include: {
-							serviceDesc: true,
-							serviceDescAr: true,
-							expertService: true,
-						},
-					});
-
-				return updatedService;
-			}
-		);
+						})
+					),
+				},
+			},
+			include: {
+				serviceDesc: true,
+				serviceDescAr: true,
+				expertService: true,
+			},
+		});
 
 		return new NextResponse(JSON.stringify(updatedService), {
 			status: 200,
