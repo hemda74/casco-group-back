@@ -17,6 +17,8 @@ model Store {
   Industries              Industry[]                      @relation("StoreToIndustry")
   news                    News[]                          @relation("StoreToNews")
   events                  Event[]                         @relation("StoreToEvent")
+    events2                  Event2[]                         @relation("StoreToEvent2")
+    events3                  Event3[]                         @relation("StoreToEvent3")
   insidersView            InsidersView[]                  @relation("StoreToInsidersView")
   testimonials            Testimonials[]                  @relation("StoreTotestimonials")
   //  whatwedo               WhatWeDo[]                      @relation("StoreToWhatWeDo")
@@ -409,6 +411,9 @@ model NewsCategory {
   name_ar           String
   news           News[] @relation("CategoryToNews")
   event           Event[] @relation("CategoryToEvent")
+    event2           Event2[] @relation("CategoryToEvent2")
+  event3           Event3[] @relation("CategoryToEvent3")
+
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
   @@index([storeId])
@@ -532,3 +537,65 @@ model CourseType {
 //     whatwedo       WhatWeDoPoint   @relation("PointToWhatWeDoPoint",fields: [whatwedoId],references: [id])
 //     @@index([whatwedoId])
 //  }
+model paragrph_event2 {
+  id                    String   @id @default(uuid())
+  eventId                String
+  event                  Event2  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  text                  String 
+  @@index([eventId])
+}
+model paragrph_event_ar2 {
+  id                    String   @id @default(uuid())
+  eventId                String
+  event2                  Event2  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  text                  String 
+  @@index([eventId])
+}
+model Event2 {
+    id                            String       @id @default(uuid())
+    storeId                       String // Foreign Key to Store
+    store                         Store       @relation("StoreToEvent2", fields: [storeId], references: [id])
+    categoryId                    String // Foreign Key to Courses Category
+    category                      NewsCategory    @relation("CategoryToEvent2", fields: [categoryId], references: [id])
+    title                         String 
+    title_ar                      String 
+    imageUrl                      String// Relation to Image model
+    paragraph_event2               paragrph_event2[] // Relation to paragraph_event model
+    paragraph_event_ar2            paragrph_event_ar2[] // Relation to paragraph_event_ar model
+    createdAt                     DateTime               @default(now())
+    date_of_event                 String
+    date_of_event_ar              String
+    @@index([storeId])
+    @@index([categoryId])
+}
+model paragrph_event3 {
+  id                    String   @id @default(uuid())
+  eventId                String
+  event                  Event3  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  text                  String 
+  @@index([eventId])
+}
+model paragrph_event_ar3 {
+  id                    String   @id @default(uuid())
+  eventId                String
+  event3                  Event3  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  text                  String 
+  @@index([eventId])
+}
+model Event3 {
+    id                            String       @id @default(uuid())
+    storeId                       String // Foreign Key to Store
+    store                         Store       @relation("StoreToEvent3", fields: [storeId], references: [id])
+    categoryId                    String // Foreign Key to Courses Category
+    category                      NewsCategory    @relation("CategoryToEvent3", fields: [categoryId], references: [id])
+    title                         String 
+    title_ar                      String 
+    imageUrl                      String// Relation to Image model
+    paragraph_event3               paragrph_event3[] // Relation to paragraph_event model
+    paragraph_event_ar3            paragrph_event_ar3[] // Relation to paragraph_event_ar model
+    createdAt                     DateTime               @default(now())
+    date_of_event                 String
+    date_of_event_ar              String
+    @@index([storeId])
+    @@index([categoryId])
+}
