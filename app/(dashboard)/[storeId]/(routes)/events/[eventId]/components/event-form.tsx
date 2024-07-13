@@ -284,7 +284,7 @@ export const EventForm: React.FC<EventFormProps> = ({
 									name={`paragraph_event.${index}.text`}
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Title</FormLabel>
+											<FormLabel>{`Paragraph ${index + 1}`}</FormLabel>
 											<FormControl>
 												<Textarea
 													disabled={loading}
@@ -330,7 +330,7 @@ export const EventForm: React.FC<EventFormProps> = ({
 									name={`paragraph_event_ar.${index}.text`}
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Title</FormLabel>
+											<FormLabel>{`Paragraph ${index + 1}`}</FormLabel>
 											<FormControl>
 												<Textarea
 													disabled={loading}
