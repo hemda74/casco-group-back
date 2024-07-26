@@ -42,10 +42,10 @@ export const IndustryClient: React.FC<IndustryClientProps> = ({ data }) => {
 				description="API Calls for industries"
 			/>
 			<Separator />
-			<ApiList
+			{/* <ApiList
 				entityName="industries"
 				entityIdName="industryId"
-			/>
+			/> */}
 		</>
 	);
 };

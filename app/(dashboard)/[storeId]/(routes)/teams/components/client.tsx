@@ -45,10 +45,10 @@ export const CategoriesClient: React.FC<CategoryColumnsClientProps> = ({ data })
 				description="API Calls for teams"
 			/>
 			<Separator />
-			<ApiList
+			{/* <ApiList
 				entityName="teams"
 				entityIdName="teamId"
-			/>
+			/> */}
 		</>
 	);
 };

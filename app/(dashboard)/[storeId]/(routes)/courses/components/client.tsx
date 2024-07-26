@@ -42,10 +42,10 @@ export const CourseClient: React.FC<CourseClientProps> = ({ data }) => {
 				description="API Calls for courses"
 			/>
 			<Separator />
-			<ApiList
+			{/* <ApiList
 				entityName="courses"
 				entityIdName="courseId"
-			/>
+			/> */}
 		</>
 	);
 };

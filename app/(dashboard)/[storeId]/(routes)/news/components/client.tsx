@@ -46,10 +46,10 @@ export const ProductsClient: React.FC<ProductsClientProps> = ({ data }) => {
 				description="API Calls for news"
 			/>
 			<Separator />
-			<ApiList
+			{/* <ApiList
 				entityName="news"
 				entityIdName="newsId"
-			/>
+			/> */}
 		</>
 	);
 };

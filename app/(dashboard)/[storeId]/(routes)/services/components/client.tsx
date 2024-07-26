@@ -42,10 +42,10 @@ export const ServiceClient: React.FC<ServiceClientProps> = ({ data }) => {
 				description="API Calls for services"
 			/>
 			<Separator />
-			<ApiList
+			{/* <ApiList
 				entityName="services"
 				entityIdName="serviceId"
-			/>
+			/> */}
 		</>
 	);
 };
