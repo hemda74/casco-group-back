@@ -10,7 +10,7 @@ async function main() {
 		const store = await prisma.store.create({
 			data: {
 				name: 'CASCO Training Center',
-				userId: 'user_2X1mXgVQXftlrY3VAAC5i44Hv5J',
+				 : 'user_2X1mXgVQXftlrY3VAAC5i44Hv5J',
 			},
 		});
 		console.log(' Store created');

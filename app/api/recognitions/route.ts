@@ -3,18 +3,31 @@ import { auth } from '@clerk/nextjs';
 
 import prismadb from '@/lib/prismadb';
 
-export async function PATCH(
+export async function POST(
 	req: Request,
 	{ params }: { params: { storeId: string } }
 ) {
 	try {
 		const {} = auth();
+
 		const body = await req.json();
 
-		const { name } = body;
+		const { imageUrl, title, title_ar } = body;
 
-		if (!name) {
-			return new NextResponse('Name is required', {
+		if (!title) {
+			return new NextResponse('title is required', {
+				status: 400,
+			});
+		}
+
+		if (!title_ar) {
+			return new NextResponse('title_ar is required', {
+				status: 400,
+			});
+		}
+
+		if (!imageUrl) {
+			return new NextResponse('Image URL is required', {
 				status: 400,
 			});
 		}
@@ -25,23 +38,23 @@ export async function PATCH(
 			});
 		}
 
-		const store = await prismadb.store.updateMany({
-			where: {
-				id: params.storeId,
-			},
+		const recognition = await prismadb.recognition.create({
 			data: {
-				name,
+				title,
+				title_ar,
+				imageUrl,
+				storeId: params.storeId,
 			},
 		});
 
-		return NextResponse.json(store);
+		return NextResponse.json(recognition);
 	} catch (error) {
-		console.log('[STORE_PATCH]', error);
+		console.log('[recognitionS_POST]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
 
-export async function DELETE(
+export async function GET(
 	req: Request,
 	{ params }: { params: { storeId: string } }
 ) {
@@ -52,15 +65,15 @@ export async function DELETE(
 			});
 		}
 
-		const store = await prismadb.store.deleteMany({
+		const recognitions = await prismadb.recognition.findMany({
 			where: {
-				id: params.storeId,
+				storeId: params.storeId,
 			},
 		});
 
-		return NextResponse.json(store);
+		return NextResponse.json(recognitions);
 	} catch (error) {
-		console.log('[STORE_DELETE]', error);
+		console.log('[recognitionS_GET]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }

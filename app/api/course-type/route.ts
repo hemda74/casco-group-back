@@ -3,15 +3,14 @@ import { auth } from '@clerk/nextjs';
 
 import prismadb from '@/lib/prismadb';
 
-export async function PATCH(
+export async function POST(
 	req: Request,
 	{ params }: { params: { storeId: string } }
 ) {
 	try {
-		const {} = auth();
 		const body = await req.json();
 
-		const { name } = body;
+		const { name, name_ar } = body;
 
 		if (!name) {
 			return new NextResponse('Name is required', {
@@ -19,29 +18,34 @@ export async function PATCH(
 			});
 		}
 
+		if (!name_ar) {
+			return new NextResponse('name_ar is required', {
+				status: 400,
+			});
+		}
+
 		if (!params.storeId) {
 			return new NextResponse('Store id is required', {
 				status: 400,
 			});
 		}
 
-		const store = await prismadb.store.updateMany({
-			where: {
-				id: params.storeId,
-			},
+		const courseType = await prismadb.courseType.create({
 			data: {
 				name,
+				name_ar,
+				storeId: params.storeId,
 			},
 		});
 
-		return NextResponse.json(store);
+		return NextResponse.json(courseType);
 	} catch (error) {
-		console.log('[STORE_PATCH]', error);
+		console.log('[courseTypeS_POST]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
 
-export async function DELETE(
+export async function GET(
 	req: Request,
 	{ params }: { params: { storeId: string } }
 ) {
@@ -52,15 +56,15 @@ export async function DELETE(
 			});
 		}
 
-		const store = await prismadb.store.deleteMany({
+		const courseTypes = await prismadb.courseType.findMany({
 			where: {
-				id: params.storeId,
+				storeId: params.storeId,
 			},
 		});
 
-		return NextResponse.json(store);
+		return NextResponse.json(courseTypes);
 	} catch (error) {
-		console.log('[STORE_DELETE]', error);
+		console.log('[courseTypeS_GET]', error);
 		return new NextResponse('Internal error', { status: 500 });
 	}
 }
