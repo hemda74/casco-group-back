@@ -9,7 +9,7 @@ datasource db {
 model Store {
   id                      String                          @id @default(uuid())
   name                    String
-  userId                  String
+                    
   coursescategories       CoursesCategory[]               @relation("StoreToCategory")
   newscategories          NewsCategory[]                  @relation("StoreToCategory")
   courses                 Course[]                        @relation("StoreToCourse")
