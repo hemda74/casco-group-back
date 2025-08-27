@@ -3,37 +3,25 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-	console.log('🌱 Starting database seeding...');
+	console.log('Starting database seeding...');
 
 	try {
-		// Create Store
-		const store = await prisma.store.create({
-			data: {
-				name: 'CASCO Training Center',
-				 : 'user_2X1mXgVQXftlrY3VAAC5i44Hv5J',
-			},
-		});
-		console.log(' Store created');
-
 		// Create Course Categories
 		const courseCategories = await Promise.all([
 			prisma.coursesCategory.create({
 				data: {
-					storeId: store.id,
 					name: 'Business Management',
 					name_ar: 'إدارة الأعمال',
 				},
 			}),
 			prisma.coursesCategory.create({
 				data: {
-					storeId: store.id,
 					name: 'Technology & IT',
 					name_ar: 'التكنولوجيا وتقنية المعلومات',
 				},
 			}),
 			prisma.coursesCategory.create({
 				data: {
-					storeId: store.id,
 					name: 'Finance & Accounting',
 					name_ar: 'المالية والمحاسبة',
 				},
@@ -45,21 +33,18 @@ async function main() {
 		const courseTypes = await Promise.all([
 			prisma.courseType.create({
 				data: {
-					storeId: store.id,
 					name: 'Professional Certificate',
 					name_ar: 'شهادة مهنية',
 				},
 			}),
 			prisma.courseType.create({
 				data: {
-					storeId: store.id,
 					name: 'Executive Program',
 					name_ar: 'برنامج تنفيذي',
 				},
 			}),
 			prisma.courseType.create({
 				data: {
-					storeId: store.id,
 					name: 'Intensive Workshop',
 					name_ar: 'ورشة عمل مكثفة',
 				},
@@ -71,21 +56,18 @@ async function main() {
 		const newsCategories = await Promise.all([
 			prisma.newsCategory.create({
 				data: {
-					storeId: store.id,
 					name: 'Company News',
 					name_ar: 'أخبار الشركة',
 				},
 			}),
 			prisma.newsCategory.create({
 				data: {
-					storeId: store.id,
 					name: 'Industry Updates',
 					name_ar: 'تحديثات الصناعة',
 				},
 			}),
 			prisma.newsCategory.create({
 				data: {
-					storeId: store.id,
 					name: 'Training Announcements',
 					name_ar: 'إعلانات التدريب',
 				},
@@ -97,21 +79,18 @@ async function main() {
 		const industries = await Promise.all([
 			prisma.industry.create({
 				data: {
-					storeId: store.id,
 					name: 'Banking & Finance',
 					name_ar: 'البنوك والمالية',
 				},
 			}),
 			prisma.industry.create({
 				data: {
-					storeId: store.id,
 					name: 'Healthcare',
 					name_ar: 'الرعاية الصحية',
 				},
 			}),
 			prisma.industry.create({
 				data: {
-					storeId: store.id,
 					name: 'Manufacturing',
 					name_ar: 'التصنيع',
 				},
@@ -123,21 +102,18 @@ async function main() {
 		const services = await Promise.all([
 			prisma.service.create({
 				data: {
-					storeId: store.id,
 					name: 'Strategic Consulting',
 					name_ar: 'الاستشارات الاستراتيجية',
 				},
 			}),
 			prisma.service.create({
 				data: {
-					storeId: store.id,
 					name: 'Digital Transformation',
 					name_ar: 'التحول الرقمي',
 				},
 			}),
 			prisma.service.create({
 				data: {
-					storeId: store.id,
 					name: 'Leadership Development',
 					name_ar: 'تطوير القيادة',
 				},
@@ -149,7 +125,6 @@ async function main() {
 		const teams = await Promise.all([
 			prisma.team.create({
 				data: {
-					storeId: store.id,
 					name: 'Executive Team',
 					name_ar: 'الفريق التنفيذي',
 					address: '123 Business District, Cairo, Egypt',
@@ -161,7 +136,6 @@ async function main() {
 			}),
 			prisma.team.create({
 				data: {
-					storeId: store.id,
 					name: 'Training Team',
 					name_ar: 'فريق التدريب',
 					address: '456 Training Center, Cairo, Egypt',
@@ -177,7 +151,6 @@ async function main() {
 		// Create Courses with related data
 		const course1 = await prisma.course.create({
 			data: {
-				storeId: store.id,
 				categoryId: courseCategories[0].id,
 				coursetypeId: courseTypes[0].id,
 				c_title: 'Advanced Project Management',
@@ -383,7 +356,6 @@ async function main() {
 
 		const course2 = await prisma.course.create({
 			data: {
-				storeId: store.id,
 				categoryId: courseCategories[1].id,
 				coursetypeId: courseTypes[1].id,
 				c_title: 'Digital Transformation Leadership',
@@ -550,7 +522,6 @@ async function main() {
 		await Promise.all([
 			prisma.teamMember.create({
 				data: {
-					storeId: store.id,
 					teamId: teams[0].id,
 					name: 'Ahmed Hassan',
 					name_ar: 'أحمد حسن',
@@ -567,7 +538,6 @@ async function main() {
 			}),
 			prisma.teamMember.create({
 				data: {
-					storeId: store.id,
 					teamId: teams[1].id,
 					name: 'Fatima Al-Zahra',
 					name_ar: 'فاطمة الزهراء',
@@ -589,7 +559,6 @@ async function main() {
 		await Promise.all([
 			prisma.expertService.create({
 				data: {
-					storeId: store.id,
 					serviceId: services[0].id,
 					expert_name: 'Dr. Mohamed Elkady',
 					expert_name_ar: 'د. محمد القاضي',
@@ -603,7 +572,6 @@ async function main() {
 			}),
 			prisma.expertService.create({
 				data: {
-					storeId: store.id,
 					serviceId: services[1].id,
 					expert_name: 'Sarah Johnson',
 					expert_name_ar: 'سارة جونسون',
@@ -622,7 +590,6 @@ async function main() {
 		await Promise.all([
 			prisma.serviceDesc.create({
 				data: {
-					storeId: store.id,
 					serviceId: services[0].id,
 					title: 'Comprehensive Strategic Planning',
 					desc_1: 'We help organizations develop long-term strategic plans that align with their vision and market opportunities.',
@@ -631,9 +598,7 @@ async function main() {
 			}),
 			prisma.serviceDescAr.create({
 				data: {
-					storeId: store.id,
 					serviceId: services[0].id,
-					title_ar: 'التخطيط الاستراتيجي الشامل',
 					desc_1_ar: 'نساعد المؤسسات على تطوير خطط استراتيجية طويلة المدى تتماشى مع رؤيتها وفرص السوق.',
 					desc_2_ar: 'يجمع نهجنا بين أفضل الممارسات الصناعية والتفكير المبتكر لإنشاء خرائط طريق قابلة للتنفيذ للنجاح.',
 				},
@@ -644,7 +609,6 @@ async function main() {
 		// Create Industry Details
 		const industryDetails = await prisma.industryDetailes.create({
 			data: {
-				storeId: store.id,
 				industryId: industries[0].id,
 				title: 'Banking Digital Innovation',
 				title_ar: 'الابتكار الرقمي في البنوك',
@@ -681,7 +645,6 @@ async function main() {
 		// Create Case Studies
 		const caseStudy = await prisma.caseStudy.create({
 			data: {
-				storeId: store.id,
 				industryId: industries[0].id,
 				title: 'Digital Banking Transformation',
 				title_ar: 'تحول البنكية الرقمية',
@@ -729,7 +692,6 @@ async function main() {
 		// Create News
 		const news = await prisma.news.create({
 			data: {
-				storeId: store.id,
 				categoryId: newsCategories[0].id,
 				title: 'CASCO Launches New Digital Leadership Program',
 				title_ar: 'كاسكو تطلق برنامج القيادة الرقمية الجديد',
@@ -769,7 +731,6 @@ async function main() {
 		// Create Events
 		const event = await prisma.event.create({
 			data: {
-				storeId: store.id,
 				categoryId: newsCategories[2].id,
 				title: 'Annual Leadership Summit 2025',
 				title_ar: 'قمة القيادة السنوية 2025',
@@ -810,7 +771,6 @@ async function main() {
 		await Promise.all([
 			prisma.testimonials.create({
 				data: {
-					storeId: store.id,
 					imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
 					text: "CASCO's training programs have transformed our organization. The quality of instruction and practical approach made a real difference in our team's performance.",
 					name: 'Omar Al-Rashid',
@@ -822,7 +782,6 @@ async function main() {
 			}),
 			prisma.testimonials.create({
 				data: {
-					storeId: store.id,
 					imageUrl: 'https://images.unsplash.com/photo-1494790108755-2616b612b820?w=400',
 					text: 'The digital transformation course exceeded my expectations. The instructors were knowledgeable and the content was immediately applicable to our business challenges.',
 					name: 'Layla Mohamed',
@@ -834,7 +793,6 @@ async function main() {
 			}),
 			prisma.testimonials.create({
 				data: {
-					storeId: store.id,
 					imageUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400',
 					text: 'Outstanding training experience! The project management course helped me deliver our latest initiative 30% faster than planned.',
 					name: 'Khalid Mansour',
@@ -851,7 +809,6 @@ async function main() {
 		await Promise.all([
 			prisma.insidersView.create({
 				data: {
-					storeId: store.id,
 					imageUrl: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800',
 					text: 'Behind every successful transformation is a team that believes in continuous learning and innovation. At CASCO, we foster this culture every day.',
 					name: 'Dr. Amina Farouk',
@@ -863,7 +820,6 @@ async function main() {
 			}),
 			prisma.insidersView.create({
 				data: {
-					storeId: store.id,
 					imageUrl: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800',
 					text: 'The future of business lies in the intersection of technology and human potential. Our programs are designed to unlock both.',
 					name: 'Hassan Al-Mahmoud',
@@ -880,7 +836,6 @@ async function main() {
 		await Promise.all([
 			prisma.recognition.create({
 				data: {
-					storeId: store.id,
 					imageUrl: 'https://images.unsplash.com/photo-1569705460033-cfaa4bf9f822?w=400',
 					title: 'Best Training Provider 2024',
 					title_ar: 'أفضل مقدم تدريب 2024',
@@ -888,7 +843,6 @@ async function main() {
 			}),
 			prisma.recognition.create({
 				data: {
-					storeId: store.id,
 					imageUrl: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=400',
 					title: 'Excellence in Digital Innovation',
 					title_ar: 'التميز في الابتكار الرقمي',
@@ -896,7 +850,6 @@ async function main() {
 			}),
 			prisma.recognition.create({
 				data: {
-					storeId: store.id,
 					imageUrl: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=400',
 					title: 'Regional Leadership Development Award',
 					title_ar: 'جائزة تطوير القيادة الإقليمية',
@@ -909,7 +862,6 @@ async function main() {
 		await Promise.all([
 			prisma.expertIndustry.create({
 				data: {
-					storeId: store.id,
 					industryId: industries[0].id,
 					expert_name: 'Yasmin Abdel-Rahman',
 					expert_name_ar: 'ياسمين عبد الرحمن',
@@ -924,7 +876,6 @@ async function main() {
 			}),
 			prisma.expertIndustry.create({
 				data: {
-					storeId: store.id,
 					industryId: industries[1].id,
 					expert_name: 'Dr. Tamer Hosny',
 					expert_name_ar: 'د. تامر حسني',
@@ -943,7 +894,6 @@ async function main() {
 		// Create Event2 and Event3 (additional event types)
 		const event2 = await prisma.event2.create({
 			data: {
-				storeId: store.id,
 				categoryId: newsCategories[1].id,
 				title: 'Technology Innovation Showcase',
 				title_ar: 'معرض ابتكار التكنولوجيا',
@@ -975,7 +925,6 @@ async function main() {
 
 		const event3 = await prisma.event3.create({
 			data: {
-				storeId: store.id,
 				categoryId: newsCategories[2].id,
 				title: 'Strategic Planning Workshop Series',
 				title_ar: 'سلسلة ورش التخطيط الاستراتيجي',
@@ -1015,7 +964,6 @@ async function main() {
 		// Create Industry Details 2
 		const industryDetails2 = await prisma.industryDetailes2.create({
 			data: {
-				storeId: store.id,
 				industryId: industries[1].id,
 				title: 'Healthcare Digital Solutions',
 				title_ar: 'حلول الرعاية الصحية الرقمية',
@@ -1058,7 +1006,6 @@ async function main() {
 		console.log('🎉 Database seeding completed successfully!');
 		console.log(`
 📊 Summary of created records:
-- 1 Store
 - 3 Course Categories
 - 3 Course Types  
 - 3 News Categories

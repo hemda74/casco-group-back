@@ -44,7 +44,6 @@ export async function POST(
 	{ params }: { params: { storeId: string } }
 ) {
 	try {
-		 
 		const body: ServiceRequestBody = await req.json();
 
 		const {
@@ -54,8 +53,6 @@ export async function POST(
 			serviceDescAr,
 			expertService,
 		} = body;
-
-		 
 
 		if (!name) {
 			return new NextResponse('Name is required', {
@@ -67,8 +64,6 @@ export async function POST(
 				status: 400,
 			});
 		}
-
-	 
 
 		const service = await prismadb.$transaction(async (prisma) => {
 			const createdService = await prisma.service.create({
@@ -186,22 +181,9 @@ export async function DELETE(
 	{ params }: { params: { serviceId: string; storeId: string } }
 ) {
 	try {
-		 
-		if (! )
-			return new NextResponse('Unauthenticated', {
-				status: 403,
-			});
-
 		if (!params.serviceId)
 			return new NextResponse('Service id is required', {
 				status: 400,
-			});
-
-		 
-
-		if (!storeBy )
-			return new NextResponse('Unauthorized', {
-				status: 405,
 			});
 
 		const service = await prismadb.service.delete({
@@ -221,25 +203,12 @@ export async function PATCH(
 	{ params }: { params: { serviceId: string; storeId: string } }
 ) {
 	try {
-		 
-		if (! )
-			return new NextResponse('Unauthenticated', {
-				status: 403,
-			});
-
 		const body: ServiceRequestBody = await req.json();
 		validateRequestBody(body);
 
 		if (!params.serviceId)
 			return new NextResponse('Service Id is required', {
 				status: 400,
-			});
-
-		 
-
-		if (!storeBy )
-			return new NextResponse('Unauthorized', {
-				status: 405,
 			});
 
 		// Delete existing related records
