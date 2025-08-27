@@ -1,599 +1,573 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
   provider     = "postgresql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
-model Store {
-  id                      String                          @id @default(uuid())
-  name                    String
-                    
-  coursescategories       CoursesCategory[]               @relation("StoreToCategory")
-  newscategories          NewsCategory[]                  @relation("StoreToCategory")
-  courses                 Course[]                        @relation("StoreToCourse")
-  Services                Service[]                       @relation("StoreToService")
-  Industries              Industry[]                      @relation("StoreToIndustry")
-  news                    News[]                          @relation("StoreToNews")
-  events                  Event[]                         @relation("StoreToEvent")
-    events2                  Event2[]                         @relation("StoreToEvent2")
-    events3                  Event3[]                         @relation("StoreToEvent3")
-  insidersView            InsidersView[]                  @relation("StoreToInsidersView")
-  testimonials            Testimonials[]                  @relation("StoreTotestimonials")
-  //  whatwedo               WhatWeDo[]                      @relation("StoreToWhatWeDo")
-  recognition             Recognition[]                   @relation("StoreToRecognition")
-  casestudies             CaseStudy[]                     @relation("StoreToCaseStudy")
-  expertservice           ExpertService[]                 @relation("StoreToExpertService")
-  expertIndustry          ExpertIndustry[]                @relation("StoreToExpertIndustry")
-  team                    Team[]                          @relation("StoreToTeam")
-  teammember              TeamMember[]                    @relation("StoreToTeamMember")
-  servicedesc             ServiceDesc[]                   @relation("ServiceDesc")
-  servicedescar           ServiceDescAr[]                 @relation("ServiceDescAr")
-  idustryDetailes         IndustryDetailes[]              @relation("IndustryDetailes")
-  idustryDetailes2        IndustryDetailes2[]             @relation("IndustryDetailes2")
-  CourseType              CourseType[]                    @relation("StoreToCourseType")
-  createdAt               DateTime                        @default(now())
-  updatedAt               DateTime                        @updatedAt
-}
+
 model CoursesCategory {
-  id                String    @id @default(uuid())
-  storeId           String // Foreign Key to Store
-  store             Store     @relation("StoreToCategory", fields: [storeId], references: [id])
-  name              String
-  name_ar           String
-  courses           Course[] @relation("CategoryToCourse")
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  @@index([storeId])
+  id        Int      @id @default(autoincrement())
+  name      String
+  name_ar   String
+  courses   Course[] @relation("CategoryToCourse")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
+
 model Course {
-    id                         String       @id @default(uuid())
-    storeId                    String // Foreign Key to Store
-    store                      Store       @relation("StoreToCourse", fields: [storeId], references: [id])
-    categoryId                 String // Foreign Key to Courses Category
-    category                   CoursesCategory    @relation("CategoryToCourse", fields: [categoryId], references: [id])
-    c_title                    String 
-    c_title_ar                 String 
-    price_egp                  Decimal
-    price_uae                  Decimal
-    price_ksa                  Decimal
-    price_usd                  Decimal
-    c_short_intro_en           String
-    c_short_intro_ar           String
-    c_duration_en              String 
-    c_duration_ar              String
-    c_in_house_en              String 
-    c_in_house_ar              String 
-    c_delv_and_leaders_en      String 
-    c_delv_and_leaders_ar      String  
-    imageUrl                    String
-    c_intro_en                 C_intro_en[]
-    c_intro_ar                 C_intro_ar[]
-    c_who_should_en            C_who_should_en[] 
-    c_who_should_ar            C_who_should_ar[] 
-    c_objective_en             C_objective_en[] 
-    c_objective_ar             C_objective_ar[] 
-    c_content_en               C_content_en[]
-    c_content_ar               C_content_ar[]
-    c_benefit_en               C_benefit_en[]
-    c_benefit_ar               C_benefit_ar[]
-    c_content2_en              C_content2_en[] 
-    c_content2_ar              C_content2_ar[] 
-    c_date_en                  C_date_en[]   
-    c_date_ar                  C_date_ar[]  
-    coursetypeId               String    // Foreign Key to CourseType
-    CourseType                 CourseType      @relation(fields: [coursetypeId], references: [id])
-    @@index([storeId])
-    @@index([categoryId])
-    @@index([coursetypeId])
+  id                    Int               @id @default(autoincrement())
+  categoryId            Int
+  category              CoursesCategory   @relation("CategoryToCourse", fields: [categoryId], references: [id])
+  c_title               String
+  c_title_ar            String
+  price_egp             Decimal
+  price_uae             Decimal
+  price_ksa             Decimal
+  price_usd             Decimal
+  c_short_intro_en      String
+  c_short_intro_ar      String
+  c_duration_en         String
+  c_duration_ar         String
+  c_in_house_en         String
+  c_in_house_ar         String
+  c_delv_and_leaders_en String
+  c_delv_and_leaders_ar String
+  imageUrl              String
+  c_intro_en            C_intro_en[]
+  c_intro_ar            C_intro_ar[]
+  c_who_should_en       C_who_should_en[]
+  c_who_should_ar       C_who_should_ar[]
+  c_objective_en        C_objective_en[]
+  c_objective_ar        C_objective_ar[]
+  c_content_en          C_content_en[]
+  c_content_ar          C_content_ar[]
+  c_benefit_en          C_benefit_en[]
+  c_benefit_ar          C_benefit_ar[]
+  c_content2_en         C_content2_en[]
+  c_content2_ar         C_content2_ar[]
+  c_date_en             C_date_en[]
+  c_date_ar             C_date_ar[]
+  coursetypeId          Int
+  CourseType            CourseType        @relation(fields: [coursetypeId], references: [id])
+
+  @@index([categoryId])
+  @@index([coursetypeId])
 }
-model C_intro_en{
-    id         Int @id @default(autoincrement())
-    text       String
-    courseId   String
-    course     Course @relation(fields: [courseId],references: [id])
-    @@index([courseId])
+
+model C_intro_en {
+  id       Int    @id @default(autoincrement())
+  text     String
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  @@index([courseId])
 }
-model C_intro_ar{
-    id         Int @id @default(autoincrement())
-    text       String
-    courseId   String
-    course     Course @relation(fields: [courseId],references: [id])
-    @@index([courseId])
+
+model C_intro_ar {
+  id       Int    @id @default(autoincrement())
+  text     String
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  @@index([courseId])
 }
-model C_content2_en{
-     id         Int @id @default(autoincrement())
-    text       String
-    courseId   String
-    course     Course @relation(fields: [courseId],references: [id])
-    @@index([courseId])
+
+model C_content2_en {
+  id       Int    @id @default(autoincrement())
+  text     String
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  @@index([courseId])
 }
-model C_content2_ar{
-   id         Int @id @default(autoincrement())
-    text       String
-    courseId   String
-    course     Course @relation(fields: [courseId],references: [id])
-    @@index([courseId])
+
+model C_content2_ar {
+  id       Int    @id @default(autoincrement())
+  text     String
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  @@index([courseId])
 }
-model C_who_should_en{
-    id         Int @id @default(autoincrement())
-    text       String
-    courseId   String
-    course     Course @relation(fields: [courseId],references: [id])
-    @@index([courseId])
+
+model C_who_should_en {
+  id       Int    @id @default(autoincrement())
+  text     String
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  @@index([courseId])
 }
-model C_who_should_ar{
-    id         Int @id @default(autoincrement())
-    text       String
-    courseId   String
-    course     Course @relation(fields: [courseId],references: [id])
-    @@index([courseId])
+
+model C_who_should_ar {
+  id       Int    @id @default(autoincrement())
+  text     String
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  @@index([courseId])
 }
-model C_objective_en{
-    id         Int @id @default(autoincrement())
-    text       String
-    courseId   String
-    course     Course @relation(fields: [courseId],references: [id])
-    @@index([courseId])
+
+model C_objective_en {
+  id       Int    @id @default(autoincrement())
+  text     String
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  @@index([courseId])
 }
-model C_objective_ar{
-    id         Int @id @default(autoincrement())
-    text       String
-    courseId   String
-    course     Course @relation(fields: [courseId],references: [id])
-    @@index([courseId])
+
+model C_objective_ar {
+  id       Int    @id @default(autoincrement())
+  text     String
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  @@index([courseId])
 }
-model C_content_en{
-    id         Int @id @default(autoincrement())
-    text       String
-    courseId   String
-    course     Course @relation(fields: [courseId],references: [id])
-    @@index([courseId])
+
+model C_content_en {
+  id       Int    @id @default(autoincrement())
+  text     String
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  @@index([courseId])
 }
- model C_content_ar{
-    id         Int @id @default(autoincrement())
-    text       String
-    courseId   String
-    course     Course @relation(fields: [courseId],references: [id])
-    @@index([courseId])
+
+model C_content_ar {
+  id       Int    @id @default(autoincrement())
+  text     String
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  @@index([courseId])
 }
-model C_benefit_en{
-    id         Int @id @default(autoincrement())
-    text       String
-    courseId   String
-    course     Course @relation(fields: [courseId],references: [id])
-    @@index([courseId])
+
+model C_benefit_en {
+  id       Int    @id @default(autoincrement())
+  text     String
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  @@index([courseId])
 }
-model C_benefit_ar{
-    id         Int @id @default(autoincrement())
-    text       String
-    courseId   String
-    course     Course @relation(fields: [courseId],references: [id])
-    @@index([courseId])
+
+model C_benefit_ar {
+  id       Int    @id @default(autoincrement())
+  text     String
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  @@index([courseId])
 }
-model C_date_en{
-    id         Int @id @default(autoincrement())
-    text       String
-    courseId   String
-    course     Course @relation(fields: [courseId],references: [id])
-    @@index([courseId])
+
+model C_date_en {
+  id       Int    @id @default(autoincrement())
+  text     String
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  @@index([courseId])
 }
-model C_date_ar{
-    id         Int @id @default(autoincrement())
-    text       String
-    courseId   String
-    course     Course @relation(fields: [courseId],references: [id])
-    @@index([courseId])
+
+model C_date_ar {
+  id       Int    @id @default(autoincrement())
+  text     String
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  @@index([courseId])
 }
+
 model Team {
- id               String @id @default(uuid())
- storeId          String 
- store            Store   @relation("StoreToTeam",fields: [storeId],references: [id])
- name                 String
- name_ar              String
- address              String
- address_ar           String
- linkedin            String
- phone            String
- imageUrl            String
- teammember       TeamMember[]  @relation("TeamToTeamMember")
- @@index([storeId])
+  id         Int          @id @default(autoincrement())
+  name       String
+  name_ar    String
+  address    String
+  address_ar String
+  linkedin   String
+  phone      String
+  imageUrl   String
+  teammember TeamMember[] @relation("TeamToTeamMember")
 }
-model TeamMember{
-    id                      String      @id @default(uuid())
-    storeId                 String      // Foreign Key to Store
-    teamId                  String
-    team                    Team        @relation("TeamToTeamMember",fields: [teamId],references: [id])
-    store                   Store       @relation("StoreToTeamMember", fields: [storeId], references: [id])
-    name                    String
-    name_ar                 String
-    title                   String
-    title_ar                String
-    brief_1                 String 
-    brief_2                 String 
-    brief_3                 String 
-    brief_1_ar              String 
-    brief_2_ar              String 
-    brief_3_ar              String 
-    imageUrl                  String 
-    @@index([storeId])
-    @@index([teamId])
+
+model TeamMember {
+  id Int @id @default(autoincrement())
+
+  teamId     Int
+  team       Team   @relation("TeamToTeamMember", fields: [teamId], references: [id])
+  name       String
+  name_ar    String
+  title      String
+  title_ar   String
+  brief_1    String
+  brief_2    String
+  brief_3    String
+  brief_1_ar String
+  brief_2_ar String
+  brief_3_ar String
+  imageUrl   String
+
+  @@index([teamId])
 }
+
 model Service {
-  id            String         @id @default(uuid())
-  storeId       String         // Foreign Key to Store
-  store         Store          @relation("StoreToService", fields: [storeId], references: [id])
+  id Int @id @default(autoincrement())
+
   name          String
   name_ar       String
-  serviceDesc   ServiceDesc[]  @relation("ServiceToServiceDesc")
+  serviceDesc   ServiceDesc[]   @relation("ServiceToServiceDesc")
   serviceDescAr ServiceDescAr[] @relation("ServiceToServiceDescAr")
   expertService ExpertService[] @relation("ExpertToService")
-  createdAt     DateTime       @default(now())
-  @@index([storeId])
+  createdAt     DateTime        @default(now())
 }
+
 model ExpertService {
-  id           String  @id @default(uuid())
-  storeId      String  // Foreign Key to Store
-  store        Store   @relation("StoreToExpertService", fields: [storeId], references: [id])
-  serviceId    String  // Foreign Key to service 
-  service      Service @relation("ExpertToService", fields: [serviceId], references: [id])
-  expert_name         String
-  expert_name_ar      String
-  expert_title        String
-  expert_title_ar     String
-  expert_mail         String
-  expert_phone        String 
-  imageUrl            String 
-  @@index([storeId]) 
+  id Int @id @default(autoincrement())
+
+  serviceId       Int
+  service         Service @relation("ExpertToService", fields: [serviceId], references: [id])
+  expert_name     String
+  expert_name_ar  String
+  expert_title    String
+  expert_title_ar String
+  expert_mail     String
+  expert_phone    String
+  imageUrl        String
+
   @@index([serviceId])
 }
+
 model ServiceDesc {
-  id         String  @id @default(uuid())
-  storeId    String  // Foreign Key to Store
-  store      Store   @relation("ServiceDesc", fields: [storeId], references: [id])
-  serviceId  String  // Foreign Key to service
-  title      String
-  desc_1     String
-  desc_2     String
-  service    Service @relation("ServiceToServiceDesc", fields: [serviceId], references: [id])
-  @@index([storeId])
+  id Int @id @default(autoincrement())
+
+  serviceId Int
+  title     String
+  desc_1    String
+  desc_2    String
+  service   Service @relation("ServiceToServiceDesc", fields: [serviceId], references: [id])
+
   @@index([serviceId])
 }
+
 model ServiceDescAr {
-  id        String  @id @default(uuid())
-  storeId   String  // Foreign Key to Store
-  store     Store   @relation("ServiceDescAr", fields: [storeId], references: [id])
-  serviceId String  // Foreign Key to service
-  title_ar  String
+  id Int @id @default(autoincrement())
+
+  serviceId Int
   desc_1_ar String
   desc_2_ar String
   service   Service @relation("ServiceToServiceDescAr", fields: [serviceId], references: [id])
-  @@index([storeId])
+
   @@index([serviceId])
 }
+
 model Industry {
-   id                       String              @id @default(uuid())
-   storeId                  String   //Foreign Key to Store
-   store                    Store               @relation("StoreToIndustry", fields: [storeId], references: [id])
-   casestudy                CaseStudy[]          @relation("IndustryToCaseStudy")
-   industryDetailes         IndustryDetailes[]   @relation("IndustryToIndustryDetailes")
-   industryDetailes2        IndustryDetailes2[]  @relation("IndustryToIndustryDetailes2")
-   expertIndustry           ExpertIndustry[]     @relation("ExpertToIndustry")
-   name                     String              
-   name_ar                  String                           
-   @@index([storeId])
-}
-model ExpertIndustry {
-  id           String  @id @default(uuid())
-  storeId      String  // Foreign Key to Store
-  store        Store   @relation("StoreToExpertIndustry", fields: [storeId], references: [id])
-  industryId    String  // Foreign Key to Industry 
-  industry      Industry @relation("ExpertToIndustry", fields: [industryId], references: [id])
-  expert_name         String
-  expert_name_ar      String
-  expert_title        String
-  expert_title_ar     String
-  expert_mail         String
-  expert_phone        String
-  imageUrl            String
-  @@index([storeId])
-  @@index([industryId])
-}
-model IndustryDetailes{
-  id                            String    @id @default(uuid())
-  storeId                       String    // Foreign Key to Store
-  industryId                    String   //  Foreign Key to Industry
-  industry                      Industry  @relation("IndustryToIndustryDetailes",fields: [industryId],references: [id]) 
-  store                         Store     @relation("IndustryDetailes", fields: [storeId], references: [id])
-  title                         String
-  title_ar                      String
-  industryDetailesPoint         IndustryDetailesPoint[] @relation("pointtoIndustryDetailes")
-  industryDetailesPointAr       IndustryDetailesPointAr[] @relation("pointtoIndustryDetailesAr")
-  @@index([storeId])
-  @@index([industryId])
-}
-model IndustryDetailesPoint{
-    id                            String    @id @default(uuid())
-    industrydetailesId                       String         
-    industryDetailes              IndustryDetailes @relation("pointtoIndustryDetailes",fields: [industrydetailesId],references: [id]) 
-    text                          String
-    @@index([industrydetailesId])
-}
-model IndustryDetailesPointAr{
-    id                            String    @id @default(uuid())
-    industrydetailesId                        String         
-    industryDetailes              IndustryDetailes @relation("pointtoIndustryDetailesAr",fields: [industrydetailesId],references: [id]) 
-    text                         String
-    @@index([industrydetailesId])
-}
-model IndustryDetailes2{
-  id                            String    @id @default(uuid())
-  storeId                       String    // Foreign Key to Store
-  industryId                    String   //  Foreign Key to Industry
-  industry                      Industry  @relation("IndustryToIndustryDetailes2",fields: [industryId],references: [id]) 
-  store                         Store     @relation("IndustryDetailes2", fields: [storeId], references: [id])
-  title                         String
-  title_ar                      String
-  industryDetailesPoint2         IndustryDetailesPoint2[] @relation("pointtoIndustryDetailes2")
-  industryDetailesPointAr2       IndustryDetailesPointAr2[] @relation("pointtoIndustryDetailesAr2")
-  @@index([storeId])
-  @@index([industryId])
-}
-model IndustryDetailesPoint2{
-    id                            String    @id @default(uuid())
-    detaId                        String         
-    industryDetailes              IndustryDetailes2 @relation("pointtoIndustryDetailes2",fields: [detaId],references: [id]) 
-    text                          String
-    @@index([detaId])
-}
-model IndustryDetailesPointAr2{
-    id                            String    @id @default(uuid())
-    detaId                         String         
-    industryDetailes              IndustryDetailes2 @relation("pointtoIndustryDetailesAr2",fields: [detaId],references: [id]) 
-    text                         String
-    @@index([detaId])
-}
-model CaseStudy {
-  id                            String    @id @default(uuid())
-  storeId                       String // Foreign Key to Store
-  store                         Store     @relation("StoreToCaseStudy", fields: [storeId], references: [id])
-  title                         String
-  title_ar                      String
-  sub_title                     String
-  sub_title_ar                  String
-  paragraph_1                   String
-  paragraph_1_ar                String
-  paragraph_2                   String
-  paragraph_2_ar                String  
-  industryId                    String // Foreign Key to Industry
-  industry                      Industry  @relation("IndustryToCaseStudy",fields: [industryId],references: [id]) 
-  imageUrl                      String
-  caseStudyPoint                CaseStudyPoint[] @relation("PointToCaseStudy")
-  caseStudyPointAr              CaseStudyPointAr[] @relation("PointToCaseStudyAr")
-  @@index([storeId])
-  @@index([industryId])
-}
-model CaseStudyPoint{
- id                    String    @id @default(uuid())
- p1                    String    
- caseId                String
- case                  CaseStudy  @relation("PointToCaseStudy",fields: [caseId],references: [id])
-  @@index([caseId])
-}
-model CaseStudyPointAr{
- id                           String    @id @default(uuid())
- p1                 String    
- caseId            String
-  case             CaseStudy  @relation("PointToCaseStudyAr",fields: [caseId],references: [id])
-  @@index([caseId])
-}
-model paragrph_news {
-  id                    String   @id @default(uuid())
-  newsId                String
-  news                  News  @relation(fields: [newsId], references: [id], onDelete: Cascade)
-  text                  String 
-  @@index([newsId])
-}
-model paragrph_news_ar {
-  id                    String   @id @default(uuid())
-  newsId                String
-  news                  News  @relation(fields: [newsId], references: [id], onDelete: Cascade)
-  text                  String 
-  @@index([newsId])
-}
-model NewsCategory {
-  id                String    @id @default(uuid())
-  storeId           String // Foreign Key to Store
-  store             Store     @relation("StoreToCategory", fields: [storeId], references: [id])
+  id                Int                 @id @default(autoincrement())
+  casestudy         CaseStudy[]         @relation("IndustryToCaseStudy")
+  industryDetailes  IndustryDetailes[]  @relation("IndustryToIndustryDetailes")
+  industryDetailes2 IndustryDetailes2[] @relation("IndustryToIndustryDetailes2")
+  expertIndustry    ExpertIndustry[]    @relation("ExpertToIndustry")
   name              String
   name_ar           String
-  news           News[] @relation("CategoryToNews")
-  event           Event[] @relation("CategoryToEvent")
-  event2           Event2[] @relation("CategoryToEvent2")
-  event3           Event3[] @relation("CategoryToEvent3")
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  @@index([storeId])
 }
+
+model ExpertIndustry {
+  id Int @id @default(autoincrement())
+
+  industryId      Int
+  industry        Industry @relation("ExpertToIndustry", fields: [industryId], references: [id])
+  expert_name     String
+  expert_name_ar  String
+  expert_title    String
+  expert_title_ar String
+  expert_mail     String
+  expert_phone    String
+  imageUrl        String
+
+  @@index([industryId])
+}
+
+model IndustryDetailes {
+  id                      Int                       @id @default(autoincrement())
+  industryId              Int
+  industry                Industry                  @relation("IndustryToIndustryDetailes", fields: [industryId], references: [id])
+  title                   String
+  title_ar                String
+  industryDetailesPoint   IndustryDetailesPoint[]   @relation("pointtoIndustryDetailes")
+  industryDetailesPointAr IndustryDetailesPointAr[] @relation("pointtoIndustryDetailesAr")
+
+  @@index([industryId])
+}
+
+model IndustryDetailesPoint {
+  id                 Int              @id @default(autoincrement())
+  industrydetailesId Int
+  industryDetailes   IndustryDetailes @relation("pointtoIndustryDetailes", fields: [industrydetailesId], references: [id])
+  text               String
+
+  @@index([industrydetailesId])
+}
+
+model IndustryDetailesPointAr {
+  id                 Int              @id @default(autoincrement())
+  industrydetailesId Int
+  industryDetailes   IndustryDetailes @relation("pointtoIndustryDetailesAr", fields: [industrydetailesId], references: [id])
+  text               String
+
+  @@index([industrydetailesId])
+}
+
+model IndustryDetailes2 {
+  id                       Int                        @id @default(autoincrement())
+  industryId               Int
+  industry                 Industry                   @relation("IndustryToIndustryDetailes2", fields: [industryId], references: [id])
+  title                    String
+  title_ar                 String
+  industryDetailesPoint2   IndustryDetailesPoint2[]   @relation("pointtoIndustryDetailes2")
+  industryDetailesPointAr2 IndustryDetailesPointAr2[] @relation("pointtoIndustryDetailesAr2")
+
+  @@index([industryId])
+}
+
+model IndustryDetailesPoint2 {
+  id               Int               @id @default(autoincrement())
+  detaId           Int
+  industryDetailes IndustryDetailes2 @relation("pointtoIndustryDetailes2", fields: [detaId], references: [id])
+  text             String
+
+  @@index([detaId])
+}
+
+model IndustryDetailesPointAr2 {
+  id               Int               @id @default(autoincrement())
+  detaId           Int
+  industryDetailes IndustryDetailes2 @relation("pointtoIndustryDetailesAr2", fields: [detaId], references: [id])
+  text             String
+
+  @@index([detaId])
+}
+
+model CaseStudy {
+  id               Int                @id @default(autoincrement())
+  title            String
+  title_ar         String
+  sub_title        String
+  sub_title_ar     String
+  paragraph_1      String
+  paragraph_1_ar   String
+  paragraph_2      String
+  paragraph_2_ar   String
+  industryId       Int
+  industry         Industry           @relation("IndustryToCaseStudy", fields: [industryId], references: [id])
+  imageUrl         String
+  caseStudyPoint   CaseStudyPoint[]   @relation("PointToCaseStudy")
+  caseStudyPointAr CaseStudyPointAr[] @relation("PointToCaseStudyAr")
+
+  @@index([industryId])
+}
+
+model CaseStudyPoint {
+  id     Int       @id @default(autoincrement())
+  p1     String
+  caseId Int
+  case   CaseStudy @relation("PointToCaseStudy", fields: [caseId], references: [id])
+
+  @@index([caseId])
+}
+
+model CaseStudyPointAr {
+  id     Int       @id @default(autoincrement())
+  p1     String
+  caseId Int
+  case   CaseStudy @relation("PointToCaseStudyAr", fields: [caseId], references: [id])
+
+  @@index([caseId])
+}
+
+model paragrph_news {
+  id     Int    @id @default(autoincrement())
+  newsId Int
+  news   News   @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  text   String
+
+  @@index([newsId])
+}
+
+model paragrph_news_ar {
+  id     Int    @id @default(autoincrement())
+  newsId Int
+  news   News   @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  text   String
+
+  @@index([newsId])
+}
+
+model NewsCategory {
+  id        Int      @id @default(autoincrement())
+  name      String
+  name_ar   String
+  news      News[]   @relation("CategoryToNews")
+  event     Event[]  @relation("CategoryToEvent")
+  event2    Event2[] @relation("CategoryToEvent2")
+  event3    Event3[] @relation("CategoryToEvent3")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model News {
-    id                            String       @id @default(uuid())
-    storeId                       String // Foreign Key to Store
-    store                         Store       @relation("StoreToNews", fields: [storeId], references: [id])
-    categoryId                    String // Foreign Key to Courses Category
-    category                      NewsCategory    @relation("CategoryToNews", fields: [categoryId], references: [id])
-    title                         String 
-    title_ar                      String 
-    imageUrl                      String // Relation to Image model
-    paragraph_news                paragrph_news[] // Relation to paragraph_news model
-    paragraph_news_ar             paragrph_news_ar[] // Relation to paragraph_news_ar model
-    createdAt                     DateTime               @default(now())
-    date_of_news                  String
-    date_of_news_ar               String
-    @@index([storeId])
-    @@index([categoryId])
+  id                Int                @id @default(autoincrement())
+  categoryId        Int
+  category          NewsCategory       @relation("CategoryToNews", fields: [categoryId], references: [id])
+  title             String
+  title_ar          String
+  imageUrl          String
+  paragraph_news    paragrph_news[]
+  paragraph_news_ar paragrph_news_ar[]
+  createdAt         DateTime           @default(now())
+  date_of_news      String
+  date_of_news_ar   String
+
+  @@index([categoryId])
 }
+
 model paragrph_event {
-  id                    String   @id @default(uuid())
-  eventId                String
-  event                  Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  text                  String 
+  id      Int    @id @default(autoincrement())
+  eventId Int
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  text    String
+
   @@index([eventId])
 }
+
 model paragrph_event_ar {
-  id                    String   @id @default(uuid())
-  eventId                String
-  event                  Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  text                  String 
+  id      Int    @id @default(autoincrement())
+  eventId Int
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  text    String
+
   @@index([eventId])
 }
+
 model Event {
-    id                            String       @id @default(uuid())
-    storeId                       String // Foreign Key to Store
-    store                         Store       @relation("StoreToEvent", fields: [storeId], references: [id])
-    categoryId                    String // Foreign Key to Courses Category
-    category                      NewsCategory    @relation("CategoryToEvent", fields: [categoryId], references: [id])
-    title                         String 
-    title_ar                      String 
-    imageUrl                      String// Relation to Image model
-    paragraph_event               paragrph_event[] // Relation to paragraph_event model
-    paragraph_event_ar            paragrph_event_ar[] // Relation to paragraph_event_ar model
-    createdAt                     DateTime               @default(now())
-    date_of_event                 String
-    date_of_event_ar              String
-    @@index([storeId])
-    @@index([categoryId])
+  id                 Int                 @id @default(autoincrement())
+  categoryId         Int
+  category           NewsCategory        @relation("CategoryToEvent", fields: [categoryId], references: [id])
+  title              String
+  title_ar           String
+  imageUrl           String
+  paragraph_event    paragrph_event[]
+  paragraph_event_ar paragrph_event_ar[]
+  createdAt          DateTime            @default(now())
+  date_of_event      String
+  date_of_event_ar   String
+
+  @@index([categoryId])
 }
-model InsidersView{
-    id                            String @id @default(uuid())
-    storeId                       String // Foreign Key to Store
-    store                         Store       @relation("StoreToInsidersView", fields: [storeId], references: [id])
-    imageUrl                      String
-    text                          String
-    name                          String
-    title                         String
-    text_ar                       String
-    name_ar                       String
-    title_ar                      String
-    @@index([storeId])
+
+model InsidersView {
+  id       Int    @id @default(autoincrement())
+  imageUrl String
+  text     String
+  name     String
+  title    String
+  text_ar  String
+  name_ar  String
+  title_ar String
 }
-model Recognition{
-    id                            String @id @default(uuid())
-    storeId                       String // Foreign Key to Store
-    store                         Store       @relation("StoreToRecognition", fields: [storeId], references: [id])
-    imageUrl                      String
-    title                         String
-    title_ar                      String
-    @@index([storeId])
+
+model Recognition {
+  id       Int    @id @default(autoincrement())
+  imageUrl String
+  title    String
+  title_ar String
 }
-model Testimonials{
-    id                            String @id @default(uuid())
-    storeId                       String // Foreign Key to Store
-    store                         Store       @relation("StoreTotestimonials", fields: [storeId], references: [id])
-    imageUrl                      String
-    text                          String
-    name                          String
-    title                         String
-    text_ar                       String
-    name_ar                       String
-    title_ar                      String
-    @@index([storeId])
+
+model Testimonials {
+  id       Int    @id @default(autoincrement())
+  imageUrl String
+  text     String
+  name     String
+  title    String
+  text_ar  String
+  name_ar  String
+  title_ar String
 }
+
 model CourseType {
-  id          String    @id @default(uuid())
-  storeId     String    // Foreign Key to Store
-  store       Store     @relation("StoreToCourseType", fields: [storeId], references: [id])
-  name        String
-  name_ar        String
-  courses    Course[] // Relation to Product model
-  @@index([storeId])
+  id      Int      @id @default(autoincrement())
+  name    String
+  name_ar String
+  courses Course[]
 }
-// model WhatWeDo{
-//     id                            String @id @default(uuid())
-//     storeId                       String // Foreign Key to Store
-//     store                         Store       @relation("StoreToWhatWeDo", fields: [storeId], references: [id])
-//     imageUrl                      String
-//     main_title     String
-//     main_title_ar     String
-//     whatWeDoPoint             WhatWeDoPoint[] @relation("PointToWhatWeDo")
-//     @@index([storeId])
-// }
-// model WhatWeDoPoint{
-//     id                            String @id @default(uuid())
-//     title     String
-//     title_ar     String
-//     whatwedoId    String
-//     whatWeDoPoint             WhatWeDoPointText[] @relation("PointToWhatWeDoPoint")
-//     whatwedo       WhatWeDo   @relation("PointToWhatWeDo",fields: [whatwedoId],references: [id])
-//     @@index([whatwedoId])
-//  }
-//  model WhatWeDoPointText{
-//     id            String @id @default(uuid())
-//     text          String
-//     text_ar       String
-//     whatwedoId    String
-//     whatwedo       WhatWeDoPoint   @relation("PointToWhatWeDoPoint",fields: [whatwedoId],references: [id])
-//     @@index([whatwedoId])
-//  }
+
 model paragrph_event2 {
-  id                    String   @id @default(uuid())
-  eventId                String
-  event                  Event2  @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  text                  String 
+  id      Int    @id @default(autoincrement())
+  eventId Int
+  event   Event2 @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  text    String
+
   @@index([eventId])
 }
+
 model paragrph_event_ar2 {
-  id                    String   @id @default(uuid())
-  eventId                String
-  event2                  Event2  @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  text                  String 
+  id      Int    @id @default(autoincrement())
+  eventId Int
+  event2  Event2 @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  text    String
+
   @@index([eventId])
 }
+
 model Event2 {
-    id                            String       @id @default(uuid())
-    storeId                       String // Foreign Key to Store
-    store                         Store       @relation("StoreToEvent2", fields: [storeId], references: [id])
-    categoryId                    String // Foreign Key to Courses Category
-    category                      NewsCategory    @relation("CategoryToEvent2", fields: [categoryId], references: [id])
-    title                         String 
-    title_ar                      String 
-    imageUrl                      String// Relation to Image model
-    paragraph_event2               paragrph_event2[] // Relation to paragraph_event model
-    paragraph_event_ar2            paragrph_event_ar2[] // Relation to paragraph_event_ar model
-    createdAt                     DateTime               @default(now())
-    date_of_event                 String
-    date_of_event_ar              String
-    @@index([storeId])
-    @@index([categoryId])
+  id                  Int                  @id @default(autoincrement())
+  categoryId          Int
+  category            NewsCategory         @relation("CategoryToEvent2", fields: [categoryId], references: [id])
+  title               String
+  title_ar            String
+  imageUrl            String
+  paragraph_event2    paragrph_event2[]
+  paragraph_event_ar2 paragrph_event_ar2[]
+  createdAt           DateTime             @default(now())
+  date_of_event       String
+  date_of_event_ar    String
+
+  @@index([categoryId])
 }
+
 model paragrph_event3 {
-  id                    String   @id @default(uuid())
-  eventId                String
-  event                  Event3  @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  text                  String 
+  id      Int    @id @default(autoincrement())
+  eventId Int
+  event   Event3 @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  text    String
+
   @@index([eventId])
 }
+
 model paragrph_event_ar3 {
-  id                    String   @id @default(uuid())
-  eventId                String
-  event3                  Event3  @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  text                  String 
+  id      Int    @id @default(autoincrement())
+  eventId Int
+  event3  Event3 @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  text    String
+
   @@index([eventId])
 }
+
 model Event3 {
-    id                            String       @id @default(uuid())
-    storeId                       String // Foreign Key to Store
-    store                         Store       @relation("StoreToEvent3", fields: [storeId], references: [id])
-    categoryId                    String // Foreign Key to Courses Category
-    category                      NewsCategory    @relation("CategoryToEvent3", fields: [categoryId], references: [id])
-    title                         String 
-    title_ar                      String 
-    imageUrl                      String// Relation to Image model
-    paragraph_event3               paragrph_event3[] // Relation to paragraph_event model
-    paragraph_event_ar3            paragrph_event_ar3[] // Relation to paragraph_event_ar model
-    createdAt                     DateTime               @default(now())
-    date_of_event                 String
-    date_of_event_ar              String
-    @@index([storeId])
-    @@index([categoryId])
+  id                  Int                  @id @default(autoincrement())
+  categoryId          Int
+  category            NewsCategory         @relation("CategoryToEvent3", fields: [categoryId], references: [id])
+  title               String
+  title_ar            String
+  imageUrl            String
+  paragraph_event3    paragrph_event3[]
+  paragraph_event_ar3 paragrph_event_ar3[]
+  createdAt           DateTime             @default(now())
+  date_of_event       String
+  date_of_event_ar    String
+
+  @@index([categoryId])
 }

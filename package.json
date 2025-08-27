@@ -59,7 +59,7 @@
 		"zustand": "^4.3.8"
 	},
 	"devDependencies": {
-		"prisma": "^5.15.1",
+		"prisma": "^6.15.0",
 		"ts-node": "^10.9.2"
 	}
 }

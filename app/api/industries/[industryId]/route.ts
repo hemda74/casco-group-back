@@ -45,12 +45,9 @@ export async function POST(
 	{ params }: { params: { storeId: string } }
 ) {
 	try {
-		 
 		const body: IndustryRequestBody = await req.json();
 
 		const { name, name_ar } = body;
-
-		 
 
 		if (!name) {
 			return new NextResponse('Name is required', {
@@ -62,8 +59,6 @@ export async function POST(
 				status: 400,
 			});
 		}
-
-	 
 
 		const industry = await prismadb.$transaction(async (prisma) => {
 			const createdIndustry = await prisma.industry.create({
@@ -231,22 +226,9 @@ export async function DELETE(
 	{ params }: { params: { industryId: string; storeId: string } }
 ) {
 	try {
-		 
-		if (! )
-			return new NextResponse('Unauthenticated', {
-				status: 403,
-			});
-
 		if (!params.industryId)
 			return new NextResponse('Industry id is required', {
 				status: 400,
-			});
-
-		 
-
-		if (!storeBy )
-			return new NextResponse('Unauthorized', {
-				status: 405,
 			});
 
 		const industry = await prismadb.industry.delete({
@@ -266,25 +248,12 @@ export async function PATCH(
 	{ params }: { params: { industryId: string; storeId: string } }
 ) {
 	try {
-		 
-		if (! )
-			return new NextResponse('Unauthenticated', {
-				status: 403,
-			});
-
 		const body: IndustryRequestBody = await req.json();
 		validateRequestBody(body);
 
 		if (!params.industryId)
 			return new NextResponse('Industry Id is required', {
 				status: 400,
-			});
-
-		 
-
-		if (!storeBy )
-			return new NextResponse('Unauthorized', {
-				status: 405,
 			});
 
 		// Delete all related IndustryDetailesPoint and IndustryDetailesPointAr records
