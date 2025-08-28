@@ -2,7 +2,7 @@ import prismadb from '@/lib/prismadb';
 import { ProductsClient } from './components/client';
 import { CategoryColumn } from './components/columns';
 
-const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
+const ProductsPage = async ({ params }: { params: { storeid: number } }) => {
 	const teamMember = await prismadb.teamMember.findMany({
 		where: {
 			storeId: params.storeId,

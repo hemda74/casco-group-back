@@ -5,7 +5,7 @@ import { RecognitionForm } from "./components/insiders-form";
 const RecognitionPage = async ({
   params
 }: {
-  params: { recognitionId: string }
+  params: { recognitionid: number }
 }) => {
   const recognition = await prismadb.recognition.findUnique({
     where: {

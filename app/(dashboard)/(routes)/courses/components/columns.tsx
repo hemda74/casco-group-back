@@ -4,7 +4,7 @@ import { CellAction } from './cell-action';
 import { Decimal } from '@prisma/client/runtime';
 
 export type CourseColumn = {
-	id: string;
+	id: number;
 	c_title: string;
 	c_title_ar: string;
 	category: string;

@@ -5,7 +5,7 @@ import { CategoryForm } from './components/team-form';
 const ProductPage = async ({
 	params,
 }: {
-	params: { teamId: string; storeId: string };
+	params: { teamid: number; storeid: number };
 }) => {
 	const team = await prismadb.team.findUnique({
 		where: {

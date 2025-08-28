@@ -5,7 +5,7 @@ import prismadb from '@/lib/prismadb';
 
 export async function GET(
 	req: Request,
-	{ params }: { params: { newsId: string } }
+	{ params }: { params: { newsid: number } }
 ) {
 	try {
 		if (!params.newsId) {
@@ -34,7 +34,7 @@ export async function GET(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { newsId: string; storeId: string } }
+	{ params }: { params: { newsid: number; storeid: number } }
 ) {
 	try {
 		const {} = auth();
@@ -60,7 +60,7 @@ export async function DELETE(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { newsId: string; storeId: string } }
+	{ params }: { params: { newsid: number; storeid: number } }
 ) {
 	try {
 		const {} = auth();

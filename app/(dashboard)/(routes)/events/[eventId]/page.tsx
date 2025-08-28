@@ -5,7 +5,7 @@ import { EventForm } from './components/event-form';
 const ProductPage = async ({
 	params,
 }: {
-	params: { eventId: string; storeId: string };
+	params: { eventid: number; storeid: number };
 }) => {
 	const event = await prismadb.event.findUnique({
 		where: {

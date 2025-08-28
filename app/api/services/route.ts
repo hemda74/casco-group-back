@@ -9,13 +9,13 @@ type ServiceRequestBody = {
 		title: string;
 		desc_1: string;
 		desc_2: string;
-		store: { connect: { id: string } };
+		store: { connect: { id: number } };
 	}[];
 	serviceDescAr: {
 		title_ar: string;
 		desc_1_ar: string;
 		desc_2_ar: string;
-		store: { connect: { id: string } };
+		store: { connect: { id: number } };
 	}[];
 	expertService: {
 		expert_name: string;
@@ -25,13 +25,13 @@ type ServiceRequestBody = {
 		expert_title: string;
 		expert_title_ar: string;
 		imageUrl: string;
-		store: { connect: { id: string } };
+		store: { connect: { id: number } };
 	}[];
 };
 
 export async function POST(
 	req: Request,
-	{ params }: { params: { storeId: string } }
+	{ params }: { params: { storeid: number } }
 ) {
 	try {
 		const {} = auth();
@@ -134,7 +134,7 @@ export async function POST(
 
 export async function GET(
 	req: Request,
-	{ params }: { params: { storeId: string } }
+	{ params }: { params: { storeid: number } }
 ) {
 	try {
 		if (!params.storeId) {
@@ -158,7 +158,7 @@ export async function GET(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { storeId: string; serviceId: string } }
+	{ params }: { params: { storeid: number; serviceid: number } }
 ) {
 	try {
 		const {} = auth();
@@ -273,7 +273,7 @@ export async function PATCH(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { storeId: string; serviceId: string } }
+	{ params }: { params: { storeid: number; serviceid: number } }
 ) {
 	try {
 		const {} = auth();

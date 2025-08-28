@@ -12,7 +12,7 @@ import { formatter } from '@/lib/utils';
 
 interface DashboardPageProps {
   params: {
-    storeId: string;
+    storeid: number;
   };
 }
 

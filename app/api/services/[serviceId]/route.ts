@@ -41,7 +41,7 @@ const handleErrorResponse = (error: any) => {
 
 export async function POST(
 	req: Request,
-	{ params }: { params: { storeId: string } }
+	{ params }: { params: { storeid: number } }
 ) {
 	try {
 		const body: ServiceRequestBody = await req.json();
@@ -151,7 +151,7 @@ export async function POST(
 
 export async function GET(
 	req: Request,
-	{ params }: { params: { serviceId: string } }
+	{ params }: { params: { serviceid: number } }
 ) {
 	try {
 		if (!params.serviceId)
@@ -178,7 +178,7 @@ export async function GET(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { serviceId: string; storeId: string } }
+	{ params }: { params: { serviceid: number; storeid: number } }
 ) {
 	try {
 		if (!params.serviceId)
@@ -200,7 +200,7 @@ export async function DELETE(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { serviceId: string; storeId: string } }
+	{ params }: { params: { serviceid: number; storeid: number } }
 ) {
 	try {
 		const body: ServiceRequestBody = await req.json();

@@ -3,7 +3,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
 // Define the ProductColumn type with all required properties
 export interface ProductColumn {
-	id: string;
+	id: number;
 	title: string;
 	title_ar: string;
 	category: string;

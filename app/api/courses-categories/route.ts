@@ -3,7 +3,7 @@ import { auth } from '@clerk/nextjs';
 import prismadb from '@/lib/prismadb';
 export async function POST(
 	req: Request,
-	{ params }: { params: { storeId: string } }
+	{ params }: { params: { storeid: number } }
 ) {
 	try {
 		const body = await req.json();
@@ -45,7 +45,7 @@ export async function POST(
 
 export async function GET(
 	req: Request,
-	{ params }: { params: { storeId: string } }
+	{ params }: { params: { storeid: number } }
 ) {
 	try {
 		if (!params.storeId) {

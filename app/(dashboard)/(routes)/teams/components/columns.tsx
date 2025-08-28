@@ -3,7 +3,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
 // Define the CategoryColumn type with all required properties
 export interface CategoryColumn {
-	id: string;
+	id: number;
 	name: string;
 	name_ar: string;
 	linkedin: string;

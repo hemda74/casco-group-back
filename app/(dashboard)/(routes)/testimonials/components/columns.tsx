@@ -5,7 +5,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { CellAction } from "./cell-action"
 
 export type InsidersViewColumn = {
-  id: string
+  id: number
   name: string;
   name_ar: string;
   title: string;

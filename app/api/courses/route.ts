@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
 import prismadb from '@/lib/prismadb';
 type courseRequestBody = {
-	categoryId: string;
-	coursetypeId: string;
+	categoryid: number;
+	coursetypeid: number;
 	c_title: string;
 	imageUrl: string;
 	c_title_ar: string;
@@ -65,7 +65,7 @@ type courseRequestBody = {
 
 export async function POST(
 	req: Request,
-	{ params }: { params: { storeId: string } }
+	{ params }: { params: { storeid: number } }
 ) {
 	try {
 		const body: courseRequestBody = await req.json();
@@ -237,7 +237,7 @@ export async function POST(
 
 export async function GET(
 	req: Request,
-	{ params }: { params: { storeId: string } }
+	{ params }: { params: { storeid: number } }
 ) {
 	try {
 		if (!params.storeId) {

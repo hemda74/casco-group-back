@@ -3,7 +3,7 @@ import { auth } from '@clerk/nextjs';
 import prismadb from '@/lib/prismadb';
 export async function GET(
 	req: Request,
-	{ params }: { params: { testimonialId: string } }
+	{ params }: { params: { testimonialid: number } }
 ) {
 	try {
 		if (!params.testimonialId) {
@@ -27,7 +27,7 @@ export async function GET(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { testimonialId: string; storeId: string } }
+	{ params }: { params: { testimonialid: number; storeid: number } }
 ) {
 	try {
 		const {} = auth();
@@ -53,7 +53,7 @@ export async function DELETE(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { testimonialId: string; storeId: string } }
+	{ params }: { params: { testimonialid: number; storeid: number } }
 ) {
 	try {
 		const {} = auth();

@@ -42,7 +42,7 @@ const handleErrorResponse = (error: any) => {
 };
 export async function POST(
 	req: Request,
-	{ params }: { params: { storeId: string } }
+	{ params }: { params: { storeid: number } }
 ) {
 	try {
 		const body: IndustryRequestBody = await req.json();
@@ -186,7 +186,7 @@ export async function POST(
 
 export async function GET(
 	req: Request,
-	{ params }: { params: { industryId: string } }
+	{ params }: { params: { industryid: number } }
 ) {
 	try {
 		if (!params.industryId)
@@ -223,7 +223,7 @@ export async function GET(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { industryId: string; storeId: string } }
+	{ params }: { params: { industryid: number; storeid: number } }
 ) {
 	try {
 		if (!params.industryId)
@@ -245,7 +245,7 @@ export async function DELETE(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { industryId: string; storeId: string } }
+	{ params }: { params: { industryid: number; storeid: number } }
 ) {
 	try {
 		const body: IndustryRequestBody = await req.json();

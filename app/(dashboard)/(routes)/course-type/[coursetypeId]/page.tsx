@@ -5,7 +5,7 @@ import { CourseTypeForm } from "./components/size-form";
 const SizePage = async ({
   params
 }: {
-  params: { coursetypeId: string }
+  params: { coursetypeid: number }
 }) => {
   const size = await prismadb.courseType.findUnique({
     where: {

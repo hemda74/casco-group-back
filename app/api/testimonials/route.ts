@@ -5,7 +5,7 @@ import prismadb from '@/lib/prismadb';
 
 export async function POST(
 	req: Request,
-	{ params }: { params: { storeId: string } }
+	{ params }: { params: { storeid: number } }
 ) {
 	try {
 		const {} = auth();
@@ -86,7 +86,7 @@ export async function POST(
 
 export async function GET(
 	req: Request,
-	{ params }: { params: { storeId: string } }
+	{ params }: { params: { storeid: number } }
 ) {
 	try {
 		if (!params.storeId) {
