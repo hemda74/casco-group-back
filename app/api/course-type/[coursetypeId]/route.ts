@@ -5,7 +5,7 @@ import { auth } from '@clerk/nextjs';
 
 export async function GET(
 	req: Request,
-	{ params }: { params: { coursetypeId: string } }
+	{ params }: { params: { coursetypeid: number } }
 ) {
 	try {
 		if (!params.coursetypeId) {
@@ -29,7 +29,7 @@ export async function GET(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { coursetypeId: string; storeId: string } }
+	{ params }: { params: { coursetypeid: number; storeid: number } }
 ) {
 	try {
 		if (!params.coursetypeId) {
@@ -53,7 +53,7 @@ export async function DELETE(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { coursetypeId: string; storeId: string } }
+	{ params }: { params: { coursetypeid: number; storeid: number } }
 ) {
 	try {
 		const body = await req.json();

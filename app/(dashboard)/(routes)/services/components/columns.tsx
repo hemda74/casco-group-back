@@ -2,7 +2,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
 
 export type ServiceColumn = {
-	id: string;
+	id: number;
 	name: string;
 	name_ar: string;
 	expert_name: string[];

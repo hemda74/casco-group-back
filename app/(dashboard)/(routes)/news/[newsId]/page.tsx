@@ -5,7 +5,7 @@ import { NewsForm } from './components/news-form';
 const ProductPage = async ({
 	params,
 }: {
-	params: { newsId: string; storeId: string };
+	params: { newsid: number; storeid: number };
 }) => {
 	const News = await prismadb.news.findUnique({
 		where: {

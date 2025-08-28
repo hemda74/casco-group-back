@@ -3,8 +3,8 @@ import { auth } from '@clerk/nextjs';
 import prismadb from '@/lib/prismadb';
 
 type CourseRequestBody = {
-	categoryId: string;
-	coursetypeId: string;
+	categoryid: number;
+	coursetypeid: number;
 	c_title: string;
 	c_title_ar: string;
 	price_egp: number;
@@ -54,7 +54,7 @@ const validateFields = (body: CourseRequestBody) => {
 	});
 };
 
-const validateStore = async (storeId: string) => {
+const validateStore = async (storeid: number) => {
 	const store = await prismadb.store.findFirst({
 		where: { id: storeId },
 	});
@@ -106,7 +106,7 @@ const getStaticFields = (body: CourseRequestBody) => {
 // API Routes
 export async function POST(
 	req: Request,
-	{ params }: { params: { storeId: string } }
+	{ params }: { params: { storeid: number } }
 ) {
 	try {
 		const body: CourseRequestBody = await req.json();
@@ -151,7 +151,7 @@ export async function POST(
 
 export async function GET(
 	req: Request,
-	{ params }: { params: { courseId: string } }
+	{ params }: { params: { courseid: number } }
 ) {
 	try {
 		if (!params.courseId) throw new Error('course id is required');
@@ -178,7 +178,7 @@ export async function GET(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { courseId: string; storeId: string } }
+	{ params }: { params: { courseid: number; storeid: number } }
 ) {
 	try {
 		if (!params.courseId) throw new Error('course id is required');
@@ -197,7 +197,7 @@ export async function DELETE(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { courseId: string; storeId: string } }
+	{ params }: { params: { courseid: number; storeid: number } }
 ) {
 	try {
 		const body: CourseRequestBody = await req.json();

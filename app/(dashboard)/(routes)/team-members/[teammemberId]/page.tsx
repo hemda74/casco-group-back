@@ -5,7 +5,7 @@ import { CourseForm } from './components/member-form';
 const ProductPage = async ({
 	params,
 }: {
-	params: { teammemberId: string; storeId: string };
+	params: { teammemberid: number; storeid: number };
 }) => {
 	const Teammember = await prismadb.teamMember.findUnique({
 		where: {

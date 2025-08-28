@@ -4,7 +4,7 @@ import { CourseForm } from './components/course-form';
 const CategoryPage = async ({
 	params,
 }: {
-	params: { courseId: string; storeId: string };
+	params: { courseid: number; storeid: number };
 }) => {
 	const course = await prismadb.course.findUnique({
 		where: {

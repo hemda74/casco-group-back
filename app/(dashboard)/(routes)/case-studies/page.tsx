@@ -2,7 +2,7 @@ import prismadb from '@/lib/prismadb';
 import { ProductsClient } from './components/client';
 import { CaseColumn } from './components/columns';
 
-const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
+const ProductsPage = async ({ params }: { params: { storeid: number } }) => {
 	const caseStudy = await prismadb.caseStudy.findMany({
 		where: {
 			storeId: params.storeId,

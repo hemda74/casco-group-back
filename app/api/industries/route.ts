@@ -12,7 +12,7 @@ type industryRequestBody = {
 		expert_title: string;
 		expert_title_ar: string;
 		imageUrl: string;
-		store: { connect: { id: string } };
+		store: { connect: { id: number } };
 	}[];
 	industryDetailes: {
 		title: string;
@@ -38,7 +38,7 @@ type industryRequestBody = {
 
 export async function POST(
 	req: Request,
-	{ params }: { params: { storeId: string } }
+	{ params }: { params: { storeid: number } }
 ) {
 	try {
 		const body: industryRequestBody = await req.json();
@@ -175,7 +175,7 @@ export async function POST(
 
 export async function GET(
 	req: Request,
-	{ params }: { params: { storeId: string } }
+	{ params }: { params: { storeid: number } }
 ) {
 	try {
 		if (!params.storeId) {
@@ -199,7 +199,7 @@ export async function GET(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { storeId: string; industryId: string } }
+	{ params }: { params: { storeid: number; industryid: number } }
 ) {
 	try {
 		const body: industryRequestBody = await req.json();
@@ -373,7 +373,7 @@ export async function PATCH(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { storeId: string; categoryId: string } }
+	{ params }: { params: { storeid: number; categoryid: number } }
 ) {
 	try {
 		if (!params.storeId || !params.categoryId) {

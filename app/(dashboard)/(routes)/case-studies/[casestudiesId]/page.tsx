@@ -3,7 +3,7 @@ import { CaseForm } from './components/case-studies-form';
 const ProductPage = async ({
 	params,
 }: {
-	params: { casestudiesId: string; storeId: string };
+	params: { casestudiesid: number; storeid: number };
 }) => {
 	const casestudies = await prismadb.caseStudy.findUnique({
 		where: {

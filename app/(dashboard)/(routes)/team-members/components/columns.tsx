@@ -6,7 +6,7 @@ import { Decimal } from '@prisma/client/runtime';
 
 // Define the CategoryColumn type with all required properties
 export interface CategoryColumn {
-	id: string;
+	id: number;
 	name: string;
 	name_ar: string;
 	team: string;

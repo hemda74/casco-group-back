@@ -5,7 +5,7 @@ import { InsidersViewForm } from "./components/insiders-form";
 const InsidersViewPage = async ({
   params
 }: {
-  params: { testimonialId: string }
+  params: { testimonialid: number }
 }) => {
   const InsidersView = await prismadb.testimonials.findUnique({
     where: {

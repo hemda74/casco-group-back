@@ -8,7 +8,7 @@ import { SettingsForm } from "./components/settings-form";
 const SettingsPage = async ({
   params
 }: {
-  params: { storeId: string }
+  params: { storeid: number }
 }) => {
 
 

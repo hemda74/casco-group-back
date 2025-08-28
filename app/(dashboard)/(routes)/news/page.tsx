@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import prismadb from '@/lib/prismadb';
 import { ProductsClient } from './components/client';
 import { ProductColumn } from './components/columns';
-const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
+const ProductsPage = async ({ params }: { params: { storeid: number } }) => {
 	const news = await prismadb.news.findMany({
 		where: {
 			storeId: params.storeId,
