@@ -41,8 +41,8 @@ const formSchema = z.object({
 	price_uae: z.coerce.number().min(1),
 	price_ksa: z.coerce.number().min(1),
 	price_usd: z.coerce.number().min(1),
-	categoryId: z.string().min(1),
-	coursetypeId: z.string().min(1),
+	categoryid: z.string().min(1),
+	coursetypeid: z.string().min(1),
 	c_short_intro_en: z.string().min(1),
 	c_short_intro_ar: z.string().min(1),
 	c_delv_and_leaders_en: z.string().min(1),
@@ -159,11 +159,11 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 			),
 		}
 		: {
-			coursetypeId: '',
+			coursetypeid: '',
 			c_title: '',
 			c_title_ar: '',
 			imageUrl: '',
-			categoryId: '',
+			categoryid: '',
 			c_delv_and_leaders_ar: '',
 			c_delv_and_leaders_en: '',
 			c_duration_ar: '',
@@ -346,7 +346,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="categoryId"
+							name="categoryid"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
@@ -403,7 +403,7 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 						/>
 						<FormField
 							control={form.control}
-							name="coursetypeId"
+							name="coursetypeid"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>

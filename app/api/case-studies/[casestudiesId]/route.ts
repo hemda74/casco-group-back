@@ -32,7 +32,7 @@ export async function GET(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { casestudiesid: number; storeid: number } }
+	{ params }: { params: { casestudiesid: number } }
 ) {
 	try {
 		if (!params.casestudiesId) {
@@ -56,7 +56,7 @@ export async function DELETE(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { casestudiesid: number; storeid: number } }
+	{ params }: { params: { casestudiesid: number } }
 ) {
 	try {
 		const body = await req.json();

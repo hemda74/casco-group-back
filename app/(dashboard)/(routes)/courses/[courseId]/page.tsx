@@ -4,11 +4,11 @@ import { CourseForm } from './components/course-form';
 const CategoryPage = async ({
 	params,
 }: {
-	params: { courseid: number; storeid: number };
+	params: { courseid: number; };
 }) => {
 	const course = await prismadb.course.findUnique({
 		where: {
-			id: params.courseId,
+			id: params.courseid,
 		},
 		include: {
 			CourseType: true,
@@ -30,14 +30,10 @@ const CategoryPage = async ({
 	});
 
 	const categories = await prismadb.coursesCategory.findMany({
-		where: {
-			storeId: params.storeId,
-		},
+
 	});
 	const types = await prismadb.courseType.findMany({
-		where: {
-			storeId: params.storeId,
-		},
+
 	});
 	return (
 		<div className="flex-col">

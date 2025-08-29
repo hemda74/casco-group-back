@@ -2,11 +2,9 @@ import prismadb from '@/lib/prismadb';
 import { IndustryColumn } from './components/columns';
 import { IndustryClient } from './components/client';
 
-const CategoriesPage = async ({ params }: { params: { storeid: number } }) => {
+const CategoriesPage = async ({ params }: { params: {} }) => {
 	const categories = await prismadb.industry.findMany({
-		where: {
-			storeId: params.storeId,
-		},
+
 		include: {
 			expertIndustry: true,
 			industryDetailes: {

@@ -51,7 +51,7 @@ export const CategoriesClient: React.FC<CategoriesClientProps> = ({ data }) => {
 			<Separator />
 			{/* <ApiList
 				entityName="news-categories"
-				entityIdName="categoryId"
+				entityIdName="categoryid"
 			/> */}
 		</>
 	);

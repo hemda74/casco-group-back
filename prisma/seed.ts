@@ -151,8 +151,8 @@ async function main() {
 		// Create Courses with related data
 		const course1 = await prisma.course.create({
 			data: {
-				categoryId: courseCategories[0].id,
-				coursetypeId: courseTypes[0].id,
+				categoryid: courseCategories[0].id,
+				coursetypeid: courseTypes[0].id,
 				c_title: 'Advanced Project Management',
 				c_title_ar: 'إدارة المشاريع المتقدمة',
 				price_egp: 15000,
@@ -356,8 +356,8 @@ async function main() {
 
 		const course2 = await prisma.course.create({
 			data: {
-				categoryId: courseCategories[1].id,
-				coursetypeId: courseTypes[1].id,
+				categoryid: courseCategories[1].id,
+				coursetypeid: courseTypes[1].id,
 				c_title: 'Digital Transformation Leadership',
 				c_title_ar: 'قيادة التحول الرقمي',
 				price_egp: 20000,
@@ -692,7 +692,7 @@ async function main() {
 		// Create News
 		const news = await prisma.news.create({
 			data: {
-				categoryId: newsCategories[0].id,
+				categoryid: newsCategories[0].id,
 				title: 'CASCO Launches New Digital Leadership Program',
 				title_ar: 'كاسكو تطلق برنامج القيادة الرقمية الجديد',
 				imageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800',
@@ -731,7 +731,7 @@ async function main() {
 		// Create Events
 		const event = await prisma.event.create({
 			data: {
-				categoryId: newsCategories[2].id,
+				categoryid: newsCategories[2].id,
 				title: 'Annual Leadership Summit 2025',
 				title_ar: 'قمة القيادة السنوية 2025',
 				imageUrl: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=800',
@@ -894,7 +894,7 @@ async function main() {
 		// Create Event2 and Event3 (additional event types)
 		const event2 = await prisma.event2.create({
 			data: {
-				categoryId: newsCategories[1].id,
+				categoryid: newsCategories[1].id,
 				title: 'Technology Innovation Showcase',
 				title_ar: 'معرض ابتكار التكنولوجيا',
 				imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800',
@@ -925,7 +925,7 @@ async function main() {
 
 		const event3 = await prisma.event3.create({
 			data: {
-				categoryId: newsCategories[2].id,
+				categoryid: newsCategories[2].id,
 				title: 'Strategic Planning Workshop Series',
 				title_ar: 'سلسلة ورش التخطيط الاستراتيجي',
 				imageUrl: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800',

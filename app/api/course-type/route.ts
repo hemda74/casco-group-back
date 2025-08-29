@@ -3,10 +3,7 @@ import { auth } from '@clerk/nextjs';
 
 import prismadb from '@/lib/prismadb';
 
-export async function POST(
-	req: Request,
-	{ params }: { params: { storeid: number } }
-) {
+export async function POST(req: Request, { params }: { params: {} }) {
 	try {
 		const body = await req.json();
 
@@ -24,17 +21,10 @@ export async function POST(
 			});
 		}
 
-		if (!params.storeId) {
-			return new NextResponse('Store id is required', {
-				status: 400,
-			});
-		}
-
 		const courseType = await prismadb.courseType.create({
 			data: {
 				name,
 				name_ar,
-				storeId: params.storeId,
 			},
 		});
 
@@ -45,22 +35,9 @@ export async function POST(
 	}
 }
 
-export async function GET(
-	req: Request,
-	{ params }: { params: { storeid: number } }
-) {
+export async function GET(req: Request, { params }: { params: {} }) {
 	try {
-		if (!params.storeId) {
-			return new NextResponse('Store id is required', {
-				status: 400,
-			});
-		}
-
-		const courseTypes = await prismadb.courseType.findMany({
-			where: {
-				storeId: params.storeId,
-			},
-		});
+		const courseTypes = await prismadb.courseType.findMany({});
 
 		return NextResponse.json(courseTypes);
 	} catch (error) {

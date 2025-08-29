@@ -2,11 +2,9 @@ import prismadb from '@/lib/prismadb';
 import { CategoryColumn } from './components/columns';
 import { CategoriesClient } from './components/client';
 
-const CategoriesPage = async ({ params }: { params: { storeid: number } }) => {
+const CategoriesPage = async ({ params }: { params: {} }) => {
 	const categories = await prismadb.team.findMany({
-		where: {
-			storeId: params.storeId,
-		},
+
 
 		orderBy: {
 			name: 'desc',

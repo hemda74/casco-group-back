@@ -3,10 +3,7 @@ import { auth } from '@clerk/nextjs';
 
 import prismadb from '@/lib/prismadb';
 
-export async function POST(
-	req: Request,
-	{ params }: { params: { storeid: number } }
-) {
+export async function POST(req: Request, { params }: { params: {} }) {
 	try {
 		const {} = auth();
 
@@ -88,12 +85,6 @@ export async function POST(
 			});
 		}
 
-		if (!params.storeId) {
-			return new NextResponse('Store id is required', {
-				status: 400,
-			});
-		}
-
 		const product = await prismadb.teamMember.create({
 			data: {
 				name,
@@ -108,7 +99,6 @@ export async function POST(
 				brief_3_ar,
 				teamId,
 				imageUrl,
-				storeId: params.storeId,
 			},
 		});
 
@@ -119,23 +109,13 @@ export async function POST(
 	}
 }
 
-export async function GET(
-	req: Request,
-	{ params }: { params: { storeid: number } }
-) {
+export async function GET(req: Request, { params }: { params: {} }) {
 	try {
 		const { searchParams } = new URL(req.url);
 		const teamId = searchParams.get('teamId') || undefined;
 
-		if (!params.storeId) {
-			return new NextResponse('Store id is required', {
-				status: 400,
-			});
-		}
-
 		const teammember = await prismadb.teamMember.findMany({
 			where: {
-				storeId: params.storeId,
 				teamId,
 			},
 			include: {

@@ -4,7 +4,7 @@ import { ServiceForm } from './components/service-form';
 const ServicePage = async ({
 	params,
 }: {
-	params: { serviceid: number; storeid: number };
+	params: { serviceid: number; };
 }) => {
 	const service = await prismadb.service.findUnique({
 		where: {

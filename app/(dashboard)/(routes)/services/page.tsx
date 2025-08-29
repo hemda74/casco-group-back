@@ -3,12 +3,10 @@ import { ServiceClient } from './components/client';
 import { ServiceColumn } from './components/columns';
 import { format } from 'date-fns';
 
-const ServicesPage = async ({ params }: { params: { storeid: number } }) => {
+const ServicesPage = async ({ params }: { params: {} }) => {
 	try {
 		const service = await prismadb.service.findMany({
-			where: {
-				storeId: params.storeId,
-			},
+
 			include: {
 				serviceDesc: true,
 				serviceDescAr: true,

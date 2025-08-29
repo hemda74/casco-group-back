@@ -39,10 +39,7 @@ const handleErrorResponse = (error: any) => {
 	return new NextResponse('Internal error', { status: 500 });
 };
 
-export async function POST(
-	req: Request,
-	{ params }: { params: { storeid: number } }
-) {
+export async function POST(req: Request, { params }: { params: {} }) {
 	try {
 		const body: ServiceRequestBody = await req.json();
 
@@ -80,11 +77,6 @@ export async function POST(
 								title: desc.title,
 								desc_1: desc.desc_1,
 								desc_2: desc.desc_2,
-								store: {
-									connect: {
-										id: params.storeId,
-									},
-								},
 							})
 						),
 					},
@@ -94,11 +86,6 @@ export async function POST(
 								title_ar: descAr.title_ar,
 								desc_1_ar: descAr.desc_1_ar,
 								desc_2_ar: descAr.desc_2_ar,
-								store: {
-									connect: {
-										id: params.storeId,
-									},
-								},
 							})
 						),
 					},
@@ -118,11 +105,6 @@ export async function POST(
 									expert.expert_phone,
 								expert_mail:
 									expert.expert_mail,
-								store: {
-									connect: {
-										id: params.storeId,
-									},
-								},
 							})
 						),
 					},
@@ -178,7 +160,7 @@ export async function GET(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { serviceid: number; storeid: number } }
+	{ params }: { params: { serviceid: number } }
 ) {
 	try {
 		if (!params.serviceId)
@@ -200,7 +182,7 @@ export async function DELETE(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { serviceid: number; storeid: number } }
+	{ params }: { params: { serviceid: number } }
 ) {
 	try {
 		const body: ServiceRequestBody = await req.json();
@@ -234,11 +216,6 @@ export async function PATCH(
 					create: body.serviceDesc.map(
 						(desc) => ({
 							...desc,
-							store: {
-								connect: {
-									id: params.storeId,
-								},
-							},
 						})
 					),
 				},
@@ -246,11 +223,6 @@ export async function PATCH(
 					create: body.serviceDescAr.map(
 						(descAr) => ({
 							...descAr,
-							store: {
-								connect: {
-									id: params.storeId,
-								},
-							},
 						})
 					),
 				},
@@ -258,11 +230,6 @@ export async function PATCH(
 					create: body.expertService.map(
 						(expert) => ({
 							...expert,
-							store: {
-								connect: {
-									id: params.storeId,
-								},
-							},
 						})
 					),
 				},

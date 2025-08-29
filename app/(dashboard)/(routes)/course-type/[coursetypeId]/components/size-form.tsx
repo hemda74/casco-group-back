@@ -59,7 +59,7 @@ export const CourseTypeForm: React.FC<CourseTypeFormProps> = ({
     try {
       setLoading(true);
       if (initialData) {
-        await axios.patch(`/api/${params.storeId}/course-type/${params.coursetypeId}`, data);
+        await axios.patch(`/api/${params.storeId}/course-type/${params.coursetypeid}`, data);
       } else {
         await axios.post(`/api/${params.storeId}/course-type`, data);
       }
@@ -76,7 +76,7 @@ export const CourseTypeForm: React.FC<CourseTypeFormProps> = ({
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/course-type/${params.coursetypeId}`);
+      await axios.delete(`/api/${params.storeId}/course-type/${params.coursetypeid}`);
       router.refresh();
       router.push(`/${params.storeId}/course-type`);
       toast.success('CourseType deleted.');

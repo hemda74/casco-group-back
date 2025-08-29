@@ -6,7 +6,7 @@ export async function GET(
 	{ params }: { params: { recognitionid: number } }
 ) {
 	try {
-		if (!params.recognitionId) {
+		if (!params.recognitionid) {
 			return new NextResponse('Billboard id is required', {
 				status: 400,
 			});
@@ -14,7 +14,7 @@ export async function GET(
 
 		const billboard = await prismadb.recognition.findUnique({
 			where: {
-				id: params.recognitionId,
+				id: params.recognitionid,
 			},
 		});
 
@@ -27,12 +27,12 @@ export async function GET(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { recognitionid: number; storeid: number } }
+	{ params }: { params: { recognitionid: number } }
 ) {
 	try {
 		const {} = auth();
 
-		if (!params.recognitionId) {
+		if (!params.recognitionid) {
 			return new NextResponse('Billboard id is required', {
 				status: 400,
 			});
@@ -40,7 +40,7 @@ export async function DELETE(
 
 		const billboard = await prismadb.recognition.delete({
 			where: {
-				id: params.recognitionId,
+				id: params.recognitionid,
 			},
 		});
 
@@ -53,7 +53,7 @@ export async function DELETE(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { recognitionid: number; storeid: number } }
+	{ params }: { params: { recognitionid: number } }
 ) {
 	try {
 		const {} = auth();
@@ -79,7 +79,7 @@ export async function PATCH(
 			});
 		}
 
-		if (!params.recognitionId) {
+		if (!params.recognitionid) {
 			return new NextResponse('Billboard id is required', {
 				status: 400,
 			});
@@ -87,7 +87,7 @@ export async function PATCH(
 
 		const billboard = await prismadb.recognition.update({
 			where: {
-				id: params.recognitionId,
+				id: params.recognitionid,
 			},
 			data: {
 				title,

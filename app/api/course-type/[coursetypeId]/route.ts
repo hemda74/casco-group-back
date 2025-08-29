@@ -8,7 +8,7 @@ export async function GET(
 	{ params }: { params: { coursetypeid: number } }
 ) {
 	try {
-		if (!params.coursetypeId) {
+		if (!params.coursetypeid) {
 			return new NextResponse('courseType id is required', {
 				status: 400,
 			});
@@ -16,7 +16,7 @@ export async function GET(
 
 		const courseType = await prismadb.courseType.findUnique({
 			where: {
-				id: params.coursetypeId,
+				id: params.coursetypeid,
 			},
 		});
 
@@ -29,10 +29,10 @@ export async function GET(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { coursetypeid: number; storeid: number } }
+	{ params }: { params: { coursetypeid: number } }
 ) {
 	try {
-		if (!params.coursetypeId) {
+		if (!params.coursetypeid) {
 			return new NextResponse('courseType id is required', {
 				status: 400,
 			});
@@ -40,7 +40,7 @@ export async function DELETE(
 
 		const courseType = await prismadb.courseType.delete({
 			where: {
-				id: params.coursetypeId,
+				id: params.coursetypeid,
 			},
 		});
 
@@ -53,7 +53,7 @@ export async function DELETE(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { coursetypeid: number; storeid: number } }
+	{ params }: { params: { coursetypeid: number } }
 ) {
 	try {
 		const body = await req.json();
@@ -66,7 +66,7 @@ export async function PATCH(
 			});
 		}
 
-		if (!params.coursetypeId) {
+		if (!params.coursetypeid) {
 			return new NextResponse('courseType id is required', {
 				status: 400,
 			});
@@ -74,7 +74,7 @@ export async function PATCH(
 
 		const courseType = await prismadb.courseType.update({
 			where: {
-				id: params.coursetypeId,
+				id: params.coursetypeid,
 			},
 			data: {
 				name,

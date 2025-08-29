@@ -34,7 +34,7 @@ const formSchema = z.object({
 	imageUrl: z.string().min(1),
 	title: z.string().min(1),
 	title_ar: z.string().min(1),
-	categoryId: z.string().min(1),
+	categoryid: z.string().min(1),
 	paragraph_event3: z.array(z.any()),
 	paragraph_event_ar3: z.array(z.any()),
 	date_of_event: z.string().min(1),
@@ -70,7 +70,7 @@ export const EventForm: React.FC<EventFormProps> = ({
 		} : {
 			title: '',
 			title_ar: '',
-			categoryId: '',
+			categoryid: '',
 			imageUrl: '',
 			date_of_event: '',
 			date_of_event_ar: '',
@@ -176,7 +176,7 @@ export const EventForm: React.FC<EventFormProps> = ({
 						{/* Other form fields */}
 						<FormField
 							control={form.control}
-							name="categoryId"
+							name="categoryid"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Category</FormLabel>

@@ -2,10 +2,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
 import prismadb from '@/lib/prismadb';
 
-export async function POST(
-	req: Request,
-	{ params }: { params: { storeid: number } }
-) {
+export async function POST(req: Request, { params }: { params: {} }) {
 	try {
 		const {} = auth();
 
@@ -23,17 +20,11 @@ export async function POST(
 				status: 400,
 			});
 		}
-		if (!params.storeId) {
-			return new NextResponse('Store id is required', {
-				status: 400,
-			});
-		}
 
 		const category = await prismadb.newsCategory.create({
 			data: {
 				name,
 				name_ar,
-				storeId: params.storeId,
 			},
 		});
 
@@ -44,22 +35,9 @@ export async function POST(
 	}
 }
 
-export async function GET(
-	req: Request,
-	{ params }: { params: { storeid: number } }
-) {
+export async function GET(req: Request, { params }: { params: {} }) {
 	try {
-		if (!params.storeId) {
-			return new NextResponse('Store id is required', {
-				status: 400,
-			});
-		}
-
-		const categories = await prismadb.newsCategory.findMany({
-			where: {
-				storeId: params.storeId,
-			},
-		});
+		const categories = await prismadb.newsCategory.findMany({});
 
 		return NextResponse.json(categories);
 	} catch (error) {

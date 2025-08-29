@@ -3,7 +3,7 @@ import { auth } from '@clerk/nextjs';
 import prismadb from '@/lib/prismadb';
 
 type CourseRequestBody = {
-	categoryid: number;
+	categoryId: number;
 	coursetypeid: number;
 	c_title: string;
 	c_title_ar: string;
@@ -21,8 +21,6 @@ type CourseRequestBody = {
 	c_delv_and_leaders_en: string;
 	c_delv_and_leaders_ar: string;
 } & Record<string, { text: string }[]>;
-
-// Configuration for dynamic fields that need special handling
 const DYNAMIC_FIELDS = [
 	'c_intro_en',
 	'c_intro_ar',
@@ -44,22 +42,14 @@ const REQUIRED_FIELDS = [
 	'c_title',
 	'c_title_ar',
 	'imageUrl',
-	'categoryId',
-	'coursetypeId',
+	'categoryid',
+	'coursetypeid',
 ];
 
 const validateFields = (body: CourseRequestBody) => {
 	REQUIRED_FIELDS.forEach((field) => {
 		if (!body[field]) throw new Error(`${field} is required`);
 	});
-};
-
-const validateStore = async (storeid: number) => {
-	const store = await prismadb.store.findFirst({
-		where: { id: storeId },
-	});
-	if (!store) throw new Error('Unauthorized');
-	return store;
 };
 
 const handleError = (error: any, context: string) => {
@@ -104,15 +94,10 @@ const getStaticFields = (body: CourseRequestBody) => {
 };
 
 // API Routes
-export async function POST(
-	req: Request,
-	{ params }: { params: { storeid: number } }
-) {
+export async function POST(req: Request, { params }: { params: {} }) {
 	try {
 		const body: CourseRequestBody = await req.json();
 		validateFields(body);
-
-		await validateStore(params.storeId);
 
 		const staticFields = getStaticFields(body);
 		const dynamicFields = createDynamicFieldData(body);
@@ -120,7 +105,7 @@ export async function POST(
 		const course = await prismadb.course.create({
 			data: {
 				categoryId: body.categoryId,
-				coursetypeId: body.coursetypeId,
+				coursetypeId: body.coursetypeid,
 				c_title: body.c_title,
 				c_title_ar: body.c_title_ar,
 				price_egp: body.price_egp,
@@ -139,7 +124,6 @@ export async function POST(
 				c_delv_and_leaders_ar:
 					body.c_delv_and_leaders_ar,
 				...dynamicFields,
-				storeId: params.storeId,
 			},
 		});
 
@@ -154,7 +138,7 @@ export async function GET(
 	{ params }: { params: { courseid: number } }
 ) {
 	try {
-		if (!params.courseId) throw new Error('course id is required');
+		if (!params.courseid) throw new Error('course id is required');
 
 		const includeFields = DYNAMIC_FIELDS.reduce((acc, field) => {
 			acc[field] = true;
@@ -162,7 +146,7 @@ export async function GET(
 		}, {} as Record<string, boolean>);
 
 		const course = await prismadb.course.findUnique({
-			where: { id: params.courseId },
+			where: { id: params.courseid },
 			include: {
 				CourseType: true,
 				category: true,
@@ -178,15 +162,13 @@ export async function GET(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { courseid: number; storeid: number } }
+	{ params }: { params: { courseid: number } }
 ) {
 	try {
-		if (!params.courseId) throw new Error('course id is required');
-
-		await validateStore(params.storeId);
+		if (!params.courseid) throw new Error('course id is required');
 
 		const course = await prismadb.course.delete({
-			where: { id: params.courseId },
+			where: { id: params.courseid },
 		});
 
 		return NextResponse.json(course);
@@ -197,35 +179,31 @@ export async function DELETE(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { courseid: number; storeid: number } }
+	{ params }: { params: { courseid: number } }
 ) {
 	try {
 		const body: CourseRequestBody = await req.json();
 		validateFields(body);
 
-		if (!params.courseId) throw new Error('Course Id is required');
+		if (!params.courseid) throw new Error('Course Id is required');
 
-		await validateStore(params.storeId);
-
-		// Delete all dynamic field records in parallel
 		const deletePromises = DYNAMIC_FIELDS.map((field) => {
 			const tableName = field as keyof typeof prismadb;
 			return (prismadb[tableName] as any).deleteMany({
-				where: { courseId: params.courseId },
+				where: { courseid: params.courseid },
 			});
 		});
 
 		await Promise.all(deletePromises);
 
-		// Update with new data
 		const staticFields = getStaticFields(body);
 		const dynamicFields = createDynamicFieldData(body);
 
 		const updatedCourse = await prismadb.course.update({
-			where: { id: params.courseId },
+			where: { id: params.courseid },
 			data: {
 				categoryId: body.categoryId,
-				coursetypeId: body.coursetypeId,
+				coursetypeId: body.coursetypeid,
 				c_title: body.c_title,
 				c_title_ar: body.c_title_ar,
 				price_egp: body.price_egp,

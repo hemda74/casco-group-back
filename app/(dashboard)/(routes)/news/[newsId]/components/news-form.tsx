@@ -34,7 +34,7 @@ const formSchema = z.object({
 	imageUrl: z.string().min(1),
 	title: z.string().min(1),
 	title_ar: z.string().min(1),
-	categoryId: z.string().min(1),
+	categoryid: z.string().min(1),
 	paragraph_news: z.array(z.any()),
 	paragraph_news_ar: z.array(z.any()),
 	date_of_news: z.string().min(1),
@@ -71,7 +71,7 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 		} : {
 			title: '',
 			title_ar: '',
-			categoryId: '',
+			categoryid: '',
 			imageUrl: '',
 			date_of_news: '',
 			date_of_news_ar: '',
@@ -96,7 +96,7 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 			setLoading(true);
 			if (initialData) {
 				await axios.patch(
-					`/api/${params.storeId}/news/${params.newsId}`,
+					`/api/${params.storeId}/news/${params.newsid}`,
 					data
 				);
 			} else {
@@ -176,7 +176,7 @@ export const NewsForm: React.FC<NewsFormProps> = ({
 					<div className="md:grid md:grid-cols-2 gap-8">
 						<FormField
 							control={form.control}
-							name="categoryId"
+							name="categoryid"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Category</FormLabel>

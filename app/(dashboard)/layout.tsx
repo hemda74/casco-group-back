@@ -9,7 +9,7 @@ export default async function DashboardLayout({
 	params,
 }: {
 	children: React.ReactNode;
-	params: { storeid: number };
+	params: {};
 }) {
 
 

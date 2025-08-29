@@ -4,7 +4,7 @@ import { IndustryForm } from './components/industry-form';
 const CategoryPage = async ({
 	params,
 }: {
-	params: { industryid: number; storeid: number };
+	params: { industryid: number; };
 }) => {
 	const industry = await prismadb.industry.findUnique({
 		where: {

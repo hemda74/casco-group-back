@@ -8,7 +8,7 @@ export async function GET(
 	{ params }: { params: { newsid: number } }
 ) {
 	try {
-		if (!params.newsId) {
+		if (!params.newsid) {
 			return new NextResponse('news id is required', {
 				status: 400,
 			});
@@ -16,7 +16,7 @@ export async function GET(
 
 		const news = await prismadb.news.findUnique({
 			where: {
-				id: params.newsId,
+				id: params.newsid,
 			},
 			include: {
 				paragraph_news: true,
@@ -34,12 +34,12 @@ export async function GET(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { newsid: number; storeid: number } }
+	{ params }: { params: { newsid: number } }
 ) {
 	try {
 		const {} = auth();
 
-		if (!params.newsId) {
+		if (!params.newsid) {
 			return new NextResponse('news id is required', {
 				status: 400,
 			});
@@ -47,7 +47,7 @@ export async function DELETE(
 
 		const news = await prismadb.news.delete({
 			where: {
-				id: params.newsId,
+				id: params.newsid,
 			},
 		});
 
@@ -60,7 +60,7 @@ export async function DELETE(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { newsid: number; storeid: number } }
+	{ params }: { params: { newsid: number } }
 ) {
 	try {
 		const {} = auth();
@@ -70,7 +70,7 @@ export async function PATCH(
 			title,
 			title_ar,
 			imageUrl,
-			categoryId,
+			categoryid,
 			paragraph_news,
 			paragraph_news_ar,
 			date_of_news,
@@ -92,7 +92,7 @@ export async function PATCH(
 				status: 400,
 			});
 		}
-		if (!categoryId) {
+		if (!categoryid) {
 			return new NextResponse('Category ID is required', {
 				status: 400,
 			});
@@ -120,19 +120,9 @@ export async function PATCH(
 			);
 		}
 
-		const storeBy = await prismadb.store.findFirst({
-			where: { id: params.storeId },
-		});
-
-		if (!storeBy) {
-			return new NextResponse('Unauthorized', {
-				status: 405,
-			});
-		}
-
 		// First, delete existing paragraph news
 		await prismadb.news.update({
-			where: { id: params.newsId },
+			where: { id: params.newsid },
 			data: {
 				title,
 				title_ar,
@@ -143,10 +133,8 @@ export async function PATCH(
 				paragraph_news_ar: { deleteMany: {} },
 			},
 		});
-
-		// Then, create new paragraph newss
 		const news = await prismadb.news.update({
-			where: { id: params.newsId },
+			where: { id: params.newsid },
 			data: {
 				paragraph_news: {
 					createMany: {

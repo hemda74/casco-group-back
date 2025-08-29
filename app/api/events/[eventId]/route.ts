@@ -34,7 +34,7 @@ export async function GET(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { eventid: number; storeid: number } }
+	{ params }: { params: { eventid: number } }
 ) {
 	try {
 		if (!params.eventId) {
@@ -58,7 +58,7 @@ export async function DELETE(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { eventid: number; storeid: number } }
+	{ params }: { params: { eventid: number } }
 ) {
 	try {
 		const body = await req.json();
@@ -67,7 +67,7 @@ export async function PATCH(
 			title,
 			title_ar,
 			imageUrl,
-			categoryId,
+			categoryid,
 			paragraph_event,
 			paragraph_event_ar,
 			date_of_event,
@@ -89,7 +89,7 @@ export async function PATCH(
 				status: 400,
 			});
 		}
-		if (!categoryId) {
+		if (!categoryid) {
 			return new NextResponse('Category ID is required', {
 				status: 400,
 			});
@@ -115,16 +115,6 @@ export async function PATCH(
 				'Date of Event in Arabic is required',
 				{ status: 400 }
 			);
-		}
-
-		const storeBy = await prismadb.store.findFirst({
-			where: { id: params.storeId },
-		});
-
-		if (!storeBy) {
-			return new NextResponse('Unauthorized', {
-				status: 405,
-			});
 		}
 
 		// First, delete existing paragraph events

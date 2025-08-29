@@ -2,11 +2,9 @@ import prismadb from '@/lib/prismadb';
 import { CourseColumn } from './components/columns';
 import { CourseClient } from './components/client';
 
-const CategoriesPage = async ({ params }: { params: { storeid: number } }) => {
+const CategoriesPage = async ({ params }: { params: {} }) => {
 	const categories = await prismadb.course.findMany({
-		where: {
-			storeId: params.storeId,
-		},
+
 		include: {
 			CourseType: true,
 			category: true,

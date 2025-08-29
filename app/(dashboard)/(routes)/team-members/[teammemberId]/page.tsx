@@ -5,7 +5,7 @@ import { CourseForm } from './components/member-form';
 const ProductPage = async ({
 	params,
 }: {
-	params: { teammemberid: number; storeid: number };
+	params: { teammemberid: number; };
 }) => {
 	const Teammember = await prismadb.teamMember.findUnique({
 		where: {
@@ -15,9 +15,7 @@ const ProductPage = async ({
 	});
 
 	const teams = await prismadb.team.findMany({
-		where: {
-			storeId: params.storeId,
-		},
+
 	});
 	return (
 		<div className="flex-row">

@@ -63,7 +63,7 @@ export const RecognitionForm: React.FC<recognitionFormProps> = ({
     try {
       setLoading(true);
       if (initialData) {
-        await axios.patch(`/api/${params.storeId}/recognitions/${params.recognitionId}`, data);
+        await axios.patch(`/api/${params.storeId}/recognitions/${params.recognitionid}`, data);
       } else {
         await axios.post(`/api/${params.storeId}/recognitions`, data);
       }
@@ -80,7 +80,7 @@ export const RecognitionForm: React.FC<recognitionFormProps> = ({
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/recognitions/${params.recognitionId}`);
+      await axios.delete(`/api/${params.storeId}/recognitions/${params.recognitionid}`);
       router.refresh();
       router.push(`/${params.storeId}/recognitions`);
       toast.success('recognition deleted.');

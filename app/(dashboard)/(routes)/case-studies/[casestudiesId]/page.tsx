@@ -3,7 +3,7 @@ import { CaseForm } from './components/case-studies-form';
 const ProductPage = async ({
 	params,
 }: {
-	params: { casestudiesid: number; storeid: number };
+	params: { casestudiesid: number; };
 }) => {
 	const casestudies = await prismadb.caseStudy.findUnique({
 		where: {
@@ -15,9 +15,7 @@ const ProductPage = async ({
 		},
 	});
 	const industries = await prismadb.industry.findMany({
-		where: {
-			storeId: params.storeId,
-		},
+
 	});
 	return (
 		<div className="flex-row">
