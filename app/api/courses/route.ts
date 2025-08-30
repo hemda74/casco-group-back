@@ -63,18 +63,15 @@ type courseRequestBody = {
 	}[];
 };
 
-export async function POST(
-	req: Request,
-	{ params }: { params: { storeid: number } }
-) {
+export async function POST(req: Request, { params }: { params: {} }) {
 	try {
 		const body: courseRequestBody = await req.json();
 		const {
 			c_title,
 			c_title_ar,
 			imageUrl,
-			categoryId,
-			coursetypeId,
+			categoryid,
+			coursetypeid,
 			price_egp,
 			price_ksa,
 			price_uae,
@@ -113,18 +110,13 @@ export async function POST(
 				status: 400,
 			});
 		}
-		if (!categoryId) {
+		if (!categoryid) {
 			return new NextResponse('Billboard ID is required', {
 				status: 400,
 			});
 		}
-		if (!coursetypeId) {
+		if (!coursetypeid) {
 			return new NextResponse('Billboard ID is required', {
-				status: 400,
-			});
-		}
-		if (!params.storeId) {
-			return new NextResponse('Store id is required', {
 				status: 400,
 			});
 		}
@@ -216,14 +208,12 @@ export async function POST(
 						text: i.text,
 					})),
 				},
-				store: {
-					connect: { id: params.storeId },
-				},
+
 				category: {
-					connect: { id: categoryId },
+					connect: { id: categoryid },
 				},
 				CourseType: {
-					connect: { id: coursetypeId },
+					connect: { id: coursetypeid },
 				},
 			},
 		});
@@ -235,22 +225,9 @@ export async function POST(
 	}
 }
 
-export async function GET(
-	req: Request,
-	{ params }: { params: { storeid: number } }
-) {
+export async function GET(req: Request, { params }: { params: {} }) {
 	try {
-		if (!params.storeId) {
-			return new NextResponse('Store id is required', {
-				status: 400,
-			});
-		}
-
-		const categories = await prismadb.course.findMany({
-			where: {
-				storeId: params.storeId,
-			},
-		});
+		const categories = await prismadb.course.findMany({});
 
 		return NextResponse.json(categories);
 	} catch (error) {

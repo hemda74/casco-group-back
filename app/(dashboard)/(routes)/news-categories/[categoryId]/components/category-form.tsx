@@ -68,7 +68,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 			setLoading(true);
 			if (initialData) {
 				await axios.patch(
-					`/api/${params.storeId}/news-categories/${params.categoryId}`,
+					`/api/${params.storeId}/news-categories/${params.categoryid}`,
 					data
 				);
 			} else {
@@ -91,7 +91,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 		try {
 			setLoading(true);
 			await axios.delete(
-				`/api/${params.storeId}/news-categories/${params.categoryId}`
+				`/api/${params.storeId}/news-categories/${params.categoryid}`
 			);
 			router.refresh();
 			router.push(`/${params.storeId}/news-categories`);

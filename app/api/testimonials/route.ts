@@ -3,10 +3,7 @@ import { auth } from '@clerk/nextjs';
 
 import prismadb from '@/lib/prismadb';
 
-export async function POST(
-	req: Request,
-	{ params }: { params: { storeid: number } }
-) {
+export async function POST(req: Request, { params }: { params: {} }) {
 	try {
 		const {} = auth();
 
@@ -58,12 +55,6 @@ export async function POST(
 			});
 		}
 
-		if (!params.storeId) {
-			return new NextResponse('Store id is required', {
-				status: 400,
-			});
-		}
-
 		const insidersView = await prismadb.testimonials.create({
 			data: {
 				name,
@@ -73,7 +64,6 @@ export async function POST(
 				text_ar,
 				title_ar,
 				imageUrl,
-				storeId: params.storeId,
 			},
 		});
 
@@ -84,22 +74,9 @@ export async function POST(
 	}
 }
 
-export async function GET(
-	req: Request,
-	{ params }: { params: { storeid: number } }
-) {
+export async function GET(req: Request, { params }: { params: {} }) {
 	try {
-		if (!params.storeId) {
-			return new NextResponse('Store id is required', {
-				status: 400,
-			});
-		}
-
-		const insidersViews = await prismadb.insidersView.findMany({
-			where: {
-				storeId: params.storeId,
-			},
-		});
+		const insidersViews = await prismadb.insidersView.findMany({});
 
 		return NextResponse.json(insidersViews);
 	} catch (error) {

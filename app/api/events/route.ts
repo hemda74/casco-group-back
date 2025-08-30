@@ -3,10 +3,7 @@ import { auth } from '@clerk/nextjs';
 
 import prismadb from '@/lib/prismadb';
 
-export async function POST(
-	req: Request,
-	{ params }: { params: { storeid: number } }
-) {
+export async function POST(req: Request, { params }: { params: {} }) {
 	try {
 		const body = await req.json();
 
@@ -14,7 +11,7 @@ export async function POST(
 			title,
 			title_ar,
 			imageUrl,
-			categoryId,
+			categoryid,
 			paragraph_event,
 			paragraph_event_ar,
 			date_of_event,
@@ -62,14 +59,8 @@ export async function POST(
 				}
 			);
 		}
-		if (!categoryId) {
+		if (!categoryid) {
 			return new NextResponse('Category id is required', {
-				status: 400,
-			});
-		}
-
-		if (!params.storeId) {
-			return new NextResponse('Store id is required', {
 				status: 400,
 			});
 		}
@@ -78,11 +69,11 @@ export async function POST(
 			data: {
 				title,
 				title_ar,
-				categoryId,
+				categoryid,
 				date_of_event,
 				date_of_event_ar,
 				imageUrl,
-				storeId: params.storeId,
+
 				paragraph_event: {
 					createMany: {
 						data: [
@@ -117,24 +108,14 @@ export async function POST(
 	}
 }
 
-export async function GET(
-	req: Request,
-	{ params }: { params: { storeid: number } }
-) {
+export async function GET(req: Request, { params }: { params: {} }) {
 	try {
 		const { searchParams } = new URL(req.url);
-		const categoryId = searchParams.get('categoryId') || undefined;
-
-		if (!params.storeId) {
-			return new NextResponse('Store id is required', {
-				status: 400,
-			});
-		}
+		const categoryid = searchParams.get('categoryid') || undefined;
 
 		const courses = await prismadb.event.findMany({
 			where: {
-				storeId: params.storeId,
-				categoryId,
+				categoryid,
 			},
 			include: {
 				paragraph_event: true,

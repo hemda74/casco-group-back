@@ -9,7 +9,7 @@ const SizePage = async ({
 }) => {
   const size = await prismadb.courseType.findUnique({
     where: {
-      id: params.coursetypeId
+      id: params.coursetypeid
     }
   });
 

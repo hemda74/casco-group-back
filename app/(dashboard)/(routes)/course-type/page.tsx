@@ -5,7 +5,7 @@ import { SizesClient } from "./components/client";
 const SizesPage = async ({
   params
 }: {
-  params: { storeid: number }
+  params: {}
 }) => {
   const courseTypes = await prismadb.courseType.findMany({
     where: {

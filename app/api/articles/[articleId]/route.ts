@@ -32,7 +32,7 @@ export async function GET(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { articleid: number; storeid: number } }
+	{ params }: { params: { articleid: number } }
 ) {
 	try {
 		if (!params.articleId) {
@@ -56,7 +56,7 @@ export async function DELETE(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { articleid: number; storeid: number } }
+	{ params }: { params: { articleid: number } }
 ) {
 	try {
 		const body = await req.json();
@@ -65,7 +65,7 @@ export async function PATCH(
 			title,
 			title_ar,
 			imageUrl,
-			categoryId,
+			categoryid,
 			paragraph_event3,
 			paragraph_event_ar3,
 			date_of_event,
@@ -87,7 +87,7 @@ export async function PATCH(
 				status: 400,
 			});
 		}
-		if (!categoryId) {
+		if (!categoryid) {
 			return new NextResponse('Category ID is required', {
 				status: 400,
 			});

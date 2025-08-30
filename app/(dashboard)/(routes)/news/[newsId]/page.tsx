@@ -5,11 +5,11 @@ import { NewsForm } from './components/news-form';
 const ProductPage = async ({
 	params,
 }: {
-	params: { newsid: number; storeid: number };
+	params: { newsid: number; };
 }) => {
 	const News = await prismadb.news.findUnique({
 		where: {
-			id: params.newsId,
+			id: params.newsid,
 		},
 		include: {
 			paragraph_news: true,
@@ -18,9 +18,7 @@ const ProductPage = async ({
 	});
 
 	const categories = await prismadb.newsCategory.findMany({
-		where: {
-			storeId: params.storeId,
-		},
+
 	});
 	return (
 		<div className="flex-row">

@@ -8,7 +8,7 @@ export async function GET(
 	{ params }: { params: { categoryid: number } }
 ) {
 	try {
-		if (!params.categoryId) {
+		if (!params.categoryid) {
 			return new NextResponse('Category id is required', {
 				status: 400,
 			});
@@ -16,7 +16,7 @@ export async function GET(
 
 		const category = await prismadb.newsCategory.findUnique({
 			where: {
-				id: params.categoryId,
+				id: params.categoryid,
 			},
 		});
 
@@ -29,12 +29,12 @@ export async function GET(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { categoryid: number; storeid: number } }
+	{ params }: { params: { categoryid: number } }
 ) {
 	try {
 		const {} = auth();
 
-		if (!params.categoryId) {
+		if (!params.categoryid) {
 			return new NextResponse('Category id is required', {
 				status: 400,
 			});
@@ -42,7 +42,7 @@ export async function DELETE(
 
 		const category = await prismadb.newsCategory.delete({
 			where: {
-				id: params.categoryId,
+				id: params.categoryid,
 			},
 		});
 
@@ -55,7 +55,7 @@ export async function DELETE(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { categoryid: number; storeid: number } }
+	{ params }: { params: { categoryid: number } }
 ) {
 	try {
 		const {} = auth();
@@ -75,7 +75,7 @@ export async function PATCH(
 				status: 400,
 			});
 		}
-		if (!params.categoryId) {
+		if (!params.categoryid) {
 			return new NextResponse('Category id is required', {
 				status: 400,
 			});
@@ -83,7 +83,7 @@ export async function PATCH(
 
 		const category = await prismadb.newsCategory.update({
 			where: {
-				id: params.categoryId,
+				id: params.categoryid,
 			},
 			data: {
 				name,

@@ -36,10 +36,7 @@ type industryRequestBody = {
 	}[];
 };
 
-export async function POST(
-	req: Request,
-	{ params }: { params: { storeid: number } }
-) {
+export async function POST(req: Request, { params }: { params: {} }) {
 	try {
 		const body: industryRequestBody = await req.json();
 		const {
@@ -61,19 +58,10 @@ export async function POST(
 			});
 		}
 
-		if (!params.storeId) {
-			return new NextResponse('Store id is required', {
-				status: 400,
-			});
-		}
-
 		const category = await prismadb.industry.create({
 			data: {
 				name,
 				name_ar,
-				store: {
-					connect: { id: params.storeId },
-				},
 
 				expertIndustry: {
 					create: expertIndustry.map(
@@ -91,11 +79,6 @@ export async function POST(
 							expert_mail:
 								expert.expert_mail,
 							imageUrl: expert.imageUrl,
-							store: {
-								connect: {
-									id: params.storeId,
-								},
-							},
 						})
 					),
 				},
@@ -103,11 +86,7 @@ export async function POST(
 					create: industryDetailes.map((i) => ({
 						title: i.title,
 						title_ar: i.title_ar,
-						store: {
-							connect: {
-								id: params.storeId,
-							},
-						},
+
 						industryDetailesPoint: {
 							create: i.industryDetailesPoint.map(
 								(point) => ({
@@ -128,11 +107,7 @@ export async function POST(
 					create: industryDetailes2.map((i) => ({
 						title: i.title,
 						title_ar: i.title_ar,
-						store: {
-							connect: {
-								id: params.storeId,
-							},
-						},
+
 						industryDetailesPoint2: {
 							create: i.industryDetailesPoint2.map(
 								(point) => ({
@@ -173,22 +148,9 @@ export async function POST(
 	}
 }
 
-export async function GET(
-	req: Request,
-	{ params }: { params: { storeid: number } }
-) {
+export async function GET(req: Request, { params }: { params: {} }) {
 	try {
-		if (!params.storeId) {
-			return new NextResponse('Store id is required', {
-				status: 400,
-			});
-		}
-
-		const categories = await prismadb.industry.findMany({
-			where: {
-				storeId: params.storeId,
-			},
-		});
+		const categories = await prismadb.industry.findMany({});
 
 		return NextResponse.json(categories);
 	} catch (error) {
@@ -199,7 +161,7 @@ export async function GET(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { storeid: number; industryid: number } }
+	{ params }: { params: { industryid: number } }
 ) {
 	try {
 		const body: industryRequestBody = await req.json();
@@ -218,38 +180,29 @@ export async function PATCH(
 			);
 		}
 
-		const storeBy = await prismadb.store.findFirst({
-			where: { id: params.storeId },
-		});
-
 		const updatedindustry = await prismadb.$transaction(
 			async (prisma) => {
 				await prisma.industryDetailes.deleteMany({
 					where: {
-						industryId: params.industryId,
+						industryId: params.industryid,
 					},
 				});
 				await prisma.industryDetailes2.deleteMany({
 					where: {
-						industryId: params.industryId,
+						industryId: params.industryid,
 					},
 				});
 				await prisma.expertIndustry.deleteMany({
 					where: {
-						industryId: params.industryId,
+						industryId: params.industryid,
 					},
 				});
 
 				const industry = await prisma.industry.update({
-					where: { id: params.industryId },
+					where: { id: params.industryid },
 					data: {
 						name,
 						name_ar,
-						store: {
-							connect: {
-								id: params.storeId,
-							},
-						},
 
 						expertIndustry: {
 							create: expertIndustry.map(
@@ -267,11 +220,6 @@ export async function PATCH(
 									expert_mail:
 										expert.expert_mail,
 									imageUrl: expert.imageUrl,
-									store: {
-										connect: {
-											id: params.storeId,
-										},
-									},
 								})
 							),
 						},
@@ -280,11 +228,7 @@ export async function PATCH(
 								(i) => ({
 									title: i.title,
 									title_ar: i.title_ar,
-									store: {
-										connect: {
-											id: params.storeId,
-										},
-									},
+
 									industryDetailesPoint:
 										{
 											create: i.industryDetailesPoint.map(
@@ -313,11 +257,7 @@ export async function PATCH(
 								(i) => ({
 									title: i.title,
 									title_ar: i.title_ar,
-									store: {
-										connect: {
-											id: params.storeId,
-										},
-									},
+
 									industryDetailesPoint2:
 										{
 											create: i.industryDetailesPoint2.map(
@@ -373,21 +313,12 @@ export async function PATCH(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { storeid: number; categoryid: number } }
+	{ params }: { params: { categoryid: number } }
 ) {
 	try {
-		if (!params.storeId || !params.categoryId) {
-			return new NextResponse(
-				'Store id and category id are required',
-				{
-					status: 400,
-				}
-			);
-		}
-
 		await prismadb.industry.delete({
 			where: {
-				id: params.categoryId,
+				id: params.categoryid,
 			},
 		});
 

@@ -9,7 +9,7 @@ const RecognitionPage = async ({
 }) => {
   const recognition = await prismadb.recognition.findUnique({
     where: {
-      id: params.recognitionId
+      id: params.recognitionid
     }
   });
 

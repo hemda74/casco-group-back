@@ -19,8 +19,8 @@ model CoursesCategory {
 
 model Course {
   id                    Int               @id @default(autoincrement())
-  categoryId            Int
-  category              CoursesCategory   @relation("CategoryToCourse", fields: [categoryId], references: [id])
+  categoryid            Int
+  category              CoursesCategory   @relation("CategoryToCourse", fields: [categoryid], references: [id])
   c_title               String
   c_title_ar            String
   price_egp             Decimal
@@ -50,11 +50,11 @@ model Course {
   c_content2_ar         C_content2_ar[]
   c_date_en             C_date_en[]
   c_date_ar             C_date_ar[]
-  coursetypeId          Int
-  CourseType            CourseType        @relation(fields: [coursetypeId], references: [id])
+  coursetypeid          Int
+  CourseType            CourseType        @relation(fields: [coursetypeid], references: [id])
 
-  @@index([categoryId])
-  @@index([coursetypeId])
+  @@index([categoryid])
+  @@index([coursetypeid])
 }
 
 model C_intro_en {
@@ -390,20 +390,20 @@ model CaseStudyPointAr {
 
 model paragrph_news {
   id     Int    @id @default(autoincrement())
-  newsId Int
-  news   News   @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  newsid Int
+  news   News   @relation(fields: [newsid], references: [id], onDelete: Cascade)
   text   String
 
-  @@index([newsId])
+  @@index([newsid])
 }
 
 model paragrph_news_ar {
   id     Int    @id @default(autoincrement())
-  newsId Int
-  news   News   @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  newsid Int
+  news   News   @relation(fields: [newsid], references: [id], onDelete: Cascade)
   text   String
 
-  @@index([newsId])
+  @@index([newsid])
 }
 
 model NewsCategory {
@@ -420,8 +420,8 @@ model NewsCategory {
 
 model News {
   id                Int                @id @default(autoincrement())
-  categoryId        Int
-  category          NewsCategory       @relation("CategoryToNews", fields: [categoryId], references: [id])
+  categoryid        Int
+  category          NewsCategory       @relation("CategoryToNews", fields: [categoryid], references: [id])
   title             String
   title_ar          String
   imageUrl          String
@@ -431,7 +431,7 @@ model News {
   date_of_news      String
   date_of_news_ar   String
 
-  @@index([categoryId])
+  @@index([categoryid])
 }
 
 model paragrph_event {
@@ -454,8 +454,8 @@ model paragrph_event_ar {
 
 model Event {
   id                 Int                 @id @default(autoincrement())
-  categoryId         Int
-  category           NewsCategory        @relation("CategoryToEvent", fields: [categoryId], references: [id])
+  categoryid         Int
+  category           NewsCategory        @relation("CategoryToEvent", fields: [categoryid], references: [id])
   title              String
   title_ar           String
   imageUrl           String
@@ -465,7 +465,7 @@ model Event {
   date_of_event      String
   date_of_event_ar   String
 
-  @@index([categoryId])
+  @@index([categoryid])
 }
 
 model InsidersView {
@@ -524,8 +524,8 @@ model paragrph_event_ar2 {
 
 model Event2 {
   id                  Int                  @id @default(autoincrement())
-  categoryId          Int
-  category            NewsCategory         @relation("CategoryToEvent2", fields: [categoryId], references: [id])
+  categoryid          Int
+  category            NewsCategory         @relation("CategoryToEvent2", fields: [categoryid], references: [id])
   title               String
   title_ar            String
   imageUrl            String
@@ -535,7 +535,7 @@ model Event2 {
   date_of_event       String
   date_of_event_ar    String
 
-  @@index([categoryId])
+  @@index([categoryid])
 }
 
 model paragrph_event3 {
@@ -558,8 +558,8 @@ model paragrph_event_ar3 {
 
 model Event3 {
   id                  Int                  @id @default(autoincrement())
-  categoryId          Int
-  category            NewsCategory         @relation("CategoryToEvent3", fields: [categoryId], references: [id])
+  categoryid          Int
+  category            NewsCategory         @relation("CategoryToEvent3", fields: [categoryid], references: [id])
   title               String
   title_ar            String
   imageUrl            String
@@ -569,5 +569,5 @@ model Event3 {
   date_of_event       String
   date_of_event_ar    String
 
-  @@index([categoryId])
+  @@index([categoryid])
 }

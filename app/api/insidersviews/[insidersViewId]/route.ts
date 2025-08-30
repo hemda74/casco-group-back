@@ -27,7 +27,7 @@ export async function GET(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { insidersviewid: number; storeid: number } }
+	{ params }: { params: { insidersviewid: number } }
 ) {
 	try {
 		const {} = auth();
@@ -53,7 +53,7 @@ export async function DELETE(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { insidersviewid: number; storeid: number } }
+	{ params }: { params: { insidersviewid: number } }
 ) {
 	try {
 		const {} = auth();

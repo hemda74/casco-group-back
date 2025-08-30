@@ -29,7 +29,7 @@ export async function GET(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { teamid: number; storeid: number } }
+	{ params }: { params: { teamid: number } }
 ) {
 	try {
 		if (!params.teamId) {
@@ -53,7 +53,7 @@ export async function DELETE(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { teamid: number; storeid: number } }
+	{ params }: { params: { teamid: number } }
 ) {
 	try {
 		const body = await req.json();

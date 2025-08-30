@@ -8,7 +8,7 @@ import { InsidersviewClient } from "./components/client";
 const insidersViewsPage = async ({
   params
 }: {
-  params: { storeid: number }
+  params: {}
 }) => {
   const insidersViews = await prismadb.recognition.findMany({
     where: {

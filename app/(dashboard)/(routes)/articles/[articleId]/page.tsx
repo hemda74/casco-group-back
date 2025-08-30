@@ -5,7 +5,7 @@ import { EventForm } from './components/event-form';
 const ProductPage = async ({
 	params,
 }: {
-	params: { articleid: number; storeid: number };
+	params: { articleid: number; };
 }) => {
 	const article = await prismadb.event3.findUnique({
 		where: {
@@ -18,9 +18,7 @@ const ProductPage = async ({
 	});
 
 	const categories = await prismadb.newsCategory.findMany({
-		where: {
-			storeId: params.storeId,
-		},
+
 	});
 	return (
 		<div className="flex-row">

@@ -40,10 +40,7 @@ const handleErrorResponse = (error: any) => {
 	console.error(error);
 	return new NextResponse('Internal error', { status: 500 });
 };
-export async function POST(
-	req: Request,
-	{ params }: { params: { storeid: number } }
-) {
+export async function POST(req: Request, { params }: { params: {} }) {
 	try {
 		const body: IndustryRequestBody = await req.json();
 
@@ -94,11 +91,6 @@ export async function POST(
 											})
 										),
 									},
-								store: {
-									connect: {
-										id: params.storeId,
-									},
-								},
 							})
 						),
 					},
@@ -127,11 +119,6 @@ export async function POST(
 											})
 										),
 									},
-								store: {
-									connect: {
-										id: params.storeId,
-									},
-								},
 							})
 						),
 					},
@@ -153,11 +140,6 @@ export async function POST(
 								expert_mail:
 									expert.expert_mail,
 								imageUrl: expert.imageUrl,
-								store: {
-									connect: {
-										id: params.storeId,
-									},
-								},
 							})
 						),
 					},
@@ -223,7 +205,7 @@ export async function GET(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { industryid: number; storeid: number } }
+	{ params }: { params: { industryid: number } }
 ) {
 	try {
 		if (!params.industryId)
@@ -245,7 +227,7 @@ export async function DELETE(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { industryid: number; storeid: number } }
+	{ params }: { params: { industryid: number } }
 ) {
 	try {
 		const body: IndustryRequestBody = await req.json();
@@ -332,11 +314,6 @@ export async function PATCH(
 										})
 									),
 								},
-							store: {
-								connect: {
-									id: params.storeId,
-								},
-							},
 						})
 					),
 				},
@@ -365,11 +342,6 @@ export async function PATCH(
 										})
 									),
 								},
-							store: {
-								connect: {
-									id: params.storeId,
-								},
-							},
 						})
 					),
 				},
@@ -391,11 +363,6 @@ export async function PATCH(
 							expert_mail:
 								expert.expert_mail,
 							imageUrl: expert.imageUrl,
-							store: {
-								connect: {
-									id: params.storeId,
-								},
-							},
 						})
 					),
 				},

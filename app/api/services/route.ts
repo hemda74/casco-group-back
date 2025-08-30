@@ -29,10 +29,7 @@ type ServiceRequestBody = {
 	}[];
 };
 
-export async function POST(
-	req: Request,
-	{ params }: { params: { storeid: number } }
-) {
+export async function POST(req: Request, { params }: { params: {} }) {
 	try {
 		const {} = auth();
 		const body: ServiceRequestBody = await req.json();
@@ -51,20 +48,9 @@ export async function POST(
 			);
 		}
 
-		const storeBy = await prismadb.store.findFirst({
-			where: { id: params.storeId },
-		});
-
-		if (!storeBy) {
-			return new NextResponse('Unauthorized', {
-				status: 405,
-			});
-		}
-
 		const service = await prismadb.$transaction(async (prisma) => {
 			const createdService = await prisma.service.create({
 				data: {
-					storeId: params.storeId,
 					name,
 					name_ar,
 
@@ -74,11 +60,6 @@ export async function POST(
 								title: desc.title,
 								desc_1: desc.desc_1,
 								desc_2: desc.desc_2,
-								store: {
-									connect: {
-										id: params.storeId,
-									},
-								},
 							})
 						),
 					},
@@ -88,11 +69,6 @@ export async function POST(
 								title_ar: descAr.title_ar,
 								desc_1_ar: descAr.desc_1_ar,
 								desc_2_ar: descAr.desc_2_ar,
-								store: {
-									connect: {
-										id: params.storeId,
-									},
-								},
 							})
 						),
 					},
@@ -112,11 +88,6 @@ export async function POST(
 									expert.expert_phone,
 								expert_mail:
 									expert.expert_mail,
-								store: {
-									connect: {
-										id: params.storeId,
-									},
-								},
 							})
 						),
 					},
@@ -132,22 +103,9 @@ export async function POST(
 	}
 }
 
-export async function GET(
-	req: Request,
-	{ params }: { params: { storeid: number } }
-) {
+export async function GET(req: Request, { params }: { params: {} }) {
 	try {
-		if (!params.storeId) {
-			return new NextResponse('Store id is required', {
-				status: 400,
-			});
-		}
-
-		const categories = await prismadb.service.findMany({
-			where: {
-				storeId: params.storeId,
-			},
-		});
+		const categories = await prismadb.service.findMany({});
 
 		return NextResponse.json(categories);
 	} catch (error) {
@@ -158,7 +116,7 @@ export async function GET(
 
 export async function PATCH(
 	req: Request,
-	{ params }: { params: { storeid: number; serviceid: number } }
+	{ params }: { params: { serviceid: number } }
 ) {
 	try {
 		const {} = auth();
@@ -178,30 +136,20 @@ export async function PATCH(
 			);
 		}
 
-		const storeBy = await prismadb.store.findFirst({
-			where: { id: params.storeId },
-		});
-
-		if (!storeBy) {
-			return new NextResponse('Unauthorized', {
-				status: 405,
-			});
-		}
-
 		const updatedService = await prismadb.$transaction(
 			async (prisma) => {
 				await prisma.serviceDesc.deleteMany({
-					where: { serviceId: params.serviceId },
+					where: { serviceId: params.serviceid },
 				});
 				await prisma.serviceDescAr.deleteMany({
-					where: { serviceId: params.serviceId },
+					where: { serviceId: params.serviceid },
 				});
 				await prisma.expertService.deleteMany({
-					where: { serviceId: params.serviceId },
+					where: { serviceId: params.serviceid },
 				});
 
 				const service = await prisma.service.update({
-					where: { id: params.serviceId },
+					where: { id: params.serviceid },
 					data: {
 						name,
 						name_ar,
@@ -212,11 +160,6 @@ export async function PATCH(
 									title: desc.title,
 									desc_1: desc.desc_1,
 									desc_2: desc.desc_2,
-									store: {
-										connect: {
-											id: params.storeId,
-										},
-									},
 								})
 							),
 						},
@@ -226,11 +169,6 @@ export async function PATCH(
 									title_ar: descAr.title_ar,
 									desc_1_ar: descAr.desc_1_ar,
 									desc_2_ar: descAr.desc_2_ar,
-									store: {
-										connect: {
-											id: params.storeId,
-										},
-									},
 								})
 							),
 						},
@@ -250,11 +188,6 @@ export async function PATCH(
 										expert.expert_phone,
 									expert_mail:
 										expert.expert_mail,
-									store: {
-										connect: {
-											id: params.storeId,
-										},
-									},
 								})
 							),
 						},
@@ -273,23 +206,13 @@ export async function PATCH(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { storeid: number; serviceid: number } }
+	{ params }: { params: { serviceid: number } }
 ) {
 	try {
 		const {} = auth();
 
-		const storeBy = await prismadb.store.findFirst({
-			where: { id: params.storeId },
-		});
-
-		if (!storeBy) {
-			return new NextResponse('Unauthorized', {
-				status: 405,
-			});
-		}
-
 		const deletedService = await prismadb.service.delete({
-			where: { id: params.serviceId },
+			where: { id: params.serviceid },
 		});
 
 		return NextResponse.json(deletedService);
