@@ -9,7 +9,7 @@ const ProductPage = async ({
 }) => {
 	const article = await prismadb.event3.findUnique({
 		where: {
-			id: params.articleId,
+			id: params.articleid,
 		},
 		include: {
 			paragraph_event3: true,

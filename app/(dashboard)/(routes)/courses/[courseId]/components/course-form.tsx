@@ -1,4 +1,5 @@
 'use client';
+
 import * as z from 'zod';
 import axios from 'axios';
 import { useState } from 'react';
@@ -8,7 +9,23 @@ import { toast } from 'react-hot-toast';
 import { Trash } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import {
-	Course, CoursesCategory, CourseType, C_benefit_ar, C_benefit_en, C_content2_ar, C_content2_en, C_content_ar, C_content_en, C_date_ar, C_date_en, C_intro_ar, C_intro_en, C_objective_ar, C_who_should_en, C_who_should_ar, C_objective_en
+	Course,
+	CoursesCategory,
+	CourseType,
+	C_benefit_ar,
+	C_benefit_en,
+	C_content2_ar,
+	C_content2_en,
+	C_content_ar,
+	C_content_en,
+	C_date_ar,
+	C_date_en,
+	C_intro_ar,
+	C_intro_en,
+	C_objective_ar,
+	C_who_should_en,
+	C_who_should_ar,
+	C_objective_en
 } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -33,74 +50,49 @@ import {
 } from '@/components/ui/select';
 import ImageUpload from '@/components/ui/image-upload';
 
+// Schema definition
+const textItemSchema = z.object({
+	text: z.string().min(1, 'Text is required'),
+});
+
 const formSchema = z.object({
-	c_title: z.string().min(2),
-	c_title_ar: z.string().min(2),
-	imageUrl: z.string().min(2),
-	price_egp: z.coerce.number().min(1),
-	price_uae: z.coerce.number().min(1),
-	price_ksa: z.coerce.number().min(1),
-	price_usd: z.coerce.number().min(1),
-	categoryid: z.string().min(1),
-	coursetypeid: z.string().min(1),
-	c_short_intro_en: z.string().min(1),
-	c_short_intro_ar: z.string().min(1),
-	c_delv_and_leaders_en: z.string().min(1),
-	c_delv_and_leaders_ar: z.string().min(1),
-	c_in_house_en: z.string().min(1),
-	c_in_house_ar: z.string().min(1),
-	c_duration_en: z.string().min(1),
-	c_duration_ar: z.string().min(1),
-	c_intro_en: z.array(z.object({
-		text: z.string().min(1),
-	})),
-	c_intro_ar: z.array(z.object({
-		text: z.string().min(1),
-	})),
-	c_who_should_en: z.array(z.object({
-		text: z.string().min(1),
-	})),
-	c_who_should_ar: z.array(z.object({
-		text: z.string().min(1),
-	})),
-	c_objective_en: z.array(z.object({
-		text: z.string().min(1),
-	})),
-	c_objective_ar: z.array(z.object({
-		text: z.string().min(1),
-	})),
-	c_content_en: z.array(z.object({
-		text: z.string().min(1),
-	})),
-	c_content_ar: z.array(z.object({
-		text: z.string().min(1),
-	})),
-	c_benefit_en: z.array(z.object({
-		text: z.string().min(1),
-	})),
-	c_benefit_ar: z.array(z.object({
-		text: z.string().min(1),
-	})),
-	c_content2_en: z.array(z.object({
-		text: z.string().min(1),
-	})),
-	c_content2_ar: z.array(z.object({
-		text: z.string().min(1),
-	})),
-	c_date_en: z.array(z.object({
-		text: z.string().min(1),
-	})),
-	c_date_ar: z.array(z.object({
-		text: z.string().min(1),
-	})),
+	c_title: z.string().min(2, 'Title must be at least 2 characters'),
+	c_title_ar: z.string().min(2, 'Arabic title must be at least 2 characters'),
+	imageUrl: z.string().min(2, 'Image is required'),
+	price_egp: z.coerce.number().min(1, 'EGP price must be greater than 0'),
+	price_uae: z.coerce.number().min(1, 'UAE price must be greater than 0'),
+	price_ksa: z.coerce.number().min(1, 'KSA price must be greater than 0'),
+	price_usd: z.coerce.number().min(1, 'USD price must be greater than 0'),
+	categoryid: z.string().min(1, 'Category is required'),
+	coursetypeid: z.string().min(1, 'Course type is required'),
+	c_short_intro_en: z.string().min(1, 'English short introduction is required'),
+	c_short_intro_ar: z.string().min(1, 'Arabic short introduction is required'),
+	c_delv_and_leaders_en: z.string().min(1, 'English delivery and leaders is required'),
+	c_delv_and_leaders_ar: z.string().min(1, 'Arabic delivery and leaders is required'),
+	c_in_house_en: z.string().min(1, 'English in-house info is required'),
+	c_in_house_ar: z.string().min(1, 'Arabic in-house info is required'),
+	c_duration_en: z.string().min(1, 'English duration is required'),
+	c_duration_ar: z.string().min(1, 'Arabic duration is required'),
+	c_intro_en: z.array(textItemSchema),
+	c_intro_ar: z.array(textItemSchema),
+	c_who_should_en: z.array(textItemSchema),
+	c_who_should_ar: z.array(textItemSchema),
+	c_objective_en: z.array(textItemSchema),
+	c_objective_ar: z.array(textItemSchema),
+	c_content_en: z.array(textItemSchema),
+	c_content_ar: z.array(textItemSchema),
+	c_benefit_en: z.array(textItemSchema),
+	c_benefit_ar: z.array(textItemSchema),
+	c_content2_en: z.array(textItemSchema),
+	c_content2_ar: z.array(textItemSchema),
+	c_date_en: z.array(textItemSchema),
+	c_date_ar: z.array(textItemSchema),
 });
 
 type CourseFormValues = z.infer<typeof formSchema>;
 
 interface CourseFormProps {
-	initialData:
-	| (Course & {
-
+	initialData: (Course & {
 		c_intro_ar: C_intro_ar[];
 		c_intro_en: C_intro_en[];
 		c_date_ar: C_date_ar[];
@@ -115,11 +107,151 @@ interface CourseFormProps {
 		c_objective_en: C_objective_en[];
 		c_who_should_ar: C_who_should_ar[];
 		c_who_should_en: C_who_should_en[];
-	})
-	| null;
+	}) | null;
 	categories: CoursesCategory[];
 	types: CourseType[];
 }
+
+// Default form values
+const getDefaultValues = (initialData: CourseFormProps['initialData']): CourseFormValues => {
+	if (initialData) {
+		return {
+			...initialData,
+			price_egp: parseFloat(String(initialData.price_egp)),
+			price_uae: parseFloat(String(initialData.price_uae)),
+			price_usd: parseFloat(String(initialData.price_usd)),
+			price_ksa: parseFloat(String(initialData.price_ksa)),
+			c_title: '',
+			c_title_ar: '',
+			c_short_intro_en: '',
+			c_short_intro_ar: '',
+			c_duration_en: '',
+			c_duration_ar: '',
+			c_in_house_en: '',
+			c_in_house_ar: '',
+			c_delv_and_leaders_en: '',
+			c_delv_and_leaders_ar: '',
+			imageUrl: '',
+			c_intro_en: [],
+			c_intro_ar: [],
+			c_who_should_en: [],
+			c_who_should_ar: [],
+			c_objective_en: [],
+			c_objective_ar: [],
+			c_content_en: [],
+			c_content_ar: [],
+			c_benefit_en: [],
+			c_benefit_ar: [],
+			c_content2_en: [],
+			c_content2_ar: [],
+			c_date_en: [],
+			c_date_ar: [],
+			categoryid: '',
+			coursetypeid: ''
+		};
+	}
+
+	return {
+		coursetypeid: '',
+		c_title: '',
+		c_title_ar: '',
+		imageUrl: '',
+		categoryid: '',
+		c_delv_and_leaders_ar: '',
+		c_delv_and_leaders_en: '',
+		c_duration_ar: '',
+		c_duration_en: '',
+		c_in_house_ar: '',
+		c_in_house_en: '',
+		c_short_intro_ar: '',
+		c_short_intro_en: '',
+		c_intro_ar: [],
+		c_intro_en: [],
+		c_content2_ar: [],
+		c_content2_en: [],
+		c_date_ar: [],
+		c_date_en: [],
+		c_benefit_ar: [],
+		c_benefit_en: [],
+		c_content_ar: [],
+		c_content_en: [],
+		c_objective_ar: [],
+		c_objective_en: [],
+		c_who_should_ar: [],
+		c_who_should_en: [],
+		price_usd: 0,
+		price_egp: 0,
+		price_uae: 0,
+		price_ksa: 0,
+	};
+};
+
+// Reusable dynamic section component
+interface DynamicSectionProps {
+	title: string;
+	description: string;
+	fields: Array<{ id: string }>;
+	fieldName: string;
+	onAppend: (value: { text: string }) => void;
+	onRemove: (index: number) => void;
+	control: any;
+	loading: boolean;
+}
+
+const DynamicSection: React.FC<DynamicSectionProps> = ({
+	title,
+	description,
+	fields,
+	fieldName,
+	onAppend,
+	onRemove,
+	control,
+	loading,
+}) => (
+	<div>
+		<Heading description={description} title={title} />
+		{fields.map((field, index) => (
+			<div key={field.id} className="grid grid-cols-2 gap-8 mb-4">
+				<FormField
+					control={control}
+					name={`${fieldName}.${index}.text`}
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>{`${title} Paragraph ${index + 1}`}</FormLabel>
+							<FormControl>
+								<Textarea
+									disabled={loading}
+									placeholder="Enter content"
+									{...field}
+								/>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<Button
+					disabled={loading}
+					type="button"
+					onClick={() => onRemove(index)}
+					variant="destructive"
+					size="sm"
+					className="mt-10"
+				>
+					Remove
+				</Button>
+			</div>
+		))}
+		<Button
+			disabled={loading}
+			type="button"
+			onClick={() => onAppend({ text: '' })}
+			variant="secondary"
+			className="mt-2"
+		>
+			Add New Paragraph
+		</Button>
+	</div>
+);
 
 export const CourseForm: React.FC<CourseFormProps> = ({
 	initialData,
@@ -128,172 +260,113 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 }) => {
 	const params = useParams();
 	const router = useRouter();
-
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 
-	const title = initialData ? 'Edit Course' : 'Create Course';
-	const description = initialData
-		? 'Edit a Course.'
-		: 'Add a new Course';
-	const toastMessage = initialData
-		? 'Course updated.'
-		: 'Course created.';
-	const action = initialData ? 'Save changes' : 'Create';
-	const defaultValues = initialData
-		? {
-			...initialData,
-			price_egp: parseFloat(
-				String(initialData?.price_egp)
-			),
-			price_uae: parseFloat(
-				String(initialData?.price_uae)
-			),
+	// Form configuration
+	const isEditing = Boolean(initialData);
+	const title = isEditing ? 'Edit Course' : 'Create Course';
+	const description = isEditing ? 'Edit a Course.' : 'Add a new Course';
+	const toastMessage = isEditing ? 'Course updated.' : 'Course created.';
+	const action = isEditing ? 'Save changes' : 'Create';
 
-			price_usd: parseFloat(
-				String(initialData?.price_usd)
-			),
-
-			price_ksa: parseFloat(
-				String(initialData?.price_ksa)
-			),
-		}
-		: {
-			coursetypeid: '',
-			c_title: '',
-			c_title_ar: '',
-			imageUrl: '',
-			categoryid: '',
-			c_delv_and_leaders_ar: '',
-			c_delv_and_leaders_en: '',
-			c_duration_ar: '',
-			c_duration_en: '',
-			c_in_house_ar: '',
-			c_in_house_en: '',
-			c_short_intro_ar: '',
-			c_short_intro_en: '',
-			c_intro_ar: [],
-			c_intro_en: [],
-			c_content2_ar: [],
-			c_content2_en: [],
-			c_date_ar: [],
-			c_date_en: [],
-			c_benefit_ar: [],
-			c_benefit_en: [],
-			c_content_ar: [],
-			c_content_en: [],
-			c_objective_ar: [],
-			c_objective_en: [],
-			c_who_should_ar: [],
-			c_who_should_en: [],
-			price_usd: 0,
-			price_egp: 0,
-			price_uae: 0,
-			price_ksa: 0,
-		};
 	const form = useForm<CourseFormValues>({
 		resolver: zodResolver(formSchema),
-		defaultValues,
+		defaultValues: getDefaultValues(initialData),
 	});
 
-	const { fields: c_intro_enFields, append: appendc_intro_en, remove: removec_intro_en } = useFieldArray({
-		control: form.control,
-		name: 'c_intro_en',
-	});
-	const { fields: c_intro_arFields, append: appendc_intro_ar, remove: removec_intro_ar } = useFieldArray({
-		control: form.control,
-		name: 'c_intro_ar',
-	});
-	const { fields: c_date_enFields, append: appendc_date_en, remove: removec_date_en } = useFieldArray({
-		control: form.control,
-		name: 'c_date_en',
-	});
-	const { fields: c_date_arFields, append: appendc_date_ar, remove: removec_date_ar } = useFieldArray({
-		control: form.control,
-		name: 'c_date_ar',
-	});
-	const { fields: c_content_enFields, append: appendc_content_en, remove: removec_content_en } = useFieldArray({
-		control: form.control,
-		name: 'c_content_en',
-	});
-	const { fields: c_content_arFields, append: appendc_content_ar, remove: removec_content_ar } = useFieldArray({
-		control: form.control,
-		name: 'c_content_ar',
-	});
-	const { fields: c_benefit_enFields, append: appendc_benefit_en, remove: removec_benefit_en } = useFieldArray({
-		control: form.control,
-		name: 'c_benefit_en',
-	});
-	const { fields: c_benefit_arFields, append: appendc_benefit_ar, remove: removec_benefit_ar } = useFieldArray({
-		control: form.control,
-		name: 'c_benefit_ar',
-	});
-	const { fields: c_content2_enFields, append: appendc_content2_en, remove: removec_content2_en } = useFieldArray({
-		control: form.control,
-		name: 'c_content2_en',
-	});
-	const { fields: c_content2_arFields, append: appendc_content2_ar, remove: removec_content2_ar } = useFieldArray({
-		control: form.control,
-		name: 'c_content2_ar',
-	});
-	const { fields: c_objective_enFields, append: appendc_objective_en, remove: removec_objective_en } = useFieldArray({
-		control: form.control,
-		name: 'c_objective_en',
-	});
-	const { fields: c_objective_arFields, append: appendc_objective_ar, remove: removec_objective_ar } = useFieldArray({
-		control: form.control,
-		name: 'c_objective_ar',
-	});
-	const { fields: c_who_should_enFields, append: appendc_who_should_en, remove: removec_who_should_en } = useFieldArray({
-		control: form.control,
-		name: 'c_who_should_en',
-	});
-	const { fields: c_who_should_arFields, append: appendc_who_should_ar, remove: removec_who_should_ar } = useFieldArray({
-		control: form.control,
-		name: 'c_who_should_ar',
-	});
+	// Field arrays setup
+	const fieldArrays = {
+		c_intro_en: useFieldArray({ control: form.control, name: 'c_intro_en' }),
+		c_intro_ar: useFieldArray({ control: form.control, name: 'c_intro_ar' }),
+		c_date_en: useFieldArray({ control: form.control, name: 'c_date_en' }),
+		c_date_ar: useFieldArray({ control: form.control, name: 'c_date_ar' }),
+		c_content_en: useFieldArray({ control: form.control, name: 'c_content_en' }),
+		c_content_ar: useFieldArray({ control: form.control, name: 'c_content_ar' }),
+		c_benefit_en: useFieldArray({ control: form.control, name: 'c_benefit_en' }),
+		c_benefit_ar: useFieldArray({ control: form.control, name: 'c_benefit_ar' }),
+		c_content2_en: useFieldArray({ control: form.control, name: 'c_content2_en' }),
+		c_content2_ar: useFieldArray({ control: form.control, name: 'c_content2_ar' }),
+		c_objective_en: useFieldArray({ control: form.control, name: 'c_objective_en' }),
+		c_objective_ar: useFieldArray({ control: form.control, name: 'c_objective_ar' }),
+		c_who_should_en: useFieldArray({ control: form.control, name: 'c_who_should_en' }),
+		c_who_should_ar: useFieldArray({ control: form.control, name: 'c_who_should_ar' }),
+	};
+
+	// Form submission handler
 	const onSubmit = async (data: CourseFormValues) => {
 		try {
 			setLoading(true);
-			if (initialData) {
-				await axios.patch(
-					`/api/${params.storeId}/courses/${params.courseId}`,
-					data
-				);
-			} else {
-				await axios.post(
-					`/api/${params.storeId}/courses`,
-					data
-				);
-			}
+			const url = isEditing
+				? `/api/${params.storeId}/courses/${params.courseId}`
+				: `/api/${params.storeId}/courses`;
+
+			const method = isEditing ? axios.patch : axios.post;
+			await method(url, data);
+
 			router.refresh();
 			router.push(`/${params.storeId}/courses`);
 			toast.success(toastMessage);
-		} catch (error: any) {
+		} catch (error) {
 			toast.error('Something went wrong.');
 		} finally {
 			setLoading(false);
 		}
 	};
 
+	// Delete handler
 	const onDelete = async () => {
 		try {
 			setLoading(true);
-			await axios.delete(
-				`/api/${params.storeId}/courses/${params.courseId}`
-			);
+			await axios.delete(`/api/${params.storeId}/courses/${params.courseId}`);
 			router.refresh();
 			router.push(`/${params.storeId}/courses`);
 			toast.success('Course deleted.');
-		} catch (error: any) {
-			toast.error(
-				'Make sure you removed all products using this category first.'
-			);
+		} catch (error) {
+			toast.error('Make sure you removed all products using this course first.');
 		} finally {
 			setLoading(false);
 			setOpen(false);
 		}
 	};
+
+	// Price fields configuration
+	const priceFields = [
+		{ name: 'price_egp' as const, label: 'EGP Price' },
+		{ name: 'price_ksa' as const, label: 'KSA Price' },
+		{ name: 'price_uae' as const, label: 'UAE Price' },
+		{ name: 'price_usd' as const, label: 'USD Price' },
+	];
+
+	// Text area fields configuration
+	const textFields = [
+		{ name: 'c_short_intro_en' as const, label: 'Course Short Introduction (English)' },
+		{ name: 'c_short_intro_ar' as const, label: 'Course Short Introduction (Arabic)' },
+		{ name: 'c_delv_and_leaders_en' as const, label: 'Course Style of Delivery and Course Leaders (English)' },
+		{ name: 'c_delv_and_leaders_ar' as const, label: 'Course Style of Delivery and Course Leaders (Arabic)' },
+		{ name: 'c_in_house_en' as const, label: 'In-House Courses (English)' },
+		{ name: 'c_in_house_ar' as const, label: 'In-House Courses (Arabic)' },
+		{ name: 'c_duration_en' as const, label: 'Course Duration (English)' },
+		{ name: 'c_duration_ar' as const, label: 'Course Duration (Arabic)' },
+	];
+
+	// Dynamic sections configuration
+	const dynamicSections = [
+		{ key: 'c_intro_en', title: 'Course Introduction (English)', description: 'Managing Course Introduction (English)' },
+		{ key: 'c_intro_ar', title: 'Course Introduction (Arabic)', description: 'Managing Course Introduction (Arabic)' },
+		{ key: 'c_date_en', title: 'Course Dates (English)', description: 'Managing Course Dates (English)' },
+		{ key: 'c_date_ar', title: 'Course Dates (Arabic)', description: 'Managing Course Dates (Arabic)' },
+		{ key: 'c_content_en', title: 'Course Content (English)', description: 'Managing Course Content (English)' },
+		{ key: 'c_content_ar', title: 'Course Content (Arabic)', description: 'Managing Course Content (Arabic)' },
+		{ key: 'c_benefit_en', title: 'Course Benefits (English)', description: 'Managing Course Benefits (English)' },
+		{ key: 'c_benefit_ar', title: 'Course Benefits (Arabic)', description: 'Managing Course Benefits (Arabic)' },
+		{ key: 'c_objective_en', title: 'Course Objectives (English)', description: 'Managing Course Objectives (English)' },
+		{ key: 'c_objective_ar', title: 'Course Objectives (Arabic)', description: 'Managing Course Objectives (Arabic)' },
+		{ key: 'c_who_should_en', title: 'Who Should Attend (English)', description: 'Managing Course Who Should Attend (English)' },
+		{ key: 'c_who_should_ar', title: 'Who Should Attend (Arabic)', description: 'Managing Course Who Should Attend (Arabic)' },
+		{ key: 'c_content2_en', title: 'Course Certification (English)', description: 'Managing Course Certification (English)' },
+		{ key: 'c_content2_ar', title: 'Course Certification (Arabic)', description: 'Managing Course Certification (Arabic)' },
+	];
 
 	return (
 		<>
@@ -303,12 +376,10 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 				onConfirm={onDelete}
 				loading={loading}
 			/>
+
 			<div className="flex items-center justify-between">
-				<Heading
-					title={title}
-					description={description}
-				/>
-				{initialData && (
+				<Heading title={title} description={description} />
+				{isEditing && (
 					<Button
 						disabled={loading}
 						variant="destructive"
@@ -319,13 +390,14 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 					</Button>
 				)}
 			</div>
+
 			<Separator />
+
 			<Form {...form}>
-				<form
-					onSubmit={form.handleSubmit(onSubmit)}
-					className="space-y-8 w-full"
-				>
+				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
+					{/* Basic Information Grid */}
 					<div className="md:grid md:grid-cols-2 gap-8">
+						{/* Image Upload */}
 						<FormField
 							control={form.control}
 							name="imageUrl"
@@ -344,134 +416,92 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 								</FormItem>
 							)}
 						/>
+
+						{/* Course Category */}
 						<FormField
 							control={form.control}
 							name="categoryid"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>
-										Course Category
-									</FormLabel>
+									<FormLabel>Course Category</FormLabel>
 									<Select
-										disabled={
-											loading
-										}
-										onValueChange={
-											field.onChange
-										}
-										value={
-											field.value
-										}
-										defaultValue={
-											field.value
-										}
+										disabled={loading}
+										onValueChange={field.onChange}
+										value={field.value}
+										defaultValue={field.value}
 									>
 										<FormControl>
 											<SelectTrigger>
 												<SelectValue
-													defaultValue={
-														field.value
-													}
-													placeholder="Select a billboard"
+													defaultValue={field.value}
+													placeholder="Select a category"
 												/>
 											</SelectTrigger>
 										</FormControl>
 										<SelectContent>
-											{categories.map(
-												(
-													billboard
-												) => (
-													<SelectItem
-														key={
-															billboard.id
-														}
-														value={
-															billboard.id
-														}
-													>
-														{
-															billboard.name
-														}
-													</SelectItem>
-												)
-											)}
+											{categories.map((category) => (
+												<SelectItem
+													key={category.id}
+													value={String(category.id)} // Fixed: Convert to string
+												>
+													{category.name}
+												</SelectItem>
+											))}
 										</SelectContent>
 									</Select>
 									<FormMessage />
 								</FormItem>
 							)}
 						/>
+
+						{/* Course Type */}
 						<FormField
 							control={form.control}
 							name="coursetypeid"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>
-										Course Type
-									</FormLabel>
+									<FormLabel>Course Type</FormLabel>
 									<Select
-										disabled={
-											loading
-										}
-										onValueChange={
-											field.onChange
-										}
-										value={
-											field.value
-										}
-										defaultValue={
-											field.value
-										}
+										disabled={loading}
+										onValueChange={field.onChange}
+										value={field.value}
+										defaultValue={field.value}
 									>
 										<FormControl>
 											<SelectTrigger>
 												<SelectValue
-													defaultValue={
-														field.value
-													}
-													placeholder="Select a Type"
+													defaultValue={field.value}
+													placeholder="Select a type"
 												/>
 											</SelectTrigger>
 										</FormControl>
 										<SelectContent>
-											{types.map(
-												(
-													billboard
-												) => (
-													<SelectItem
-														key={
-															billboard.id
-														}
-														value={
-															billboard.id
-														}
-													>
-														{
-															billboard.name
-														}
-													</SelectItem>
-												)
-											)}
+											{types.map((type) => (
+												<SelectItem
+													key={type.id}
+													value={String(type.id)} // Fixed: Convert to string
+												>
+													{type.name}
+												</SelectItem>
+											))}
 										</SelectContent>
 									</Select>
 									<FormMessage />
 								</FormItem>
 							)}
 						/>
+
+						{/* Course Titles */}
 						<FormField
 							control={form.control}
 							name="c_title"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>
-										Course Title in English
-									</FormLabel>
+									<FormLabel>Course Title (English)</FormLabel>
 									<FormControl>
 										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Category name"
+											disabled={loading}
+											placeholder="Enter course title in English"
 											{...field}
 										/>
 									</FormControl>
@@ -479,22 +509,17 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 								</FormItem>
 							)}
 						/>
+
 						<FormField
 							control={form.control}
 							name="c_title_ar"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>
-										Course
-										Arabic
-										Title
-									</FormLabel>
+									<FormLabel>Course Title (Arabic)</FormLabel>
 									<FormControl>
 										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="c_title_ar"
+											disabled={loading}
+											placeholder="Enter course title in Arabic"
 											{...field}
 										/>
 									</FormControl>
@@ -502,958 +527,74 @@ export const CourseForm: React.FC<CourseFormProps> = ({
 								</FormItem>
 							)}
 						/>
-						<FormField
-							control={form.control}
-							name="price_egp"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										EGP
-										Price
-									</FormLabel>
-									<FormControl>
-										<Input
-											type="number"
-											disabled={
-												loading
-											}
-											placeholder="9.99"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="price_ksa"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										KSA
-										Price
-									</FormLabel>
-									<FormControl>
-										<Input
-											type="number"
-											disabled={
-												loading
-											}
-											placeholder="9.99"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="price_uae"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										UAE
-										Price
-									</FormLabel>
-									<FormControl>
-										<Input
-											type="number"
-											disabled={
-												loading
-											}
-											placeholder="9.99"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="price_usd"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										USD
-										Price
-									</FormLabel>
-									<FormControl>
-										<Input
-											type="number"
-											disabled={
-												loading
-											}
-											placeholder="9.99"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_short_intro_en"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course Short Introduction (English)
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Course Short Introduction (English)"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_short_intro_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course Short Introduction (Arabic)
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Course Short Introduction (Arabic)"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_delv_and_leaders_en"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course Style of Delivery and Course Leaders (English)
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Course Style of Delivery and Course Leaders (English)"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_delv_and_leaders_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course Style of Delivery and Course Leaders (Arabic)
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Course Style of Delivery and Course Leaders (Arabic)"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_in_house_en"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										In-House Courses (English)
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="In-House Courses (English)"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_in_house_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										In-House Courses (Arabic)
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="In-House Courses (Arabic)"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_duration_en"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course Duration (English)
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Course Duration (English)"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="c_duration_ar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Course Duration (Arabic)
-									</FormLabel>
-									<FormControl>
-										<Textarea
-											disabled={
-												loading
-											}
-											placeholder="Course Duration (Arabic)"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-					</div>
-					<div>
-						<Heading description="Managing Course Introduction (English)" title="Managing Course Introduction (English)" />
-						{c_intro_enFields.map((field, index) => (
-							<div key={field.id} className="grid grid-cols-2 gap-8">
-								<FormField
-									control={form.control}
-									name={`c_intro_en.${index}.text`}
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{`Course Introduction English Pargraph ${index + 1} `}</FormLabel>
-											<FormControl>
-												<Textarea
-													disabled={loading}
-													placeholder="Enter a Value"
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<Button
-									disabled={loading}
-									type="button"
-									onClick={() => removec_intro_en(index)}
-									variant="destructive"
-									size="sm"
-									className="mt-10"
-								>
-									Remove
-								</Button>
-								<Separator />
-							</div>
+
+						{/* Price Fields */}
+						{priceFields.map(({ name, label }) => (
+							<FormField
+								key={name}
+								control={form.control}
+								name={name}
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>{label}</FormLabel>
+										<FormControl>
+											<Input
+												type="number"
+												disabled={loading}
+												placeholder="0.00"
+												{...field}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 						))}
-						<Button
-							disabled={loading}
-							type="button"
-							onClick={() =>
-								appendc_intro_en({
-									text: '',
-								})
-							}
-							variant="secondary"
-							className="mt-2"
-						>
-							Add new Paragraph
-						</Button>
-					</div>
-					<Separator />
-					<div>
-						<Heading description="Managing Course Introduction (Arabic)" title="Managing Course Introduction (Arabic)" />
-						{c_intro_arFields.map((field, index) => (
-							<div key={field.id} className="grid grid-cols-2 gap-8">
-								<FormField
-									control={form.control}
-									name={`c_intro_ar.${index}.text`}
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{`Course Introduction Arabic ${index + 1} `}</FormLabel>
-											<FormControl>
-												<Textarea
-													disabled={loading}
-													placeholder="Enter a Value"
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<Button
-									disabled={loading}
-									type="button"
-									onClick={() => removec_intro_ar(index)}
-									variant="destructive"
-									size="sm"
-									className="mt-10"
-								>
-									Remove
-								</Button>
-								<Separator />
-							</div>
+
+						{/* Text Area Fields */}
+						{textFields.map(({ name, label }) => (
+							<FormField
+								key={name}
+								control={form.control}
+								name={name}
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>{label}</FormLabel>
+										<FormControl>
+											<Textarea
+												disabled={loading}
+												placeholder={label}
+												{...field}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 						))}
-						<Button
-							disabled={loading}
-							type="button"
-							onClick={() =>
-								appendc_intro_ar({
-									text: '',
-								})
-							}
-							variant="secondary"
-							className="mt-2"
-						>
-							Add new Paragraph
-						</Button>
 					</div>
+
+					{/* Dynamic Sections */}
+					{dynamicSections.map((section, index) => (
+						<div key={section.key}>
+							<Separator />
+							<DynamicSection
+								title={section.title}
+								description={section.description}
+								fields={fieldArrays[section.key as keyof typeof fieldArrays].fields}
+								fieldName={section.key}
+								onAppend={fieldArrays[section.key as keyof typeof fieldArrays].append}
+								onRemove={fieldArrays[section.key as keyof typeof fieldArrays].remove}
+								control={form.control}
+								loading={loading}
+							/>
+						</div>
+					))}
+
 					<Separator />
-					<div>
-						<Heading description="Managing Course Dates (English)" title="Managing Course Dates (English)" />
-						{c_date_enFields.map((field, index) => (
-							<div key={field.id} className="grid grid-cols-2 gap-8">
-								<FormField
-									control={form.control}
-									name={`c_date_en.${index}.text`}
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{`Course Dates (English) ${index + 1} `}</FormLabel>
-											<FormControl>
-												<Textarea
-													disabled={loading}
-													placeholder="Enter a Value"
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<Button
-									disabled={loading}
-									type="button"
-									onClick={() => removec_date_en(index)}
-									variant="destructive"
-									size="sm"
-									className="mt-10"
-								>
-									Remove
-								</Button>
-								<Separator />
-							</div>
-						))}
-						<Button
-							disabled={loading}
-							type="button"
-							onClick={() =>
-								appendc_date_en({
-									text: '',
-								})
-							}
-							variant="secondary"
-							className="mt-2"
-						>
-							Add new Paragraph
-						</Button>
-					</div>
-					<Separator />
-					<div>
-						<Heading description="Managing Course Dates (Arabic)" title="Managing Course Dates (Arabic)" />
-						{c_date_arFields.map((field, index) => (
-							<div key={field.id} className="grid grid-cols-2 gap-8">
-								<FormField
-									control={form.control}
-									name={`c_date_ar.${index}.text`}
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{`Managing Course Dates Arabic Pargraph ${index + 1} `}</FormLabel>
-											<FormControl>
-												<Textarea
-													disabled={loading}
-													placeholder="Enter a Value"
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<Button
-									disabled={loading}
-									type="button"
-									onClick={() => removec_date_ar(index)}
-									variant="destructive"
-									size="sm"
-									className="mt-10"
-								>
-									Remove
-								</Button>
-								<Separator />
-							</div>
-						))}
-						<Button
-							disabled={loading}
-							type="button"
-							onClick={() =>
-								appendc_date_ar({
-									text: '',
-								})
-							}
-							variant="secondary"
-							className="mt-2"
-						>
-							Add new Paragraph
-						</Button>
-					</div>
-					<Separator />
-					<div>
-						<Heading description="Managing Course Content (English)" title="Managing Course Content (English)" />
-						{c_content_enFields.map((field, index) => (
-							<div key={field.id} className="grid grid-cols-2 gap-8">
-								<FormField
-									control={form.control}
-									name={`c_content_en.${index}.text`}
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{`c_content_en Pargraph ${index + 1} `}</FormLabel>
-											<FormControl>
-												<Textarea
-													disabled={loading}
-													placeholder="Enter a Value"
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<Button
-									disabled={loading}
-									type="button"
-									onClick={() => removec_content_en(index)}
-									variant="destructive"
-									size="sm"
-									className="mt-10"
-								>
-									Remove
-								</Button>
-								<Separator />
-							</div>
-						))}
-						<Button
-							disabled={loading}
-							type="button"
-							onClick={() =>
-								appendc_content_en({
-									text: '',
-								})
-							}
-							variant="secondary"
-							className="mt-2"
-						>
-							Add new Paragraph
-						</Button>
-					</div>
-					<Separator />
-					<div>
-						<Heading description="Managing Course Content (Arabic)" title="Managing Course Content (Arabic)" />
-						{c_content_arFields.map((field, index) => (
-							<div key={field.id} className="grid grid-cols-2 gap-8">
-								<FormField
-									control={form.control}
-									name={`c_content_ar.${index}.text`}
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{`Content Pargraph (Arabic) ${index + 1} `}</FormLabel>
-											<FormControl>
-												<Textarea
-													disabled={loading}
-													placeholder="Enter a Value"
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<Button
-									disabled={loading}
-									type="button"
-									onClick={() => removec_content_ar(index)}
-									variant="destructive"
-									size="sm"
-									className="mt-10"
-								>
-									Remove
-								</Button>
-								<Separator />
-							</div>
-						))}
-						<Button
-							disabled={loading}
-							type="button"
-							onClick={() =>
-								appendc_content_ar({
-									text: '',
-								})
-							}
-							variant="secondary"
-							className="mt-2"
-						>
-							Add new Paragraph
-						</Button>
-					</div>
-					<Separator />
-					<div>
-						<Heading description="Managing Course Benefits (English)" title="Managing Course Benefits (English)" />
-						{c_benefit_enFields.map((field, index) => (
-							<div key={field.id} className="grid grid-cols-2 gap-8">
-								<FormField
-									control={form.control}
-									name={`c_benefit_en.${index}.text`}
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{`Benefits Pargraph (English) ${index + 1} `}</FormLabel>
-											<FormControl>
-												<Textarea
-													disabled={loading}
-													placeholder="Enter a Value"
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<Button
-									disabled={loading}
-									type="button"
-									onClick={() => removec_benefit_en(index)}
-									variant="destructive"
-									size="sm"
-									className="mt-10"
-								>
-									Remove
-								</Button>
-								<Separator />
-							</div>
-						))}
-						<Button
-							disabled={loading}
-							type="button"
-							onClick={() =>
-								appendc_benefit_en({
-									text: '',
-								})
-							}
-							variant="secondary"
-							className="mt-2"
-						>
-							Add new Paragraph
-						</Button>
-					</div>
-					<Separator />
-					<div>
-						<Heading description="Managing Course Benefits (Arabic)" title="Managing Course Benefits (Arabic)" />
-						{c_benefit_arFields.map((field, index) => (
-							<div key={field.id} className="grid grid-cols-2 gap-8">
-								<FormField
-									control={form.control}
-									name={`c_benefit_ar.${index}.text`}
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{`Benefits Pargraph (Arabic) ${index + 1} `}</FormLabel>
-											<FormControl>
-												<Textarea
-													disabled={loading}
-													placeholder="Enter a Value"
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<Button
-									disabled={loading}
-									type="button"
-									onClick={() => removec_benefit_ar(index)}
-									variant="destructive"
-									size="sm"
-									className="mt-10"
-								>
-									Remove
-								</Button>
-								<Separator />
-							</div>
-						))}
-						<Button
-							disabled={loading}
-							type="button"
-							onClick={() =>
-								appendc_benefit_ar({
-									text: '',
-								})
-							}
-							variant="secondary"
-							className="mt-2"
-						>
-							Add new Paragraph
-						</Button>
-					</div>
-					<Separator />
-					<div>
-						<Heading description="Managing Course Objectives (English)" title="Managing Course Objectives (English)" />
-						{c_objective_enFields.map((field, index) => (
-							<div key={field.id} className="grid grid-cols-2 gap-8">
-								<FormField
-									control={form.control}
-									name={`c_objective_en.${index}.text`}
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{`Objectives Pargraph (English) ${index + 1} `}</FormLabel>
-											<FormControl>
-												<Textarea
-													disabled={loading}
-													placeholder="Enter a Value"
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<Button
-									disabled={loading}
-									type="button"
-									onClick={() => removec_objective_en(index)}
-									variant="destructive"
-									size="sm"
-									className="mt-10"
-								>
-									Remove
-								</Button>
-								<Separator />
-							</div>
-						))}
-						<Button
-							disabled={loading}
-							type="button"
-							onClick={() =>
-								appendc_objective_en({
-									text: '',
-								})
-							}
-							variant="secondary"
-							className="mt-2"
-						>
-							Add new Paragraph
-						</Button>
-					</div>
-					<Separator />
-					<div>
-						<Heading description="Managing Course Objectives (Arabic)" title="Managing Course Objectives (Arabic)" />
-						{c_objective_arFields.map((field, index) => (
-							<div key={field.id} className="grid grid-cols-2 gap-8">
-								<FormField
-									control={form.control}
-									name={`c_objective_ar.${index}.text`}
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{`c_objective_ar Pargraph (Arabic) ${index + 1} `}</FormLabel>
-											<FormControl>
-												<Textarea
-													disabled={loading}
-													placeholder="Enter a Value"
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<Button
-									disabled={loading}
-									type="button"
-									onClick={() => removec_objective_ar(index)}
-									variant="destructive"
-									size="sm"
-									className="mt-10"
-								>
-									Remove
-								</Button>
-								<Separator />
-							</div>
-						))}
-						<Button
-							disabled={loading}
-							type="button"
-							onClick={() =>
-								appendc_objective_ar({
-									text: '',
-								})
-							}
-							variant="secondary"
-							className="mt-2"
-						>
-							Add new Paragraph
-						</Button>
-					</div>
-					<Separator />
-					<div>
-						<Heading description="Managing Course Who Should Attend (English)" title="Managing Course Who Should Attend (English)" />
-						{c_who_should_enFields.map((field, index) => (
-							<div key={field.id} className="grid grid-cols-2 gap-8">
-								<FormField
-									control={form.control}
-									name={`c_who_should_en.${index}.text`}
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{`Who Should Attend Pargraph (English) ${index + 1} `}</FormLabel>
-											<FormControl>
-												<Textarea
-													disabled={loading}
-													placeholder="Enter a Value"
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<Button
-									disabled={loading}
-									type="button"
-									onClick={() => removec_who_should_en(index)}
-									variant="destructive"
-									size="sm"
-									className="mt-10"
-								>
-									Remove
-								</Button>
-								<Separator />
-							</div>
-						))}
-						<Button
-							disabled={loading}
-							type="button"
-							onClick={() =>
-								appendc_who_should_en({
-									text: '',
-								})
-							}
-							variant="secondary"
-							className="mt-2"
-						>
-							Add new Paragraph
-						</Button>
-					</div>
-					<Separator />
-					<div>
-						<Heading description="Managing Course Who Should Attend (Arabic)" title="Managing Course Who Should Attend (Arabic)" />
-						{c_who_should_arFields.map((field, index) => (
-							<div key={field.id} className="grid grid-cols-2 gap-8">
-								<FormField
-									control={form.control}
-									name={`c_who_should_ar.${index}.text`}
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{`Who Should Attend Pargraph (Arabic)  ${index + 1} `}</FormLabel>
-											<FormControl>
-												<Textarea
-													disabled={loading}
-													placeholder="Enter a Value"
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<Button
-									disabled={loading}
-									type="button"
-									onClick={() => removec_who_should_ar(index)}
-									variant="destructive"
-									size="sm"
-									className="mt-10"
-								>
-									Remove
-								</Button>
-								<Separator />
-							</div>
-						))}
-						<Button
-							disabled={loading}
-							type="button"
-							onClick={() =>
-								appendc_who_should_ar({
-									text: '',
-								})
-							}
-							variant="secondary"
-							className="mt-2"
-						>
-							Add new Paragraph
-						</Button>
-					</div>
-					<Separator />
-					<div>
-						<Heading description="Managing Course Certification (English)" title="Managing Course Certification (English)" />
-						{c_content2_enFields.map((field, index) => (
-							<div key={field.id} className="grid grid-cols-2 gap-8">
-								<FormField
-									control={form.control}
-									name={`c_content2_en.${index}.text`}
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{`Certification Pargraph (English) ${index + 1} `}</FormLabel>
-											<FormControl>
-												<Textarea
-													disabled={loading}
-													placeholder="Enter a Value"
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<Button
-									disabled={loading}
-									type="button"
-									onClick={() => removec_content2_en(index)}
-									variant="destructive"
-									size="sm"
-									className="mt-10"
-								>
-									Remove
-								</Button>
-								<Separator />
-							</div>
-						))}
-						<Button
-							disabled={loading}
-							type="button"
-							onClick={() =>
-								appendc_content2_en({
-									text: '',
-								})
-							}
-							variant="secondary"
-							className="mt-2"
-						>
-							Add new Paragraph
-						</Button>
-					</div>
-					<Separator />
-					<div>
-						<Heading description="Managing Course Certification (Arabic)" title="Managing Course Certification (Arabic)" />
-						{c_content2_arFields.map((field, index) => (
-							<div key={field.id} className="grid grid-cols-2 gap-8">
-								<FormField
-									control={form.control}
-									name={`c_content2_ar.${index}.text`}
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>{`Certification Pargraph ${index + 1} `}</FormLabel>
-											<FormControl>
-												<Textarea
-													disabled={loading}
-													placeholder="Enter a Value"
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-								<Button
-									disabled={loading}
-									type="button"
-									onClick={() => removec_content2_ar(index)}
-									variant="destructive"
-									size="sm"
-									className="mt-10"
-								>
-									Remove
-								</Button>
-								<Separator />
-							</div>
-						))}
-						<Button
-							disabled={loading}
-							type="button"
-							onClick={() =>
-								appendc_content2_ar({
-									text: '',
-								})
-							}
-							variant="secondary"
-							className="mt-2"
-						>
-							Add new Paragraph
-						</Button>
-					</div>
-					<Separator />
-					<Button
-						disabled={loading}
-						className="ml-auto"
-						type="submit"
-					>
+
+					{/* Submit Button */}
+					<Button disabled={loading} className="ml-auto" type="submit">
 						{action}
 					</Button>
 				</form>
