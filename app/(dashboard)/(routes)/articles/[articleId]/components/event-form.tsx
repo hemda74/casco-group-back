@@ -34,7 +34,7 @@ const formSchema = z.object({
 	imageUrl: z.string().min(1),
 	title: z.string().min(1),
 	title_ar: z.string().min(1),
-	categoryid: z.string().min(1),
+	categoryid: z.coerce.number().min(1),
 	paragraph_event3: z.array(z.any()),
 	paragraph_event_ar3: z.array(z.any()),
 	date_of_event: z.string().min(1),
@@ -70,12 +70,12 @@ export const EventForm: React.FC<EventFormProps> = ({
 		} : {
 			title: '',
 			title_ar: '',
-			categoryid: '',
+			categoryid: 0,
 			imageUrl: '',
 			date_of_event: '',
 			date_of_event_ar: '',
-			paragraph_event: [],
-			paragraph_event_ar: [],
+			paragraph_event3: [],
+			paragraph_event_ar3: [],
 		}
 	const form = useForm<EventFormValues>({
 		resolver: zodResolver(formSchema),
@@ -182,21 +182,21 @@ export const EventForm: React.FC<EventFormProps> = ({
 									<FormLabel>Category</FormLabel>
 									<Select
 										disabled={loading}
-										onValueChange={field.onChange}
-										value={field.value}
-										defaultValue={field.value}
+										onValueChange={(value) => field.onChange(parseInt(value))}
+										value={field.value?.toString()}
+										defaultValue={field.value?.toString()}
 									>
 										<FormControl>
 											<SelectTrigger>
 												<SelectValue
-													defaultValue={field.value}
+													defaultValue={field.value?.toString()}
 													placeholder="Select a category"
 												/>
 											</SelectTrigger>
 										</FormControl>
 										<SelectContent>
 											{categories.map((category) => (
-												<SelectItem key={category.id} value={category.id}>
+												<SelectItem key={category.id} value={category.id.toString()}>
 													{category.name}
 												</SelectItem>
 											))}
