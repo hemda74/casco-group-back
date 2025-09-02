@@ -9,7 +9,7 @@ const InsidersViewPage = async ({
 }) => {
   const InsidersView = await prismadb.testimonials.findUnique({
     where: {
-      id: params.testimonialId
+      id: params.testimonialid
     }
   });
 
