@@ -28,7 +28,7 @@ export const InsidersviewClient: React.FC<InsidersviewClientProps> = ({
       <DataTable searchKey="name" columns={columns} data={data} />
       <Heading title="API" description="API Calls for testimonials" />
       <Separator />
-      {/* <ApiList entityName="testimonials" entityIdName="testimonialId" /> */}
+      {/* <ApiList entityName="testimonials" entityIdName="testimonialid" /> */}
     </>
   );
 };

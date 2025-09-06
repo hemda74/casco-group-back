@@ -6,7 +6,7 @@ export async function GET(
 	{ params }: { params: { testimonialid: number } }
 ) {
 	try {
-		if (!params.testimonialId) {
+		if (!params.testimonialid) {
 			return new NextResponse('Billboard id is required', {
 				status: 400,
 			});
@@ -14,7 +14,7 @@ export async function GET(
 
 		const billboard = await prismadb.testimonials.findUnique({
 			where: {
-				id: params.testimonialId,
+				id: params.testimonialid,
 			},
 		});
 
@@ -32,7 +32,7 @@ export async function DELETE(
 	try {
 		const {} = auth();
 
-		if (!params.testimonialId) {
+		if (!params.testimonialid) {
 			return new NextResponse('Billboard id is required', {
 				status: 400,
 			});
@@ -40,7 +40,7 @@ export async function DELETE(
 
 		const billboard = await prismadb.testimonials.delete({
 			where: {
-				id: params.testimonialId,
+				id: params.testimonialid,
 			},
 		});
 
@@ -106,7 +106,7 @@ export async function PATCH(
 			});
 		}
 
-		if (!params.testimonialId) {
+		if (!params.testimonialid) {
 			return new NextResponse('Billboard id is required', {
 				status: 400,
 			});
@@ -114,7 +114,7 @@ export async function PATCH(
 
 		const billboard = await prismadb.testimonials.update({
 			where: {
-				id: params.testimonialId,
+				id: params.testimonialid,
 			},
 			data: {
 				name,

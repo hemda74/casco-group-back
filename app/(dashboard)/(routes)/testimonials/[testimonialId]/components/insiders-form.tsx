@@ -72,7 +72,7 @@ export const InsidersViewForm: React.FC<InsidersViewFormProps> = ({
     try {
       setLoading(true);
       if (initialData) {
-        await axios.patch(`/api/${params.storeId}/testimonials/${params.testimonialId}`, data);
+        await axios.patch(`/api/${params.storeId}/testimonials/${params.testimonialid}`, data);
       } else {
         await axios.post(`/api/${params.storeId}/testimonials`, data);
       }
@@ -89,7 +89,7 @@ export const InsidersViewForm: React.FC<InsidersViewFormProps> = ({
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/testimonials/${params.testimonialId}`);
+      await axios.delete(`/api/${params.storeId}/testimonials/${params.testimonialid}`);
       router.refresh();
       router.push(`/${params.storeId}/testimonials`);
       toast.success('InsidersView deleted.');
